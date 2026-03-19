@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="KasaAngola — Encontra a tua casa em Angola sem intermediário. Arrendar ou comprar direto com o proprietário em todas as 21 províncias."/>
+<title>KasaAngola — Imóveis em Angola</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#cc0000;--red2:#e50000;--dark:#0c0c0c;--panel:#141414;--card:#1a1a1a;--card2:#202020;
+  --border:#262626;--text:#f2f2f2;--muted:#777;--muted2:#555;--green:#16a34a;--blue:#2563eb;
+  --gold:#d97706;--orange:#ea580c;--purple:#7c3aed;--white:#ffffff
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh}
+h1,h2,h3,h4,.brand{font-family:'Syne',sans-serif}
+a{text-decoration:none;color:inherit}
+button{font-family:'DM Sans',sans-serif;cursor:pointer}
+img{display:block}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:100;background:#0c0c0cee;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.navbar-inner{max-width:1320px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:40px}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.5px;white-space:nowrap}
+.brand span{color:var(--red)}
+.nav-links{display:flex;align-items:center;gap:6px;flex:1}
+.nav-link{padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap}
+.nav-link:hover,.nav-link.active{color:var(--text);background:var(--card)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.btn{padding:9px 20px;border-radius:10px;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{background:var(--card);border-color:var(--muted2)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red2)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{filter:brightness(1.1)}
+.ham{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.ham span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 32px 80px;background:var(--dark);position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,#cc000015 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,#1a0a0022 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 60px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 60px)}
+.hero-inner{max-width:1320px;margin:0 auto;width:100%;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:30px;padding:6px 14px;font-size:13px;color:var(--muted);margin-bottom:24px}
+.hero-tag span{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(38px,5vw,68px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:460px;margin-bottom:36px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap}
+.hstat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text)}
+.hstat-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+/* Search card */
+.search-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 40px 80px #00000044}
+.search-card h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.search-inp{width:100%;background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;margin-bottom:12px;transition:border-color .2s}
+.search-inp:focus{border-color:var(--red)}
+.search-row{display:flex;gap:10px;margin-bottom:12px}
+.search-row select{flex:1;background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+.chip-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sch{padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:'DM Sans',sans-serif;transition:all .2s}
+.sch.active,.sch:hover{background:var(--red);border-color:var(--red);color:#fff}
+.search-full-btn{width:100%;padding:13px;background:var(--red);border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.search-full-btn:hover{background:var(--red2);transform:translateY(-1px)}
+
+/* ── MAIN LAYOUT ── */
+.page{display:none;min-height:calc(100vh - 68px);padding-top:68px}
+.page.active{display:block}
+.container{max-width:1320px;margin:0 auto;padding:0 32px}
+.section{padding:80px 0}
+.section-title{font-size:clamp(28px,3vw,42px);font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--muted);margin-bottom:48px}
+
+/* ── LISTINGS PAGE ── */
+.listings-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;padding-top:32px;align-items:start}
+/* Sidebar */
+.sidebar{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:sticky;top:88px}
+.sidebar h3{font-size:16px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.filter-group{margin-bottom:20px}
+.filter-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+.fchip.active{background:var(--red);border-color:var(--red);color:#fff}
+.filter-select{width:100%;background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+.price-range{display:flex;gap:8px}
+.price-range input{flex:1;background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);outline:none}
+.apply-btn{width:100%;padding:11px;background:var(--red);border:none;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:20px}
+/* Grid */
+.listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.listing-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .25s;group:true}
+.listing-card:hover{transform:translateY(-4px);border-color:var(--muted2);box-shadow:0 20px 40px #00000055}
+.card-img{width:100%;height:200px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#0a1628)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.listing-card:hover .card-img img{transform:scale(1.05)}
+.card-badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-a{background:var(--blue);color:#fff}
+.badge-v{background:var(--green);color:#fff}
+.badge-dest{position:absolute;top:12px;right:12px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.trust-badge{position:absolute;bottom:12px;right:12px;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:700}
+.tb-high{background:#16a34a99;color:#afffaf}
+.tb-med{background:#d9770699;color:#fff}
+.tb-low{background:#55555566;color:#ddd}
+.card-body{padding:16px}
+.card-price{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--red);margin-bottom:4px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-loc{font-size:12.5px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.card-stars{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--gold);margin-bottom:10px}
+.card-feats{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--border)}
+.cfeat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+
+/* ── DETAIL PAGE ── */
+.detail-layout{display:grid;grid-template-columns:1fr 380px;gap:40px;padding:40px 0}
+.detail-main{}
+.detail-gallery{border-radius:16px;overflow:hidden;height:420px;background:linear-gradient(135deg,#1a0000,#0a1628);position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.detail-gallery img,.detail-gallery video{width:100%;height:100%;object-fit:cover}
+.gallery-btns{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.gbtn{padding:7px 16px;background:#0009;backdrop-filter:blur(8px);border:1px solid #ffffff22;border-radius:20px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.gbtn.active,.gbtn:hover{background:var(--red);border-color:var(--red)}
+.detail-info{}
+.detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}
+.detail-price{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--red)}
+.detail-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.detail-loc{font-size:14px;color:var(--muted);margin-bottom:16px}
+.detail-feats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.dfeat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;display:flex;align-items:center;gap:6px}
+.detail-desc{font-size:14px;line-height:1.8;color:#bbb;margin-bottom:24px}
+/* Trust */
+.trust-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.trust-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.trust-score{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;border:3px solid}
+.trust-bar{background:var(--border);border-radius:20px;height:6px;margin-bottom:14px;overflow:hidden}
+.trust-fill{height:100%;border-radius:20px;transition:width .6s}
+.doc-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.doc-row:last-child{border:none}
+/* Lock */
+.lock-card{background:linear-gradient(135deg,#0a0a25,#15103a);border:1px solid var(--purple);border-radius:16px;padding:24px;margin-bottom:20px}
+.unlocked-card{background:linear-gradient(135deg,#0a1f0a,#0a1a0a);border:1px solid var(--green);border-radius:16px;padding:20px;margin-bottom:20px}
+/* Owner */
+.owner-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.owner-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+/* Sidebar card */
+.detail-sidebar{}
+.sticky-sidebar{position:sticky;top:88px}
+.contact-widget{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.widget-price{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--red);margin-bottom:4px}
+.widget-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.wbtn{width:100%;padding:13px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.wbtn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.wbtn-r{background:var(--red);color:#fff}
+.wbtn-g{background:var(--green);color:#fff}
+.wbtn-p{background:var(--purple);color:#fff}
+.wbtn-s{background:var(--card2);border:1px solid var(--border);color:var(--text)}
+.review-item{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+
+/* ── CHAT ── */
+.chat-layout{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 68px);gap:0}
+.chat-sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.chat-sidebar-head{padding:20px;border-bottom:1px solid var(--border)}
+.chat-sidebar-head h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.chat-search{width:100%;background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+.chat-list{flex:1;overflow-y:auto}
+.chat-item{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.chat-item:hover,.chat-item.active{background:var(--card2)}
+.chat-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.chat-window{flex:1;display:flex;flex-direction:column;background:var(--dark)}
+.chat-window-head{padding:16px 24px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.chat-lock-bar{background:linear-gradient(90deg,#0a0a25,#15103a);border-bottom:1px solid var(--purple);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.messages-area{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:12px}
+.bubble{max-width:60%;padding:11px 16px;font-size:14px;line-height:1.55;border-radius:16px}
+.bubble.recv{align-self:flex-start;background:var(--card);border-radius:16px 16px 16px 4px}
+.bubble.sent{align-self:flex-end;background:#4a0000;color:#ffcccc;border-radius:16px 16px 4px 16px}
+.bubble-time{font-size:10.5px;color:var(--muted);margin-top:4px;text-align:right}
+.chat-input-bar{padding:16px 24px;background:var(--card);border-top:1px solid var(--border);display:flex;gap:12px;align-items:center}
+.chat-input-bar input{flex:1;background:var(--dark);border:1px solid var(--border);border-radius:24px;padding:11px 18px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
+.chat-send-btn{width:42px;height:42px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s}
+.chat-send-btn:hover{background:var(--red2)}
+
+/* ── PROFILE ── */
+.profile-layout{display:grid;grid-template-columns:300px 1fr;gap:32px;padding:40px 0}
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;text-align:center;position:sticky;top:88px}
+.profile-av{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px;cursor:pointer;overflow:hidden;border:3px solid var(--red)}
+.profile-av img{width:100%;height:100%;object-fit:cover}
+.profile-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.pstat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.pstat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--red)}
+.pstat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.profile-menu-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--card2);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:14px;font-weight:500;transition:all .2s}
+.profile-menu-item:hover{background:var(--card);border-color:var(--muted2)}
+/* Docs */
+.docs-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.doc-tab-header{display:flex;gap:0;background:var(--dark);border-radius:10px;padding:3px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.doc-tab-header::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;border-radius:7px;transition:all .2s;white-space:nowrap}
+.dtab.active{background:var(--red);color:#fff}
+.dpanel{display:none}
+.dpanel.show{display:block}
+.side-tabs{display:flex;gap:0;background:var(--dark);border-radius:8px;padding:3px;margin-bottom:16px;width:fit-content}
+.stab{padding:8px 18px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.stab.active{background:var(--red);color:#fff}
+.ubox{border:2px dashed var(--border);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;max-width:400px}
+.ubox:hover,.ubox.done{border-color:var(--green)}
+.ubox.done{background:#0a200a}
+.doc-prev{max-width:320px;max-height:160px;object-fit:cover;border-radius:10px;margin-top:12px;border:1px solid var(--border)}
+
+/* ── LEGAL PAGE ── */
+.legal-layout{max-width:860px;margin:0 auto;padding:60px 0}
+.legal-hero{background:linear-gradient(135deg,#1a0a00,#200a00);border-radius:20px;padding:40px;margin-bottom:32px;text-align:center}
+.lsec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.lsec-title{font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.ltext{font-size:14px;color:#bbb;line-height:1.8}
+.law-art{background:#1a0000;border:1px solid #cc000033;border-radius:10px;padding:14px;margin:10px 0}
+.copy-ok{background:#0a1f0a;border:1px solid #16a34a33;border-radius:10px;padding:14px;margin-bottom:10px}
+.copy-no{background:#1a0a0a;border:1px solid #cc000033;border-radius:10px;padding:14px}
+
+/* ── UNLOCK MODAL ── */
+.modal-ov{position:fixed;inset:0;background:#000b;z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.show{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:20px}
+.mc-card{background:linear-gradient(135deg,#0a1a0a,#001400);border:1px solid var(--green);border-radius:14px;padding:20px;margin-bottom:16px}
+.mc-ref-num{font-size:22px;font-weight:800;letter-spacing:5px;color:var(--green);font-family:monospace}
+.post-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── FOOTER ── */
+footer{background:var(--card);border-top:1px solid var(--border);padding:60px 0 32px}
+.footer-inner{max-width:1320px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand{font-size:24px;font-weight:800;margin-bottom:12px}
+.footer-brand span{color:var(--red)}
+.footer-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.footer-heading{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px}
+.footer-link{display:block;font-size:14px;color:var(--muted);padding:4px 0;transition:color .2s;cursor:pointer}
+.footer-link:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
+.price-tag{display:inline-flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:4px 12px;font-size:12px;margin-top:4px}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:var(--dark);border-bottom:1px solid var(--border);padding:16px;z-index:99}
+.mobile-menu.show{display:block}
+.mobile-menu .nav-link{display:block;padding:12px 16px;font-size:15px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .listings-layout{grid-template-columns:1fr}
+  .sidebar{position:static;display:none}
+  .sidebar.show{display:block}
+  .detail-layout{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .profile-layout{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .navbar-inner{padding:0 16px;gap:16px}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .hero{padding:100px 16px 60px}
+  .container{padding:0 16px}
+  .hero-inner{gap:32px}
+  .search-card{padding:20px}
+  .hero-stats{gap:24px}
+  .chat-layout{grid-template-columns:1fr}
+  .chat-sidebar{display:none}
+  .chat-sidebar.show-mobile{display:flex;position:fixed;inset:0;z-index:50;top:68px}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:10px;text-align:center}
+  .listings-grid{grid-template-columns:1fr 1fr}
+  .detail-layout{padding:20px 0}
+  .post-modal-grid{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .listings-grid{grid-template-columns:1fr}
+  .hero h1{letter-spacing:-1px}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .35s ease both}
+.blurred{filter:blur(6px);user-select:none}
+.inp-field{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;margin-bottom:12px}
+.inp-field:focus{border-color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="brand" style="cursor:pointer" onclick="showPage('home')">Kasa<span>Angola</span></div>
+    <div class="nav-links">
+      <a class="nav-link active" id="nl-home" onclick="showPage('home')">Início</a>
+      <a class="nav-link" id="nl-listings" onclick="showPage('listings')">Imóveis</a>
+      <a class="nav-link" id="nl-chat" onclick="showPage('chat')">Mensagens</a>
+      <a class="nav-link" id="nl-legal" onclick="showPage('legal')">Legal</a>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-ghost" onclick="showAuthModal('login')">Entrar</button>
+      <button class="btn btn-red" onclick="openPostModal()">+ Publicar</button>
+      <div id="navUserBtn" style="display:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;overflow:hidden" onclick="showPage('profile')">👤</div>
+    </div>
+    <div class="ham" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a class="nav-link" onclick="showPage('home');toggleMobileMenu()">🏠 Início</a>
+  <a class="nav-link" onclick="showPage('listings');toggleMobileMenu()">🔍 Imóveis</a>
+  <a class="nav-link" onclick="showPage('chat');toggleMobileMenu()">💬 Mensagens</a>
+  <a class="nav-link" onclick="showPage('legal');toggleMobileMenu()">⚖️ Legal</a>
+  <div style="padding:12px 16px;display:flex;gap:10px;border-top:1px solid var(--border);margin-top:8px">
+    <button class="btn btn-ghost" style="flex:1" onclick="showAuthModal('login')">Entrar</button>
+    <button class="btn btn-red" style="flex:1" onclick="openPostModal()">+ Publicar</button>
+  </div>
+</div>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner container">
+      <div>
+        <div class="hero-tag"><span></span> 21 províncias · Sem intermediário</div>
+        <h1>A tua <em>casa ideal</em><br/>em Angola</h1>
+        <p class="hero-sub">Encontra imóveis para arrendar ou comprar em todo o território angolano. Fala directamente com o proprietário — sem comissões de intermediários.</p>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#0a200a;border:1px solid #22c55e55;border-radius:10px;padding:8px 14px;font-size:12px;color:#aaffaa;margin-bottom:20px">
+        <span>🛡️</span> <span>Plataforma de anúncios — não somos agência imobiliária. <strong style="color:#4ade80">Os utilizadores são responsáveis pelos seus anúncios.</strong></span>
+      </div>
+        <div class="hero-actions">
+          <button class="btn btn-red" style="padding:13px 28px;font-size:15px" onclick="showPage('listings')">🔍 Ver imóveis</button>
+          <button class="btn btn-ghost" style="padding:13px 28px;font-size:15px" onclick="openPostModal()">➕ Publicar anúncio</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hstat-num">21</div><div class="hstat-lbl">Províncias cobertas</div></div>
+          <div><div class="hstat-num" id="heroCount">124</div><div class="hstat-lbl">Imóveis activos</div></div>
+          <div><div class="hstat-num">0 Kz</div><div class="hstat-lbl">Comissão ao intermediário</div></div>
+        </div>
+      </div>
+      <div class="search-card fade-up">
+        <h3>🔍 Pesquisa rápida</h3>
+        <input class="search-inp" id="heroSearchInp" placeholder="Localização: Luanda, Benguela..."/>
+        <div class="search-row">
+          <select class="search-inp" id="heroZone" style="margin:0">
+            <option value="">Todas as províncias</option>
+          </select>
+          <select class="search-inp" id="heroType" style="margin:0">
+            <option value="todos">Tipo</option>
+            <option value="alugar">Alugar</option>
+            <option value="vender">Vender</option>
+          </select>
+        </div>
+        <div class="chip-row" id="heroChips">
+          <button class="sch active" onclick="setHeroQuartos(0,this)">Todos</button>
+          <button class="sch" onclick="setHeroQuartos(1,this)">T1</button>
+          <button class="sch" onclick="setHeroQuartos(2,this)">T2</button>
+          <button class="sch" onclick="setHeroQuartos(3,this)">T3+</button>
+        </div>
+        <button class="search-full-btn" onclick="doHeroSearch()">Pesquisar imóveis →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured listings on home -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px">
+        <div>
+          <div class="section-title">Imóveis em destaque</div>
+          <div style="font-size:15px;color:var(--muted)">Os imóveis mais recentes e verificados</div>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('listings')">Ver todos →</button>
+      </div>
+      <div class="listings-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-title" style="text-align:center;margin-bottom:8px">Como funciona</div>
+      <div class="section-sub" style="text-align:center">Em 3 passos simples</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;margin:0 auto">
+        <div style="text-align:center;padding:32px 24px;background:var(--card2);border:1px solid var(--border);border-radius:16px">
+          <div style="font-size:44px;margin-bottom:16px">🔍</div>
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px">Pesquisa</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">Encontra a casa que procuras entre centenas de anúncios em todas as províncias de Angola.</div>
+        </div>
+        <div style="text-align:center;padding:32px 24px;background:var(--card2);border:1px solid var(--border);border-radius:16px">
+          <div style="font-size:44px;margin-bottom:16px">🔓</div>
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px">Desbloqueia</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">Paga uma taxa simbólica via Multicaixa Express para aceder ao contacto directo do proprietário.</div>
+        </div>
+        <div style="text-align:center;padding:32px 24px;background:var(--card2);border:1px solid var(--border);border-radius:16px">
+          <div style="font-size:44px;margin-bottom:16px">🏠</div>
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px">Fecha o negócio</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">Visita o imóvel, negocia directamente e assina o contrato — sem intermediários.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section">
+    <div class="container" style="max-width:900px">
+      <div class="section-title" style="text-align:center;margin-bottom:8px">Tabela de emolumentos</div>
+      <div class="section-sub" style="text-align:center">Transparente e justo para todos</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">🔑 Arrendamento</div>
+          <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:4px">3.000 Kz</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Taxa única de acesso ao contacto</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Número do proprietário</div>
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Morada exacta do imóvel</div>
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Autorização para visita</div>
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Registo na KasaAngola</div>
+          </div>
+        </div>
+        <div style="background:linear-gradient(135deg,#0a1a00,#152000);border:1px solid var(--gold);border-radius:16px;padding:28px">
+          <div style="font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">🏷️ Compra e Venda</div>
+          <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:4px">5.000 – 10.000 Kz</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Taxa inicial de acesso ao contacto</div>
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:16px">+ 100.000 Kz no fecho</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Número do proprietário</div>
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">✅ Morada e visitas presenciais</div>
+            <div style="font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px">💰 Emolumento de fecho: 100.000 Kz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Kasa<span>Angola</span></div>
+          <div class="footer-desc">Plataforma imobiliária angolana que conecta proprietários directamente com compradores e arrendatários, sem intermediários, em todas as 21 províncias.</div>
+        </div>
+        <div>
+          <div class="footer-heading">Navegação</div>
+          <a class="footer-link" onclick="showPage('home')">Início</a>
+          <a class="footer-link" onclick="showPage('listings')">Imóveis</a>
+          <a class="footer-link" onclick="openPostModal()">Publicar anúncio</a>
+        </div>
+        <div>
+          <div class="footer-heading">Conta</div>
+          <a class="footer-link" onclick="showAuthModal('login')">Entrar</a>
+          <a class="footer-link" onclick="showAuthModal('reg')">Registar</a>
+          <a class="footer-link" onclick="showPage('profile')">Perfil</a>
+        </div>
+        <div>
+          <div class="footer-heading">Legal</div>
+          <a class="footer-link" onclick="showPage('legal')">Termos de uso</a>
+          <a class="footer-link" onclick="showPage('legal')">Direitos autorais</a>
+          <a class="footer-link" onclick="showPage('legal')">Aviso legal</a>
+        </div>
+      </div>
+      <!-- FOUNDER SECTION -->
+      <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 0;margin-bottom:32px">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;max-width:800px">
+          <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:42px;flex-shrink:0;border:3px solid var(--red)">👨‍💻</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Fundador & Criador</div>
+            <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px">Isaac Ndala Pedro</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Filho de Martinho Pessatana Pedro e Laureta Natchimdemba Pedro<br/>Nascido em Luanda, Angola · 12 de Março de 1995</div>
+            <div style="font-size:13px;color:#bbb;line-height:1.8;max-width:580px">Técnico de Energia e Instalações Eléctricas que descobriu a sua paixão pela computação aos 20 anos de idade. Através de <strong style="color:var(--text)">vídeos online e aplicativos de Inteligência Artificial</strong>, Isaac foi adquirindo conhecimentos na área da tecnologia e criou o <strong style="color:var(--text)">KasaAngola</strong> — a primeira plataforma imobiliária angolana que elimina os intermediários e conecta proprietários directamente com quem procura casa. Uma prova de que a determinação e as ferramentas certas podem transformar qualquer ideia em realidade. 🚀</div>
+            <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted)">🇦🇴 Luanda, Angola</div>
+              <div style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted)">⚡ Técnico de Electricidade</div>
+              <div style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted)">💻 Self-taught Developer</div>
+              <div style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted)">🏠 Fundador KasaAngola</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>KasaAngola © 2025 🇦🇴 — Fundado por <strong>Isaac Ndala Pedro</strong> · Todos os direitos reservados</div>
+        <div style="text-align:center;font-size:12px;color:var(--muted2)">Plataforma de anúncios digitais. Não somos agência imobiliária. Os utilizadores são responsáveis pelo conteúdo publicado.</div>
+        <div>Regido pela Lei Angolana · Luanda, Angola · 🚨 Polícia: 113</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════ LISTINGS ══════════════ -->
+<div class="page" id="page-listings">
+  <div class="container">
+    <div class="listings-layout">
+      <aside class="sidebar" id="sidebarEl">
+        <h3>🔎 Filtros</h3>
+        <div class="filter-group">
+          <div class="filter-label">Tipo</div>
+          <div class="filter-chips">
+            <button class="fchip active" onclick="setFType('todos',this)">Todos</button>
+            <button class="fchip" onclick="setFType('alugar',this)">Alugar</button>
+            <button class="fchip" onclick="setFType('vender',this)">Vender</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Província</div>
+          <select class="filter-select" id="sidebarZone" onchange="setFZone(this.value)">
+            <option value="todas">Todas (21)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Quartos</div>
+          <div class="filter-chips">
+            <button class="fchip active" onclick="setFQ(0,this)">Todos</button>
+            <button class="fchip" onclick="setFQ(1,this)">T1</button>
+            <button class="fchip" onclick="setFQ(2,this)">T2</button>
+            <button class="fchip" onclick="setFQ(3,this)">T3</button>
+            <button class="fchip" onclick="setFQ(4,this)">T4+</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Preço máximo (Kz)</div>
+          <select class="filter-select" id="maxPrice" onchange="renderListingsPage()">
+            <option value="0">Sem limite</option>
+            <option value="25000">25.000</option>
+            <option value="50000">50.000</option>
+            <option value="100000">100.000</option>
+            <option value="500000">500.000</option>
+            <option value="1000000">1.000.000</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Pesquisa</div>
+          <input class="filter-select" id="listSearchInp" placeholder="Nome ou localização..." oninput="renderListingsPage()" style="padding:9px 12px"/>
+        </div>
+      </aside>
+      <main>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700">Imóveis em Angola</div>
+            <div style="font-size:14px;color:var(--muted)" id="resultsCount">A carregar...</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:4px">⚠️ A KasaAngola não verifica nem garante os anúncios. Verifica sempre os documentos antes de pagar.</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <button class="btn btn-ghost" style="font-size:13px" onclick="document.getElementById('sidebarEl').classList.toggle('show')">⚙️ Filtros</button>
+            <select style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none" onchange="setSortOrder(this.value)">
+              <option value="recent">Mais recentes</option>
+              <option value="price_asc">Preço ↑</option>
+              <option value="price_desc">Preço ↓</option>
+              <option value="trust">Mais confiáveis</option>
+            </select>
+          </div>
+        </div>
+        <div class="listings-grid" id="listingsGrid"></div>
+        <div id="noResults" style="display:none;text-align:center;padding:60px 20px;color:var(--muted)">
+          <div style="font-size:48px;margin-bottom:16px">🔍</div>
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px">Nenhum imóvel encontrado</div>
+          <div style="font-size:14px">Tenta ajustar os filtros de pesquisa</div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DETAIL ══════════════ -->
+<div class="page" id="page-detail">
+  <div class="container">
+    <div style="padding:24px 0 8px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)">
+      <span style="cursor:pointer;color:var(--red)" onclick="showPage('listings')">← Imóveis</span>
+      <span>/</span>
+      <span id="breadcrumb">Detalhe</span>
+    </div>
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="detail-gallery" id="detailGallery">
+          <span style="font-size:80px">🏠</span>
+        </div>
+        <div class="gallery-btns" id="galleryBtns" style="display:none">
+          <button class="gbtn active" onclick="switchGallery('foto')">📷 Fotos</button>
+          <button class="gbtn" onclick="switchGallery('video')">🎥 Vídeos</button>
+        </div>
+        <div class="detail-info">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:16px">
+            <div class="detail-price" id="dPrice"></div>
+            <div id="dTypeBadge"></div>
+          </div>
+          <div class="detail-title" id="dTitle2"></div>
+          <div class="detail-loc" id="dLoc">📍</div>
+          <div id="dStars" style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--gold);margin-bottom:16px"></div>
+          <div class="detail-feats" id="dFeats"></div>
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:10px">📋 Descrição</h3>
+          <div class="detail-desc" id="dDesc"></div>
+
+          <!-- Trust -->
+          <div class="trust-box">
+            <div class="trust-header">
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700">🛡️ Nível de Confiança</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:2px">Baseado nos documentos verificados</div>
+              </div>
+              <div class="trust-score" id="dTrustCircle"></div>
+            </div>
+            <div class="trust-bar"><div class="trust-fill" id="dTrustBar"></div></div>
+            <div id="dTrustDocs"></div>
+          </div>
+
+          <!-- Owner -->
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:12px">👤 Proprietário</h3>
+          <div class="owner-card">
+            <div class="owner-av">👤</div>
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:600" id="dOwnerName"></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px" id="dOwnerPhone"></div>
+            </div>
+            <div id="dOwnerVerified" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px"></div>
+          </div>
+
+          <!-- Reviews -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h3 style="font-size:16px;font-weight:700">⭐ Avaliações</h3>
+            <button class="btn btn-ghost" style="font-size:13px;padding:7px 14px" onclick="openReviewModal()">✍️ Avaliar</button>
+          </div>
+          <div id="dReviews"></div>
+        </div>
+      </div>
+
+      <aside class="detail-sidebar">
+        <div class="sticky-sidebar">
+          <!-- Contact widget -->
+          <div class="contact-widget" id="contactWidget"></div>
+          <!-- Legal warning -->
+          <div style="background:linear-gradient(135deg,#1a0a00,#200000);border:1px solid var(--orange);border-radius:14px;padding:18px">
+            <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:10px">⚠️ Aviso Legal</div>
+            <div style="font-size:12px;color:#ffccaa;line-height:1.7">
+              • Verifica sempre os documentos do proprietário.<br/>
+              • Nunca pagues sem visitar o imóvel pessoalmente.<br/>
+              • Burla e extorsão: <strong>prisão até 8 anos</strong> (Art. 217.º e 223.º).<br/>
+              • 🚨 Polícia Nacional: <strong>113</strong>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CHAT ══════════════ -->
+<div class="page" id="page-chat">
+  <div class="chat-layout">
+    <div class="chat-sidebar" id="chatSidebar">
+      <div class="chat-sidebar-head">
+        <h3>💬 Mensagens</h3>
+        <input class="chat-search" placeholder="🔍 Pesquisar..."/>
+      </div>
+      <div class="chat-list" id="chatListEl"></div>
+    </div>
+    <div class="chat-window">
+      <div class="chat-window-head" id="chatWindowHead">
+        <div style="font-size:20px">💬</div>
+        <div><div style="font-size:15px;font-weight:600">Selecciona uma conversa</div></div>
+      </div>
+      <div id="chatLockBarEl"></div>
+      <div class="messages-area" id="messagesAreaEl">
+        <div style="text-align:center;padding:60px 20px;color:var(--muted)">
+          <div style="font-size:48px;margin-bottom:16px">💬</div>
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px">Selecciona uma conversa</div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input type="text" id="chatInputField" placeholder="Escreve uma mensagem..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="chat-send-btn" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PROFILE ══════════════ -->
+<div class="page" id="page-profile">
+  <div class="container">
+    <div class="profile-layout">
+      <aside>
+        <div class="profile-card">
+          <div class="profile-av" id="profAvEl" onclick="document.getElementById('profPhotoInp').click()">👤</div>
+          <input type="file" accept="image/*" id="profPhotoInp" style="display:none" onchange="handleProfPhoto(event)"/>
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700" id="profNameEl">Utilizador</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px" id="profPhoneEl"></div>
+          <div id="profTrustBadge" style="display:inline-block;font-size:12px;padding:4px 12px;border-radius:20px;background:var(--card2);color:var(--muted);margin-top:8px">🔒 Sem verificação</div>
+          <div class="profile-stat-grid">
+            <div class="pstat"><div class="pstat-val" id="statAn">0</div><div class="pstat-lbl">Anúncios</div></div>
+            <div class="pstat"><div class="pstat-val" id="statFav">0</div><div class="pstat-lbl">Favoritos</div></div>
+            <div class="pstat"><div class="pstat-val" id="statTrust">0%</div><div class="pstat-lbl">Confiança</div></div>
+            <div class="pstat"><div class="pstat-val" id="statUnlocked">0</div><div class="pstat-lbl">Desbloq.</div></div>
+          </div>
+          <button class="btn btn-red" style="width:100%;padding:12px;font-size:14px;margin-bottom:10px" onclick="openPostModal()">➕ Publicar anúncio</button>
+          <button class="btn btn-ghost" style="width:100%;padding:12px;font-size:14px" onclick="logout()">🚪 Sair</button>
+        </div>
+      </aside>
+      <main>
+        <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:24px">O meu perfil</div>
+        <!-- Trust -->
+        <div class="docs-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700">🛡️ Verificação de Documentos</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px">Quanto mais documentos, mais confiável és para outros utilizadores</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800" id="profileTrustScore">0%</div>
+              <div style="font-size:12px;color:var(--muted)">confiança</div>
+            </div>
+          </div>
+          <div style="background:var(--border);border-radius:20px;height:8px;margin-bottom:20px;overflow:hidden"><div id="profileTrustBar" style="height:100%;border-radius:20px;background:var(--muted);transition:width .6s"></div></div>
+          <div class="doc-tab-header">
+            <button class="dtab active" onclick="setDocTab(0,this)">🪪 BI</button>
+            <button class="dtab" onclick="setDocTab(1,this)">🚗 Carta</button>
+            <button class="dtab" onclick="setDocTab(2,this)">🛂 Passaporte</button>
+            <button class="dtab" onclick="setDocTab(3,this)">🔢 NIF</button>
+            <button class="dtab" onclick="setDocTab(4,this)">🏠 Propriedade</button>
+          </div>
+          <div class="dpanel show" id="dp0">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">🪪 Bilhete de Identidade — +30%</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Documento principal emitido pela DNIRN. Obrigatório para qualquer transacção imobiliária.</div>
+            <div class="side-tabs"><button class="stab active" onclick="setSideTab('bi','f',this)">Frente</button><button class="stab" onclick="setSideTab('bi','v',this)">Verso</button></div>
+            <div id="bi-f-area"><div class="ubox" id="bi-f-box" onclick="document.getElementById('bi-f-inp').click()"><input type="file" accept="image/*" id="bi-f-inp" style="display:none" onchange="handleDoc(event,'bi','f')"/><div style="font-size:32px;margin-bottom:8px">🪪</div><div style="font-size:14px;color:var(--muted)">Clica para carregar a frente do BI</div></div><img id="bi-f-prev" class="doc-prev" style="display:none"/></div>
+            <div id="bi-v-area" style="display:none"><div class="ubox" id="bi-v-box" onclick="document.getElementById('bi-v-inp').click()"><input type="file" accept="image/*" id="bi-v-inp" style="display:none" onchange="handleDoc(event,'bi','v')"/><div style="font-size:32px;margin-bottom:8px">🪪</div><div style="font-size:14px;color:var(--muted)">Clica para carregar o verso do BI</div></div><img id="bi-v-prev" class="doc-prev" style="display:none"/></div>
+          </div>
+          <div class="dpanel" id="dp1">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">🚗 Carta de Condução — +20%</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Emitida pelo IMTT Angola. Aceite como identificação secundária válida.</div>
+            <div class="side-tabs"><button class="stab active" onclick="setSideTab('carta','f',this)">Frente</button><button class="stab" onclick="setSideTab('carta','v',this)">Verso</button></div>
+            <div id="carta-f-area"><div class="ubox" id="carta-f-box" onclick="document.getElementById('carta-f-inp').click()"><input type="file" accept="image/*" id="carta-f-inp" style="display:none" onchange="handleDoc(event,'carta','f')"/><div style="font-size:32px;margin-bottom:8px">🚗</div><div style="font-size:14px;color:var(--muted)">Frente da Carta de Condução</div></div><img id="carta-f-prev" class="doc-prev" style="display:none"/></div>
+            <div id="carta-v-area" style="display:none"><div class="ubox" id="carta-v-box" onclick="document.getElementById('carta-v-inp').click()"><input type="file" accept="image/*" id="carta-v-inp" style="display:none" onchange="handleDoc(event,'carta','v')"/><div style="font-size:32px;margin-bottom:8px">🚗</div><div style="font-size:14px;color:var(--muted)">Verso da Carta de Condução</div></div><img id="carta-v-prev" class="doc-prev" style="display:none"/></div>
+          </div>
+          <div class="dpanel" id="dp2">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">🛂 Passaporte — +20%</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Emitido pelo SMIC. Alta segurança, aceite internacionalmente.</div>
+            <div class="side-tabs"><button class="stab active" onclick="setSideTab('pass','f',this)">Dados</button><button class="stab" onclick="setSideTab('pass','v',this)">Foto</button></div>
+            <div id="pass-f-area"><div class="ubox" id="pass-f-box" onclick="document.getElementById('pass-f-inp').click()"><input type="file" accept="image/*" id="pass-f-inp" style="display:none" onchange="handleDoc(event,'pass','f')"/><div style="font-size:32px;margin-bottom:8px">🛂</div><div style="font-size:14px;color:var(--muted)">Página de dados do Passaporte</div></div><img id="pass-f-prev" class="doc-prev" style="display:none"/></div>
+            <div id="pass-v-area" style="display:none"><div class="ubox" id="pass-v-box" onclick="document.getElementById('pass-v-inp').click()"><input type="file" accept="image/*" id="pass-v-inp" style="display:none" onchange="handleDoc(event,'pass','v')"/><div style="font-size:32px;margin-bottom:8px">🛂</div><div style="font-size:14px;color:var(--muted)">Página de foto do Passaporte</div></div><img id="pass-v-prev" class="doc-prev" style="display:none"/></div>
+          </div>
+          <div class="dpanel" id="dp3">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">🔢 Número de Contribuinte (NIF) — +15%</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Emitido pela AGT — Administração Geral Tributária de Angola. Obrigatório para transacções imobiliárias formais.</div>
+            <div class="ubox" id="nif-f-box" onclick="document.getElementById('nif-f-inp').click()"><input type="file" accept="image/*" id="nif-f-inp" style="display:none" onchange="handleDoc(event,'nif','f')"/><div style="font-size:32px;margin-bottom:8px">🔢</div><div style="font-size:14px;color:var(--muted)">Cartão de Contribuinte / NIF</div></div>
+            <img id="nif-f-prev" class="doc-prev" style="display:none"/>
+          </div>
+          <div class="dpanel" id="dp4">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">🏠 Comprovativo de Propriedade — +15%</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Escritura pública ou registo predial emitido pelo Cartório Notarial ou Conservatória dos Registos.</div>
+            <div class="ubox" id="prop-f-box" onclick="document.getElementById('prop-f-inp').click()"><input type="file" accept="image/*" id="prop-f-inp" style="display:none" onchange="handleDoc(event,'prop','f')"/><div style="font-size:32px;margin-bottom:8px">🏠</div><div style="font-size:14px;color:var(--muted)">Escritura ou Registo Predial</div></div>
+            <img id="prop-f-prev" class="doc-prev" style="display:none"/>
+          </div>
+        </div>
+        <!-- Menu items -->
+        <div class="profile-menu-item" onclick="showFavs()">❤️ <span style="flex:1">Casas favoritas</span> <span id="profDocsBadge" style="font-size:12px;color:var(--muted)">0 guardadas</span></div>
+        <div class="profile-menu-item">📋 <span style="flex:1">Meus anúncios</span> <span style="color:var(--muted)">›</span></div>
+        <div class="profile-menu-item" onclick="showPage('legal')">⚖️ <span style="flex:1">Termos Legais</span> <span style="color:var(--muted)">›</span></div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LEGAL ══════════════ -->
+<div class="page" id="page-legal">
+  <div class="container">
+    <div class="legal-layout">
+      <div class="legal-hero">
+        <div style="font-size:48px;margin-bottom:12px">⚖️</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px">Aviso Legal KasaAngola</div>
+        <div style="font-size:14px;color:var(--muted)">Lei n.º 38/20 de 11 de Novembro — Código Penal da República de Angola</div>
+      </div>
+      <div class="lsec">
+        <div class="lsec-title">💰 Tabela de Emolumentos</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple);border-radius:12px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--purple);margin-bottom:8px">🔑 Arrendamento</div>
+            <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px">3.000 Kz</div>
+            <div style="font-size:12px;color:var(--muted)">Taxa de acesso ao contacto</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#0a1a00,#152000);border:1px solid var(--gold);border-radius:12px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px">🏷️ Compra e Venda</div>
+            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:2px">5.000 – 10.000 Kz</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">taxa inicial</div>
+            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--gold)">100.000 Kz</div>
+            <div style="font-size:12px;color:var(--muted)">emolumento no fecho</div>
+          </div>
+        </div>
+      </div>
+      <div class="lsec">
+        <div class="lsec-title">🔒 Protecção de Contactos</div>
+        <div class="ltext">Os contactos pessoais (número de telefone e morada exacta) ficam bloqueados até ao pagamento da taxa de acesso via Multicaixa Express. Este sistema existe para evitar que proprietários e clientes se encontrem fora da plataforma sem registo, protegendo ambas as partes de situações inseguras.</div>
+      </div>
+      <div class="lsec">
+        <div class="lsec-title">🚨 Crimes Graves — Código Penal Angolano</div>
+        <div class="law-art"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">📜 Artigo 217.º — BURLA</div><div class="ltext">Induzir em erro por meio fraudulento causando prejuízo patrimonial — <strong style="color:#ff6666">prisão até 3 anos</strong> ou multa.</div></div>
+        <div class="law-art"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">📜 Artigo 218.º — BURLA QUALIFICADA</div><div class="ltext">Burla de valor elevado ou por modo de vida — <strong style="color:#ff6666">prisão de 2 a 8 anos</strong>, sem possibilidade de suspensão.</div></div>
+        <div class="law-art"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">📜 Artigo 223.º — EXTORSÃO</div><div class="ltext">Constranger por violência ou ameaça grave — <strong style="color:#ff6666">prisão de 1 a 8 anos</strong>.</div></div>
+        <div class="law-art"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">📜 Artigo 356.º — FALSIFICAÇÃO DE DOCUMENTOS</div><div class="ltext">Usar ou falsificar documentos de identificação — <strong style="color:#ff6666">prisão até 5 anos</strong>.</div></div>
+        <div style="background:#1a0000;border:1px solid var(--red);border-radius:10px;padding:14px;margin-top:12px;text-align:center">
+          <div style="font-size:15px;color:#ffaaaa;margin-bottom:4px">🚨 <strong>Denuncia crimes imediatamente</strong></div>
+          <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--red)">113</div>
+          <div style="font-size:13px;color:#ffaaaa">Polícia Nacional de Angola</div>
+        </div>
+      </div>
+      <div class="lsec">
+        <div class="lsec-title">©️ Direitos Autorais e Propriedade Intelectual</div>
+        <div class="copy-ok" style="margin-bottom:12px"><div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:8px">✅ O QUE PODES FAZER</div><div class="ltext">✓ Partilhar o link da plataforma com outros utilizadores<br/>✓ Publicar anúncios dos teus próprios imóveis<br/>✓ Usar o chat oficial para comunicar com proprietários<br/>✓ Deixar avaliações honestas sobre imóveis visitados</div></div>
+        <div class="copy-no"><div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:8px">❌ O QUE NÃO PODES FAZER</div><div class="ltext">✗ Copiar ou reproduzir o design, código ou nome "KasaAngola" sem autorização escrita<br/>✗ Publicar imóveis que não são teus ou que não tens autorização para anunciar<br/>✗ Contornar o sistema de protecção de contactos<br/>✗ Partilhar números de telefone directamente no chat<br/>✗ Usar a plataforma para fins fraudulentos ou enganosos</div></div>
+      </div>
+      <div class="lsec">
+        <div class="lsec-title">⚠️ Isenção de Responsabilidade</div>
+        <div style="background:linear-gradient(135deg,#1a0a00,#200000);border:1px solid var(--orange);border-radius:12px;padding:18px;margin-bottom:16px">
+          <div style="font-size:15px;font-weight:800;color:var(--orange);margin-bottom:12px">🚨 AVISO IMPORTANTE — LÊ COM ATENÇÃO</div>
+          <div class="ltext">A <strong>KasaAngola</strong> é uma plataforma digital de anúncios imobiliários. Actuamos exclusivamente como <strong>intermediário tecnológico</strong>, à semelhança do OLX, Facebook Marketplace ou Imovirtual.<br/><br/>
+          A KasaAngola <strong style="color:#ff6666">NÃO É</strong> uma agência imobiliária, mediadora, nem parte em qualquer negócio entre proprietários e clientes.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div style="background:#0a200a;border:1px solid #22c55e44;border-radius:12px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px">✅ O QUE SOMOS</div>
+            <div style="font-size:12px;color:#aaffaa;line-height:1.8">
+              ✓ Plataforma de anúncios<br/>
+              ✓ Serviço de ligação entre pessoas<br/>
+              ✓ Sistema de verificação de identidade<br/>
+              ✓ Ferramenta de comunicação segura
+            </div>
+          </div>
+          <div style="background:#200a0a;border:1px solid #cc000044;border-radius:12px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:10px">❌ O QUE NÃO SOMOS</div>
+            <div style="font-size:12px;color:#ffaaaa;line-height:1.8">
+              ✗ Agência imobiliária<br/>
+              ✗ Mediadora de negócios<br/>
+              ✗ Garante dos anúncios<br/>
+              ✗ Parte nos contratos
+            </div>
+          </div>
+        </div>
+        <div class="lsec" style="background:var(--card2);margin-bottom:0">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px">📋 NÃO NOS RESPONSABILIZAMOS POR:</div>
+          <div class="ltext" style="line-height:2.0">
+            • Veracidade, exactidão ou actualidade dos anúncios publicados<br/>
+            • Qualidade, estado de conservação ou condições dos imóveis<br/>
+            • Acordos, contratos ou pagamentos realizados entre utilizadores<br/>
+            • Disputas, litígios ou desentendimentos entre proprietários e clientes<br/>
+            • Encontros pessoais ocorridos fora ou dentro da plataforma<br/>
+            • Danos materiais ou morais resultantes de anúncios fraudulentos<br/>
+            • Actos ilícitos praticados por utilizadores registados<br/>
+            • Informações falsas submetidas por proprietários ou clientes
+          </div>
+        </div>
+        <div style="background:linear-gradient(135deg,#0a1628,#0a2040);border:1px solid var(--blue);border-radius:12px;padding:16px;margin-top:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px">⚖️ RESPONSABILIDADE EXCLUSIVA DO UTILIZADOR</div>
+          <div class="ltext">Ao publicar um anúncio ou ao desbloquear um contacto, o utilizador declara expressamente que:<br/><br/>
+          1. <strong>O proprietário</strong> é o legítimo dono ou tem autorização para anunciar o imóvel.<br/>
+          2. <strong>Todas as informações</strong> fornecidas são verdadeiras e actualizadas.<br/>
+          3. <strong>O cliente</strong> aceita que a KasaAngola não garante a veracidade dos anúncios.<br/>
+          4. Qualquer <strong>falsidade ou fraude</strong> é da exclusiva responsabilidade do utilizador infractor, sujeito a processo crime nos termos da Lei n.º 38/20.</div>
+        </div>
+        <div style="background:#1a0a00;border:1px solid var(--orange);border-radius:12px;padding:16px;margin-top:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:8px">🛡️ COMO NOS PROTEGEMOS MUTUAMENTE</div>
+          <div class="ltext"><strong style="color:var(--orange)">Recomendamos sempre:</strong><br/>
+          ✓ Verificar o BI e documentos do proprietário antes de qualquer pagamento<br/>
+          ✓ Visitar o imóvel pessoalmente antes de assinar qualquer contrato<br/>
+          ✓ Nunca pagar valores sem recibo ou comprovativo escrito<br/>
+          ✓ Assinar sempre contrato de arrendamento ou compra e venda<br/>
+          ✓ Denunciar anúncios suspeitos à equipa KasaAngola e à Polícia (113)</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;display:flex;align-items:center;gap:20px">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">👨‍💻</div>
+        <div>
+          <div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Fundador & Proprietário</div>
+          <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:3px">Isaac Ndala Pedro</div>
+          <div style="font-size:12px;color:var(--muted)">Luanda, Angola · KasaAngola © 2025</div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:24px 0;font-size:13px;color:var(--muted)">KasaAngola © 2025 🇦🇴 — Fundado por <strong>Isaac Ndala Pedro</strong> · Todos os direitos reservados<br/>Regido pela Lei Angolana · Luanda, Angola</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUTH MODAL ══ -->
+<div class="modal-ov" id="authModal">
+  <div class="modal-box" style="max-width:420px">
+    <div style="display:flex;gap:0;background:var(--dark);border-radius:10px;padding:3px;margin-bottom:20px">
+      <button id="authTabLogin" style="flex:1;padding:10px;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:var(--red);color:#fff" onclick="setAuthTab('login')">Entrar</button>
+      <button id="authTabReg" style="flex:1;padding:10px;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:var(--muted)" onclick="setAuthTab('reg')">Cadastrar</button>
+    </div>
+    <div id="authFormErr" style="color:var(--red);font-size:13px;margin-bottom:10px;display:none"></div>
+    <div id="authFormEl"></div>
+    <button onclick="document.getElementById('authModal').classList.remove('show')" style="width:100%;padding:10px;background:transparent;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px">Cancelar</button>
+  </div>
+</div>
+
+<!-- ══ UNLOCK MODAL ══ -->
+<div class="modal-ov" id="unlockModal">
+  <div class="modal-box">
+    <div class="modal-title">🔓 Desbloquear Contacto</div>
+    <div style="background:linear-gradient(135deg,#0a0a25,#15103a);border:2px solid var(--purple);border-radius:16px;padding:24px;margin-bottom:20px;text-align:center">
+      <div style="font-size:40px;margin-bottom:12px">🔐</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:4px" id="unlockPriceDisplay">3.000 Kz</div>
+      <div style="font-size:13px;color:#ccaaff;margin-bottom:16px" id="unlockSubDisplay">Pagamento único. Acesso vitalício ao contacto.</div>
+      <div style="text-align:left;display:flex;flex-direction:column;gap:8px" id="unlockFeatsList">
+        <div style="font-size:13px;color:#ddbbff">✅ Número de telefone do proprietário</div>
+        <div style="font-size:13px;color:#ddbbff">✅ Morada exacta do imóvel</div>
+        <div style="font-size:13px;color:#ddbbff">✅ Autorização para visita presencial</div>
+        <div style="font-size:13px;color:#ddbbff">🔒 Registo oficial na KasaAngola</div>
+      </div>
+    </div>
+    <div class="mc-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-size:24px">💳</span><div><div style="font-size:15px;font-weight:700;color:var(--green)">Multicaixa Express</div><div style="font-size:12px;color:var(--muted)">Pagamento seguro 🇦🇴</div></div></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Valor</div>
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);margin-bottom:12px" id="unlockPriceMC">3.000 Kz</div>
+      <div class="mc-ref" style="background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">REFERÊNCIA MULTICAIXA</div>
+        <div class="mc-ref-num" id="unlockRefNum">000 000 000</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Entidade: <strong>11351</strong></div>
+      </div>
+    </div>
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:var(--muted);line-height:2.0">
+      <strong style="color:var(--text);font-size:14px">💳 Escolhe como pagar:</strong>
+    </div>
+    <!-- MULTICAIXA -->
+    <div style="background:linear-gradient(135deg,#0a1a0a,#001400);border:1px solid var(--green);border-radius:12px;padding:16px;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:10px">💳 Opção 1 — Multicaixa Express</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.9">
+        <span style="color:#aaa">1.</span> Abre o <strong style="color:var(--text)">Multicaixa Express</strong><br/>
+        <span style="color:#aaa">2.</span> <strong style="color:var(--text)">Pagar Serviços</strong> → Entidade <strong style="color:var(--text)">11351</strong><br/>
+        <span style="color:#aaa">3.</span> Referência: <strong style="color:var(--green);font-family:monospace;font-size:14px" id="mcRefInSteps">---</strong>
+      </div>
+    </div>
+    <!-- BAI -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:700;color:#60a5fa;margin-bottom:10px">🏦 Opção 2 — Transferência BAI</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">IBAN BAI</div>
+      <div style="font-family:monospace;font-size:13px;color:var(--text);background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:10px;letter-spacing:1px;cursor:pointer" onclick="copyToClipboard('0040000009520869101 23','IBAN BAI')">
+        0040 0000 09520869101 23 <span style="color:var(--muted);font-size:11px">📋</span>
+      </div>
+    </div>
+    <!-- BFA -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px">
+      <div style="font-size:14px;font-weight:700;color:#f59e0b;margin-bottom:10px">🏦 Opção 3 — Transferência BFA</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">IBAN BFA</div>
+      <div style="font-family:monospace;font-size:13px;color:var(--text);background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:10px;letter-spacing:1px;cursor:pointer" onclick="copyToClipboard('0006000079471022301 54','IBAN BFA')">
+        0006 0000 79471022301 54 <span style="color:var(--muted);font-size:11px">📋</span>
+      </div>
+    </div>
+    <a href="https://wa.me/244935633508?text=Ol%C3%A1%21%20Acabei%20de%20pagar%20para%20desbloquear%20um%20contacto%20no%20KasaAngola.%20Segue%20o%20comprovativo%3A" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px;background:#16a34a;border:none;border-radius:14px;color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:12px">
+      <span style="font-size:22px">📲</span>
+      <div style="text-align:left">
+        <div>Enviar comprovativo por WhatsApp</div>
+        <div style="font-size:12px;font-weight:400;opacity:.85">+244 935 633 508 · Desbloqueio em 5 minutos</div>
+      </div>
+    </a>
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7">
+      📌 Após o pagamento, envia o <strong style="color:var(--text)">comprovativo</strong> para o WhatsApp<br/>
+      <strong style="color:var(--text)">+244 935 633 508</strong> e aguarda a confirmação.
+    </div>
+    <div style="background:linear-gradient(135deg,#0a1a00,#112200);border:1px solid #16a34a55;border-radius:12px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:28px">⏱️</span>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#4ade80;margin-bottom:3px">Desbloqueio em 5 minutos!</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">Após receber o teu comprovativo, a equipa KasaAngola verifica e desbloqueia o contacto manualmente. Recebes confirmação por WhatsApp.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button onclick="document.getElementById('unlockModal').classList.remove('show')" class="btn btn-ghost" style="flex:1;padding:13px">Fechar</button>
+      <button onclick="confirmUnlock()" style="flex:1;padding:13px;background:var(--purple);border:none;border-radius:12px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer">✅ Já enviei o comprovativo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POST MODAL ══ -->
+<div class="modal-ov" id="postModal">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-title">➕ Publicar Anúncio</div>
+    <div class="mlabel" style="font-size:12px;color:var(--muted);margin-bottom:8px">📷 Fotos e 🎥 Vídeos</div>
+    <div style="display:flex;gap:0;background:var(--dark);border-radius:8px;padding:3px;margin-bottom:12px;width:fit-content">
+      <button class="dtab active" onclick="setMUpTab('fotos',this)">📷 Fotos</button>
+      <button class="dtab" onclick="setMUpTab('videos',this)">🎥 Vídeos</button>
+    </div>
+    <div id="fotosArea" onclick="document.getElementById('pFotosInp').click()" style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px">
+      <input type="file" accept="image/*" multiple id="pFotosInp" style="display:none" onchange="handlePostFotos(event)"/>
+      <div style="font-size:32px;margin-bottom:6px">📷</div>
+      <div style="font-size:13px;color:var(--muted)">Clica para adicionar fotos (máx. 5)</div>
+    </div>
+    <div id="videosArea" onclick="document.getElementById('pVideosInp').click()" style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;display:none">
+      <input type="file" accept="video/*" multiple id="pVideosInp" style="display:none" onchange="handlePostVideos(event)"/>
+      <div style="font-size:32px;margin-bottom:6px">🎥</div>
+      <div style="font-size:13px;color:var(--muted)">Clica para adicionar vídeos (máx. 2)</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="mediaPrevEl"></div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="btn btn-red" id="ptA" onclick="selPT('alugar')" style="padding:10px 20px">🔑 Alugar</button>
+      <button class="btn btn-ghost" id="ptV" onclick="selPT('vender')" style="padding:10px 20px">🏷️ Vender</button>
+    </div>
+    <div class="post-modal-grid">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Título *</div>
+        <input class="inp-field" id="pTitle" placeholder="Ex: T3 Mobilado em Talatona"/>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Preço (Kz) *</div>
+        <input class="inp-field" id="pPrice" type="number" placeholder="25000"/>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Província</div>
+        <select class="inp-field" id="pZone" style="margin:0"></select>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Área (m²)</div>
+        <input class="inp-field" id="pArea" type="number" placeholder="80"/>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Quartos</div>
+        <select class="inp-field" id="pQ" style="margin:0"><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Casas de banho</div>
+        <select class="inp-field" id="pB" style="margin:0"><option>1</option><option>2</option><option>3</option><option>4+</option></select>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Descrição</div>
+    <textarea class="inp-field" id="pDesc" rows="3" style="resize:none;height:80px;margin-bottom:12px" placeholder="Descreve o imóvel..."></textarea>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Teu contacto (visível só após pagamento)</div>
+    <input class="inp-field" id="pPhone" placeholder="+244 900 000 000"/>
+    <div style="background:#1a0a00;border:2px solid var(--orange);border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:10px">⚠️ DECLARAÇÃO OBRIGATÓRIA</div>
+      <div style="font-size:12px;color:#ffccaa;line-height:1.8">
+        Ao publicar este anúncio, <strong>declaro e confirmo</strong> que:<br/><br/>
+        ✓ Sou o legítimo proprietário ou tenho autorização para anunciar este imóvel<br/>
+        ✓ Todas as informações são verdadeiras e actualizadas<br/>
+        ✓ Aceito total responsabilidade pelo conteúdo publicado<br/>
+        ✓ A KasaAngola não é responsável pelos meus actos<br/><br/>
+        <strong style="color:#ff6666">Publicar informações falsas constitui crime de Burla (Art. 217.º e 218.º do Código Penal Angolano) punível com prisão até 8 anos.</strong>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button onclick="document.getElementById('postModal').classList.remove('show')" class="btn btn-ghost" style="flex:1;padding:13px">Cancelar</button>
+      <button onclick="submitPost()" class="btn btn-red" style="flex:1;padding:13px;font-size:15px">Publicar anúncio 🏠</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REVIEW MODAL ══ -->
+<div class="modal-ov" id="reviewModal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-title">⭐ Deixar Avaliação</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Classificação</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px" id="starsEl">
+      <span style="font-size:30px;cursor:pointer;opacity:.3" onclick="setStar(1)">⭐</span>
+      <span style="font-size:30px;cursor:pointer;opacity:.3" onclick="setStar(2)">⭐</span>
+      <span style="font-size:30px;cursor:pointer;opacity:.3" onclick="setStar(3)">⭐</span>
+      <span style="font-size:30px;cursor:pointer;opacity:.3" onclick="setStar(4)">⭐</span>
+      <span style="font-size:30px;cursor:pointer;opacity:.3" onclick="setStar(5)">⭐</span>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Comentário</div>
+    <textarea class="inp-field" id="reviewTxt" rows="4" style="resize:none;margin-bottom:16px" placeholder="Como foi a tua experiência?"></textarea>
+    <div style="display:flex;gap:12px">
+      <button onclick="document.getElementById('reviewModal').classList.remove('show')" class="btn btn-ghost" style="flex:1;padding:12px">Cancelar</button>
+      <button onclick="submitReview()" class="btn btn-red" style="flex:1;padding:12px">Publicar ⭐</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var PROVINCES=['Bengo','Benguela','Bié','Cabinda','Cuando Cubango','Cuando','Cuanza Norte','Cuanza Sul','Cunene','Huambo','Huíla','Ícolo e Bengo','Luanda','Lunda Norte','Lunda Sul','Malanje','Moxico','Moxico Leste','Namibe','Uíge','Zaire'];
+var EMOJIS=['🏠','🏡','🏢','🏬','🏘️'];
+var DOC_W={bi:30,carta:20,pass:20,nif:15,prop:15};
+var DOC_LBL={bi:'BI',carta:'Carta Condução',pass:'Passaporte',nif:'NIF',prop:'Comprov. Prop.'};
+var DOC_ICO={bi:'🪪',carta:'🚗',pass:'🛂',nif:'🔢',prop:'🏠'};
+var users=[{email:'demo@kasa.ao',senha:'1234',nome:'João Silva',phone:'+244 923 456 789',photo:null}];
+var currentUser=null,authMode='login';
+var unlockedContacts={};
+var pendingUnlockId=null;
+var currentDetailId=-1,currentDetailMedia='foto';
+var favs=[],sortOrder='recent',fType='todos',fZone='todas',fQ=0,maxP=0;
+var postType='alugar',postFotos=[],postVideos=[];
+var selectedStars=5;
+var userDocs={bi:{f:null,v:null},carta:{f:null,v:null},pass:{f:null,v:null},nif:{f:null},prop:{f:null}};
+var activeChatIdx=0,activeChatListingId=null;
+var listings=[
+  {id:0,type:'alugar',title:'T3 Mobilado em Talatona',zone:'Luanda',price:30000,quartos:3,banhos:2,area:120,photos:[],videos:[],emoji:'🏠',desc:'Apartamento T3 totalmente mobilado em Talatona, perto do Belas Shopping. Condomínio fechado, segurança 24h, piscina e parque de estacionamento privado.',owner:'Carlos Mendes',ownerPhone:'+244 923 456 789',ownerAddress:'Rua da Samba, Bloco B, Ap. 4, Talatona, Luanda',destaque:true,rating:4.5,trustScore:80,reviews:[{user:'Ana T.',stars:5,text:'Casa excelente! Proprietário muito atencioso e transparente.',time:'Jan 2025'},{user:'Miguel S.',stars:4,text:'Boa localização, bem mobilada. Recomendo.',time:'Dez 2024'}]},
+  {id:1,type:'vender',title:'Vivenda T4 no Kilamba',zone:'Luanda',price:4500000,quartos:4,banhos:3,area:200,photos:[],videos:[],emoji:'🏡',desc:'Vivenda T4 no Kilamba, zona nova e segura. Jardim privado, garagem para 2 carros. Acabamentos de alta qualidade.',owner:'Ana Teixeira',ownerPhone:'+244 912 345 678',ownerAddress:'Rua K2, Casa 45, Kilamba, Luanda',destaque:false,rating:4.8,trustScore:95,reviews:[{user:'Pedro L.',stars:5,text:'Vivenda incrível! Negócio rápido e sem surpresas.',time:'Fev 2025'}]},
+  {id:2,type:'alugar',title:'T2 no Centro de Benguela',zone:'Benguela',price:25000,quartos:2,banhos:1,area:80,photos:[],videos:[],emoji:'🏢',desc:'Apartamento T2 no centro de Benguela, perto de tudo. Vista para o mar, 2.º andar com elevador.',owner:'Manuel Silva',ownerPhone:'+244 934 567 890',ownerAddress:'Av. Norton de Matos, Ed. Savana, Ap. 12, Benguela',destaque:false,rating:4.2,trustScore:50,reviews:[]},
+  {id:3,type:'alugar',title:'T4 Luxo em Miramar',zone:'Luanda',price:40000,quartos:4,banhos:3,area:180,photos:[],videos:[],emoji:'🏠',desc:'Apartamento de luxo em Miramar com vista panorâmica para o mar. Acabamentos de alto padrão, cozinha equipada, ar condicionado central.',owner:'Sofia Leal',ownerPhone:'+244 945 678 901',ownerAddress:'Av. Miramar, Bloco Sol, Ap. 8, Luanda',destaque:true,rating:4.9,trustScore:100,reviews:[{user:'Carla M.',stars:5,text:'O melhor apartamento de Luanda! Absolutamente incrível.',time:'Mar 2025'}]},
+  {id:4,type:'vender',title:'Moradia T5 no Huambo',zone:'Huambo',price:6000000,quartos:5,banhos:4,area:300,photos:[],videos:[],emoji:'🏡',desc:'Grande moradia T5 no Huambo com terreno de 500m². Zona residencial tranquila, ideal para família grande.',owner:'Pedro Neto',ownerPhone:'+244 956 789 012',ownerAddress:'Bairro Popular, Rua 12, Casa 7, Huambo',destaque:false,rating:4.0,trustScore:65,reviews:[]},
+  {id:5,type:'alugar',title:'T1 em Cabinda Centro',zone:'Cabinda',price:18000,quartos:1,banhos:1,area:45,photos:[],videos:[],emoji:'🏬',desc:'Apartamento T1 bem localizado em Cabinda Centro. Inclui água e luz. Ideal para profissional.',owner:'Maria João',ownerPhone:'+244 967 890 123',ownerAddress:'Rua Henrique de Carvalho, Ap. 3, Cabinda',destaque:false,rating:3.8,trustScore:30,reviews:[]},
+  {id:6,type:'alugar',title:'T2 Benguela-Mar',zone:'Benguela',price:22000,quartos:2,banhos:1,area:70,photos:[],videos:[],emoji:'🏠',desc:'Casa T2 a 200m da praia em Benguela. Vista para o mar, quintal privado, zona muito tranquila.',owner:'Rosa Ferreira',ownerPhone:'+244 978 901 234',ownerAddress:'Rua da Praia, Casa 8, Benguela',destaque:false,rating:4.3,trustScore:70,reviews:[]},
+  {id:7,type:'vender',title:'Moradia T3 em Saurimo',zone:'Lunda Sul',price:3200000,quartos:3,banhos:2,area:150,photos:[],videos:[],emoji:'🏡',desc:'Moradia T3 no centro de Saurimo. Zona tranquila, próximo de serviços e escolas.',owner:'António Lopes',ownerPhone:'+244 989 012 345',ownerAddress:'Bairro Novo, Rua 5, Casa 12, Saurimo',destaque:false,rating:4.1,trustScore:55,reviews:[]}
+];
+var myListings=[];
+var activeChats=[
+  {id:1,name:'Carlos Mendes',emoji:'👨',about:'T3 Talatona',listingId:0,msgs:[{text:'Olá! Ainda está disponível o T3 em Talatona?',s:false,t:'09:10'},{text:'Sim! Quando quer visitar?',s:true,t:'09:12'}],unread:1},
+  {id:2,name:'Ana Teixeira',emoji:'👩',about:'Vivenda Kilamba',listingId:1,msgs:[{text:'Qual é o preço final negociável?',s:false,t:'ontem'}],unread:0},
+  {id:3,name:'Sofia Leal',emoji:'👩‍💼',about:'T4 Miramar',listingId:3,msgs:[{text:'Posso agendar uma visita para sábado?',s:false,t:'seg'}],unread:2}
+];
+
+// ── UTILS ──
+function fmtP(p,t){if(p>=1000000)return(p/1000000).toFixed(1).replace('.0','')+' M Kz';return p.toLocaleString()+' Kz'+(t==='alugar'?'/mês':'');}
+function starsHtml(r){var s='';for(var i=1;i<=5;i++)s+='<span style="opacity:'+(i<=Math.round(r)?1:0.3)+'">⭐</span>';return s+' <span style="color:var(--muted);font-size:12px">'+r.toFixed(1)+'</span>';}
+function trustPill(score){if(score>=80)return'<div class="trust-badge tb-high">🛡️ Alta Confiança</div>';if(score>=50)return'<div class="trust-badge tb-med">⚡ Média</div>';return'<div class="trust-badge tb-low">🔒</div>';}
+function isUnlocked(id){return!!unlockedContacts[id];}
+function getListing(id){var all=myListings.concat(listings);for(var i=0;i<all.length;i++){if(all[i].id===id)return all[i];}return null;}
+function tColor(s){if(s>=80)return{bar:'var(--green)',c:'var(--green)',lbl:'✅ Alta Confiança'};if(s>=50)return{bar:'var(--gold)',c:'var(--gold)',lbl:'⚡ Média'};if(s>=20)return{bar:'var(--orange)',c:'var(--orange)',lbl:'⚠️ Baixa'};return{bar:'var(--muted2)',c:'var(--muted2)',lbl:'🔒 Sem verificação'};}
+function calcTrust(){var s=0;if(userDocs.bi.f||userDocs.bi.v)s+=30;if(userDocs.carta.f||userDocs.carta.v)s+=20;if(userDocs.pass.f||userDocs.pass.v)s+=20;if(userDocs.nif.f)s+=15;if(userDocs.prop.f)s+=15;return Math.min(s,100);}
+
+// ── PAGES ──
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
+  var nl=document.getElementById('nl-'+p);
+  if(nl)nl.classList.add('active');
+  window.scrollTo(0,0);
+  if(p==='listings')renderListingsPage();
+  if(p==='chat')renderChatList();
+  if(p==='profile'){updateTrustUI();updateProfileTrustBar();}
+  if(p==='home')renderFeatured();
+}
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('show');}
+
+// ── BUILD SELECTS ──
+function buildSelects(){
+  var h='<option value="">Todas as províncias</option>';
+  var h2='<option value="todas">Todas (21)</option>';
+  var h3='';
+  for(var i=0;i<PROVINCES.length;i++){
+    h+='<option value="'+PROVINCES[i]+'">'+PROVINCES[i]+'</option>';
+    h2+='<option value="'+PROVINCES[i]+'">'+PROVINCES[i]+'</option>';
+    h3+='<option>'+PROVINCES[i]+'</option>';
+  }
+  var heroZone=document.getElementById('heroZone');if(heroZone)heroZone.innerHTML=h;
+  var sidebarZone=document.getElementById('sidebarZone');if(sidebarZone)sidebarZone.innerHTML=h2;
+  var pZone=document.getElementById('pZone');if(pZone)pZone.innerHTML=h3;
+}
+
+// ── AUTH ──
+function showAuthModal(mode){authMode=mode;renderAuthForm();document.getElementById('authModal').classList.add('show');}
+function setAuthTab(m){
+  authMode=m;
+  document.getElementById('authTabLogin').style.background=m==='login'?'var(--red)':'transparent';
+  document.getElementById('authTabLogin').style.color=m==='login'?'#fff':'var(--muted)';
+  document.getElementById('authTabReg').style.background=m==='reg'?'var(--red)':'transparent';
+  document.getElementById('authTabReg').style.color=m==='reg'?'#fff':'var(--muted)';
+  renderAuthForm();
+}
+function renderAuthForm(){
+  var f=document.getElementById('authFormEl');
+  document.getElementById('authFormErr').style.display='none';
+  if(authMode==='login'){
+    f.innerHTML='<input class="inp-field" id="aEmail" type="email" placeholder="E-mail"/><input class="inp-field" id="aSenha" type="password" placeholder="Senha"/><button class="btn btn-red" style="width:100%;padding:13px;font-size:15px" onclick="doAuth()">Entrar →</button><div style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px">Demo: demo@kasa.ao / 1234</div>';
+  }else{
+    f.innerHTML='<input class="inp-field" id="aNome" placeholder="Nome completo"/><input class="inp-field" id="aPhone" placeholder="Telefone (+244...)"/><input class="inp-field" id="aEmail" type="email" placeholder="E-mail"/><input class="inp-field" id="aSenha" type="password" placeholder="Senha (mín. 4 caracteres)"/><div style="display:flex;align-items:flex-start;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px"><input type="checkbox" id="termsCheck" style="margin-top:3px;flex-shrink:0;width:16px;height:16px;cursor:pointer"/><label for="termsCheck" style="font-size:12px;color:var(--muted);line-height:1.6;cursor:pointer">Li e aceito os <span style="color:var(--red);cursor:pointer" onclick="showPage(\'legal\')">Termos Legais</span>. Declaro que sou responsável por todo o conteúdo que publicar. A KasaAngola não se responsabiliza pelos meus actos.</label></div><button class="btn btn-red" style="width:100%;padding:13px;font-size:15px" onclick="doAuth()">Criar conta →</button>';
+  }
+}
+function doAuth(){
+  var email=document.getElementById('aEmail')?document.getElementById('aEmail').value.trim():'';
+  var senha=document.getElementById('aSenha')?document.getElementById('aSenha').value.trim():'';
+  var err=document.getElementById('authFormErr');
+  if(authMode==='login'){
+    var u=null;for(var i=0;i<users.length;i++){if(users[i].email===email&&users[i].senha===senha){u=users[i];break;}}
+    if(!u){err.textContent='E-mail ou senha incorretos.';err.style.display='block';return;}
+    login(u);
+  }else{
+    var nome=document.getElementById('aNome')?document.getElementById('aNome').value.trim():'';
+    var phone=document.getElementById('aPhone')?document.getElementById('aPhone').value.trim():'';
+    var termsCheck=document.getElementById('termsCheck');
+    if(!nome||!email||!senha){err.textContent='Preenche todos os campos.';err.style.display='block';return;}
+    if(!termsCheck||!termsCheck.checked){err.textContent='Deves aceitar os Termos Legais para continuar.';err.style.display='block';return;}
+    if(senha.length<4){err.textContent='Senha muito curta.';err.style.display='block';return;}
+    for(var j=0;j<users.length;j++){if(users[j].email===email){err.textContent='E-mail já registado.';err.style.display='block';return;}}
+    var nu={email:email,senha:senha,nome:nome,phone:phone||'+244 900 000 000',photo:null};
+    users.push(nu);login(nu);
+  }
+}
+function login(u){
+  currentUser=u;
+  document.getElementById('authModal').classList.remove('show');
+  document.getElementById('profNameEl').textContent=u.nome;
+  document.getElementById('profPhoneEl').textContent=u.phone||u.email;
+  var btn=document.getElementById('navUserBtn');
+  btn.style.display='flex';btn.textContent=u.nome[0].toUpperCase();
+  updateTrustUI();updateProfileTrustBar();
+}
+function logout(){
+  currentUser=null;
+  document.getElementById('navUserBtn').style.display='none';
+  showPage('home');
+}
+function gotoLegal(){showPage('legal');}
+
+// ── RENDER CARD ──
+function renderCard(l,i){
+  var delay=i*0.05;
+  var img=l.photos&&l.photos.length?'<img src="'+l.photos[0]+'" style="width:100%;height:100%;object-fit:cover;transition:transform .4s"/>':'<span style="font-size:60px">'+l.emoji+'</span>';
+  return '<div class="listing-card fade-up" style="animation-delay:'+delay+'s" onclick="openDetail('+l.id+')">'
+    +'<div class="card-img">'+img
+    +'<div class="card-badge '+(l.type==='alugar'?'badge-a':'badge-v')+'">'+(l.type==='alugar'?'Alugar':'Vender')+'</div>'
+    +(l.destaque?'<div class="badge-dest">⭐ Destaque</div>':'')
+    +trustPill(l.trustScore||0)+'</div>'
+    +'<div class="card-body">'
+    +'<div class="card-price">'+fmtP(l.price,l.type)+'</div>'
+    +'<div class="card-title">'+l.title+'</div>'
+    +'<div class="card-loc">📍 '+l.zone+'</div>'
+    +'<div class="card-stars">'+starsHtml(l.rating||4)+' <span style="color:var(--muted)">('+((l.reviews||[]).length)+')</span></div>'
+    +'<div class="card-feats">'
+    +'<span class="cfeat">🛏️ '+l.quartos+'</span>'
+    +'<span class="cfeat">🚿 '+l.banhos+'</span>'
+    +'<span class="cfeat">📐 '+l.area+'m²</span>'
+    +(l.type==='vender'?'<span class="cfeat" style="color:var(--gold);margin-left:auto;font-size:11px">+100k Kz</span>':'<span class="cfeat" style="color:var(--purple);margin-left:auto;font-size:11px">3k Kz</span>')
+    +'</div></div></div>';
+}
+
+// ── FEATURED ──
+function renderFeatured(){
+  var featured=listings.filter(function(l){return l.destaque||l.trustScore>=80;}).slice(0,6);
+  var h='';
+  for(var i=0;i<featured.length;i++) h+=renderCard(featured[i],i);
+  document.getElementById('featuredGrid').innerHTML=h||'<div style="color:var(--muted)">Nenhum imóvel em destaque.</div>';
+  document.getElementById('heroCount').textContent=listings.length+myListings.length;
+}
+
+// ── LISTINGS PAGE ──
+function getFilteredListings(){
+  var all=myListings.concat(listings);
+  var q=document.getElementById('listSearchInp')?document.getElementById('listSearchInp').value.toLowerCase():'';
+  var maxPv=parseInt(document.getElementById('maxPrice')?document.getElementById('maxPrice').value:0)||0;
+  return all.filter(function(l){
+    if(fType!=='todos'&&l.type!==fType)return false;
+    if(fZone!=='todas'&&l.zone!==fZone)return false;
+    if(fQ>0&&(fQ<4?l.quartos!==fQ:l.quartos<4))return false;
+    if(maxPv>0&&l.price>maxPv)return false;
+    if(q&&l.title.toLowerCase().indexOf(q)<0&&l.zone.toLowerCase().indexOf(q)<0)return false;
+    return true;
+  }).sort(function(a,b){
+    if(sortOrder==='price_asc')return a.price-b.price;
+    if(sortOrder==='price_desc')return b.price-a.price;
+    if(sortOrder==='trust')return(b.trustScore||0)-(a.trustScore||0);
+    return b.id-a.id;
+  });
+}
+function renderListingsPage(){
+  var list=getFilteredListings();
+  var grid=document.getElementById('listingsGrid');
+  var noR=document.getElementById('noResults');
+  document.getElementById('resultsCount').textContent=list.length+' imóveis encontrados';
+  if(!list.length){grid.innerHTML='';noR.style.display='block';return;}
+  noR.style.display='none';
+  var h='';for(var i=0;i<list.length;i++)h+=renderCard(list[i],i);
+  grid.innerHTML=h;
+}
+function setFType(t,el){fType=t;document.querySelectorAll('.filter-chips .fchip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');renderListingsPage();}
+function setFZone(v){fZone=v||'todas';renderListingsPage();}
+function setFQ(q,el){fQ=q;document.querySelectorAll('.filter-chips .fchip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');renderListingsPage();}
+function setSortOrder(v){sortOrder=v;renderListingsPage();}
+function setHeroQuartos(q,el){document.querySelectorAll('#heroChips .sch').forEach(function(c){c.classList.remove('active');});el.classList.add('active');}
+function doHeroSearch(){
+  var q=document.getElementById('heroSearchInp').value;
+  var z=document.getElementById('heroZone').value;
+  var t=document.getElementById('heroType').value;
+  fZone=z||'todas';fType=t||'todos';
+  if(document.getElementById('listSearchInp'))document.getElementById('listSearchInp').value=q;
+  showPage('listings');
+}
+
+// ── DETAIL ──
+function openDetail(id){
+  var l=getListing(id);if(!l)return;
+  currentDetailId=id;currentDetailMedia='foto';
+  document.getElementById('breadcrumb').textContent=l.title;
+  renderDetailGallery(l);
+  document.getElementById('galleryBtns').style.display=l.videos&&l.videos.length?'flex':'none';
+  document.getElementById('dPrice').textContent=fmtP(l.price,l.type);
+  var db=document.getElementById('dTypeBadge');
+  db.innerHTML='<span style="background:'+(l.type==='alugar'?'var(--blue)':'var(--green)')+';color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700">'+(l.type==='alugar'?'Alugar':'Vender')+'</span>';
+  document.getElementById('dTitle2').textContent=l.title;
+  document.getElementById('dLoc').innerHTML='📍 '+l.zone;
+  document.getElementById('dStars').innerHTML=starsHtml(l.rating||4)+' <span style="color:var(--muted)">('+((l.reviews||[]).length)+' avaliações)</span>';
+  document.getElementById('dFeats').innerHTML='<div class="dfeat">🛏️ '+l.quartos+' quartos</div><div class="dfeat">🚿 '+l.banhos+' banhos</div><div class="dfeat">📐 '+l.area+'m²</div><div class="dfeat">'+(l.type==='alugar'?'🔑 Arrendamento':'🏷️ Venda')+'</div>';
+  document.getElementById('dDesc').textContent=l.desc;
+  renderDetailTrust(l.trustScore||0);
+  renderContactWidget(l);
+  document.getElementById('dOwnerName').textContent=l.owner;
+  document.getElementById('dOwnerPhone').innerHTML=isUnlocked(id)?'📞 '+l.ownerPhone:'<span class="blurred">+244 9XX XXX XXX</span> 🔒';
+  var ts=l.trustScore||0;
+  var vb=document.getElementById('dOwnerVerified');
+  vb.textContent=ts>=80?'✓ Muito Confiável':ts>=50?'⚡ Verificado':'🔒 Não Verificado';
+  vb.style.cssText='background:'+(ts>=80?'var(--green)':ts>=50?'var(--gold)':'var(--border)')+';color:'+(ts>=50?'#000':'var(--muted)')+';font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px';
+  renderDetailReviews(l);
+  showPage('detail');
+}
+function renderDetailGallery(l){
+  var el=document.getElementById('detailGallery');
+  if(currentDetailMedia==='foto') el.innerHTML=l.photos&&l.photos.length?'<img src="'+l.photos[0]+'" style="width:100%;height:100%;object-fit:cover"/>':'<span style="font-size:80px">'+l.emoji+'</span>';
+  else el.innerHTML=l.videos&&l.videos.length?'<video src="'+l.videos[0]+'" controls autoplay muted playsinline style="width:100%;height:100%;object-fit:cover"></video>':'<span style="font-size:60px">🎥</span>';
+}
+function switchGallery(t){
+  currentDetailMedia=t;
+  var l=getListing(currentDetailId);if(l)renderDetailGallery(l);
+  document.querySelectorAll('.gbtn').forEach(function(b,i){b.classList.toggle('active',i===(t==='foto'?0:1));});
+}
+function renderDetailTrust(score){
+  var tc=tColor(score);
+  var bar=document.getElementById('dTrustBar');
+  if(bar){bar.style.width=score+'%';bar.style.background=tc.bar;}
+  var circle=document.getElementById('dTrustCircle');
+  if(circle){circle.textContent=score+'%';circle.style.borderColor=tc.c;circle.style.color=tc.c;}
+  var keys=['bi','carta','pass','nif','prop'],cum=0,h='';
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i];cum+=DOC_W[k];var present=score>=cum;
+    h+='<div class="doc-row"><span>'+DOC_ICO[k]+' '+DOC_LBL[k]+'</span>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<span style="font-size:12px;color:'+(present?'var(--green)':'var(--muted)')+'">'+( present?'+'+DOC_W[k]+'%':'Não enviado')+'</span>'
+      +'<div style="width:10px;height:10px;border-radius:50%;background:'+(present?'var(--green)':'var(--border)')+'"></div>'
+      +'</div></div>';
+  }
+  var docs=document.getElementById('dTrustDocs');if(docs)docs.innerHTML=h;
+}
+function renderContactWidget(l){
+  var el=document.getElementById('contactWidget');
+  var isVenda=l.type==='vender';
+  if(isUnlocked(l.id)){
+    el.innerHTML='<div style="font-family:\'Syne\',sans-serif;font-size:28px;font-weight:800;color:var(--red);margin-bottom:4px">'+fmtP(l.price,l.type)+'</div>'
+      +'<div style="font-size:13px;color:var(--muted);margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">'+(isVenda?'Preço de venda':'Por mês, arrendamento')+'</div>'
+      +'<div style="background:var(--card2);border:1px solid var(--green);border-radius:12px;padding:16px;margin-bottom:16px">'
+      +'<div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px">✅ Contacto Desbloqueado</div>'
+      +'<div style="font-size:14px;margin-bottom:6px">📞 <strong>'+l.ownerPhone+'</strong></div>'
+      +'<div style="font-size:13px;color:var(--muted)">📍 '+l.ownerAddress+'</div>'
+      +(isVenda?'<div style="margin-top:10px;background:#1a1400;border:1px solid var(--gold);border-radius:8px;padding:10px;font-size:12px;color:var(--gold)">💰 Emolumento de fecho: <strong>100.000 Kz</strong></div>':'')
+      +'</div>'
+      +'<div class="widget-actions">'
+      +'<button class="wbtn wbtn-r" onclick="alert(\'📞 A ligar para: \'+getListing(currentDetailId).ownerPhone)">📞 Ligar</button>'
+      +'<button class="wbtn wbtn-g" onclick="startChatWith(getListing(currentDetailId))">💬 Enviar mensagem</button>'
+      +'</div>';
+  }else{
+    var priceText=isVenda?'5.000 – 10.000 Kz':'3.000 Kz';
+    el.innerHTML='<div style="font-family:\'Syne\',sans-serif;font-size:28px;font-weight:800;color:var(--red);margin-bottom:4px">'+fmtP(l.price,l.type)+'</div>'
+      +'<div style="font-size:13px;color:var(--muted);margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">'+(isVenda?'Preço de venda':'Por mês, arrendamento')+'</div>'
+      +'<div style="background:linear-gradient(135deg,#0a0a20,#15103a);border:1px solid var(--purple);border-radius:12px;padding:16px;margin-bottom:16px">'
+      +'<div style="font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px">🔒 Contacto Protegido</div>'
+      +'<div style="font-size:13px;color:#ccaaff;margin-bottom:12px;line-height:1.6">Para proteger ambas as partes, os contactos são desbloqueados após pagamento.</div>'
+      +'<div style="font-family:\'Syne\',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:2px">'+priceText+'</div>'
+      +'<div style="font-size:12px;color:var(--muted)">'+(isVenda?'taxa inicial · + 100.000 Kz no fecho':'taxa de acesso única')+'</div>'
+      +'</div>'
+      +'<div class="widget-actions">'
+      +'<button class="wbtn wbtn-p" onclick="openUnlockModal('+l.id+')">🔓 Desbloquear por '+priceText+'</button>'
+      +'<button class="wbtn wbtn-s" onclick="startChatWith(getListing(currentDetailId))">💬 Enviar mensagem</button>'
+      +'</div>';
+  }
+}
+function renderDetailReviews(l){
+  var rs=l.reviews||[],h='';
+  if(!rs.length){document.getElementById('dReviews').innerHTML='<div style="color:var(--muted);font-size:14px;padding:16px 0">Ainda sem avaliações. Sê o primeiro a avaliar!</div>';return;}
+  for(var i=0;i<rs.length;i++){
+    var r=rs[i];
+    h+='<div class="review-item"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      +'<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:15px">'+r.user[0]+'</div>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:600">'+r.user+'</div><div style="font-size:12px;color:var(--muted)">'+r.time+'</div></div>'
+      +'<div style="color:var(--gold)">'+'⭐'.repeat(r.stars)+'</div></div>'
+      +'<div style="font-size:14px;color:#bbb;line-height:1.6">'+r.text+'</div></div>';
+  }
+  document.getElementById('dReviews').innerHTML=h;
+}
+
+// ── UNLOCK ──
+function openUnlockModal(id){
+  pendingUnlockId=id;
+  var l=getListing(id);
+  var isVenda=l&&l.type==='vender';
+  var n=String(Math.floor(Math.random()*900000000)+100000000);
+  document.getElementById('unlockRefNum').textContent=n.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3');
+  var mcInSteps=document.getElementById('mcRefInSteps');
+  if(mcInSteps) mcInSteps.textContent=n.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3');
+  if(isVenda){
+    document.getElementById('unlockPriceDisplay').textContent='5.000 – 10.000 Kz';
+    document.getElementById('unlockPriceMC').textContent='5.000 – 10.000 Kz';
+    document.getElementById('unlockSubDisplay').textContent='Taxa inicial de acesso. Emolumento de 100.000 Kz no fecho do negócio.';
+    document.getElementById('unlockFeatsList').innerHTML='<div style="font-size:13px;color:#ddbbff">✅ Número de telefone do proprietário</div><div style="font-size:13px;color:#ddbbff">✅ Morada exacta do imóvel</div><div style="font-size:13px;color:#ddbbff">✅ Autorização para visitas presenciais</div><div style="font-size:13px;color:var(--gold)">💰 Emolumento de fecho: 100.000 Kz</div>';
+  }else{
+    document.getElementById('unlockPriceDisplay').textContent='3.000 Kz';
+    document.getElementById('unlockPriceMC').textContent='3.000 Kz';
+    document.getElementById('unlockSubDisplay').textContent='Pagamento único. Acesso vitalício ao contacto.';
+    document.getElementById('unlockFeatsList').innerHTML='<div style="font-size:13px;color:#ddbbff">✅ Número de telefone do proprietário</div><div style="font-size:13px;color:#ddbbff">✅ Morada exacta do imóvel</div><div style="font-size:13px;color:#ddbbff">✅ Autorização para visita presencial</div><div style="font-size:13px;color:#ddbbff">🔒 Registo oficial na KasaAngola</div>';
+  }
+  document.getElementById('unlockModal').classList.add('show');
+}
+function confirmUnlock(){
+  if(pendingUnlockId===null)return;
+  var l=getListing(pendingUnlockId);
+  document.getElementById('unlockModal').classList.remove('show');
+  // Add to pending verification list
+  if(!pendingPayments) pendingPayments={};
+  pendingPayments[pendingUnlockId]={listingId:pendingUnlockId,title:l?l.title:'',time:new Date().toLocaleTimeString('pt-AO',{hour:'2-digit',minute:'2-digit'})};
+  // Show pending screen in contact widget
+  if(currentDetailId===pendingUnlockId) renderContactWidget(l);
+  renderChatLockBar();
+  pendingUnlockId=null;
+  showPendingModal();
+}
+var pendingPayments={};
+function showPendingModal(){
+  document.getElementById('pendingModal').classList.add('show');
+}
+
+// ── CHAT ──
+function renderChatList(){
+  var total=0;
+  for(var i=0;i<activeChats.length;i++)total+=activeChats[i].unread;
+  var h='';
+  for(var i=0;i<activeChats.length;i++){
+    var c=activeChats[i];
+    var last=c.msgs.length?c.msgs[c.msgs.length-1].text:'...';
+    var lockIco=isUnlocked(c.listingId)?'<span style="font-size:11px;color:var(--green)">✅</span>':'<span style="font-size:11px;color:var(--purple)">🔒</span>';
+    h+='<div class="chat-item'+(activeChatIdx===i?' active':'')+'" onclick="openChat('+i+')">'
+      +'<div class="chat-av">'+c.emoji+'</div>'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:14px;font-weight:600">'+c.name+'</div>'
+      +'<div style="font-size:12px;color:var(--muted)">🏠 '+c.about+'</div>'
+      +'<div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+last+'</div>'
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">'
+      +(c.unread>0?'<div style="background:var(--red);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:2px 7px">'+c.unread+'</div>':'')+lockIco+'</div></div>';
+  }
+  document.getElementById('chatListEl').innerHTML=h;
+}
+function openChat(i){
+  activeChatIdx=i;activeChats[i].unread=0;
+  activeChatListingId=activeChats[i].listingId;
+  var c=activeChats[i];
+  document.getElementById('chatWindowHead').innerHTML='<div class="chat-av" style="width:40px;height:40px;font-size:20px">'+c.emoji+'</div><div><div style="font-size:15px;font-weight:600">'+c.name+'</div><div style="font-size:12px;color:var(--muted)">🏠 '+c.about+'</div></div><button class="btn btn-ghost" style="margin-left:auto;padding:8px 16px;font-size:13px" onclick="'+(isUnlocked(c.listingId)?'alert(\'📞 \'+getListing('+c.listingId+').ownerPhone)':'openUnlockModal('+c.listingId+')')+'">📞 Ligar</button>';
+  renderChatLockBar();renderMessages();renderChatList();
+}
+function renderChatLockBar(){
+  var el=document.getElementById('chatLockBarEl');
+  if(isUnlocked(activeChatListingId)||activeChatListingId===null){el.innerHTML='';return;}
+  var l=getListing(activeChatListingId);
+  var pt=l&&l.type==='vender'?'5.000 – 10.000 Kz':'3.000 Kz';
+  el.innerHTML='<div class="chat-lock-bar"><div style="font-size:13px;color:#ccaaff">🔒 <strong>Contacto bloqueado</strong> — Para ver o número e marcar visita, paga '+pt+' de acesso via Multicaixa Express.</div><button onclick="openUnlockModal(activeChatListingId)" style="padding:8px 18px;background:var(--purple);border:none;border-radius:20px;color:#fff;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">🔓 Desbloquear</button></div>';
+}
+function renderMessages(){
+  var msgs=activeChats[activeChatIdx].msgs;
+  var el=document.getElementById('messagesAreaEl');
+  var h='';
+  if(!msgs.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:48px;margin-bottom:12px">💬</div><div>Inicia a conversa!</div></div>';return;}
+  for(var i=0;i<msgs.length;i++){
+    var m=msgs[i];
+    h+='<div class="bubble '+(m.s?'sent':'recv')+'">'+m.text+'<div class="bubble-time">'+m.t+(m.s?' ✓✓':'')+'</div></div>';
+  }
+  el.innerHTML=h;el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+  var inp=document.getElementById('chatInputField'),text=inp.value.trim();if(!text)return;
+  var phoneRe=/(\+?244[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}|\b\d{9}\b)/;
+  if(phoneRe.test(text)){alert('🔒 Por segurança, não é permitido partilhar números de telefone no chat.\n\nUsa o botão "Desbloquear" para aceder ao contacto oficial.');return;}
+  var now=new Date(),t=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  activeChats[activeChatIdx].msgs.push({text:text,s:true,t:t});
+  inp.value='';renderMessages();renderChatList();
+  var replies=['Obrigado pelo interesse! Quando quer visitar?','A casa ainda está disponível!','Para marcar visita, por favor desbloqueie o meu contacto.','Tenho disponibilidade esta semana.','Pode entrar em contacto para mais detalhes.'];
+  setTimeout(function(){activeChats[activeChatIdx].msgs.push({text:replies[Math.floor(Math.random()*replies.length)],s:false,t:t});renderMessages();},1200);
+}
+function startChatWith(l){
+  for(var i=0;i<activeChats.length;i++){if(activeChats[i].name===l.owner){activeChatIdx=i;showPage('chat');openChat(i);return;}}
+  activeChats.unshift({id:Date.now(),name:l.owner,emoji:'👤',about:l.title,listingId:l.id,msgs:[],unread:0});
+  activeChatIdx=0;showPage('chat');openChat(0);
+}
+
+// ── POST ──
+function openPostModal(){
+  if(!currentUser){showAuthModal('login');return;}
+  buildSelects();
+  document.getElementById('postModal').classList.add('show');
+}
+function selPT(t){
+  postType=t;
+  document.getElementById('ptA').style.background=t==='alugar'?'var(--red)':'transparent';
+  document.getElementById('ptA').className='btn '+(t==='alugar'?'btn-red':'btn-ghost');
+  document.getElementById('ptV').className='btn '+(t==='vender'?'btn-red':'btn-ghost');
+}
+function setMUpTab(t,el){
+  document.querySelectorAll('#postModal .dtab').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('fotosArea').style.display=t==='fotos'?'block':'none';
+  document.getElementById('videosArea').style.display=t==='videos'?'block':'none';
+}
+function handlePostFotos(e){
+  postFotos=[];var files=Array.prototype.slice.call(e.target.files,0,5);if(!files.length)return;
+  var done=0;
+  for(var i=0;i<files.length;i++){(function(f){var r=new FileReader();r.onload=function(ev){postFotos.push(ev.target.result);done++;if(done===files.length)renderPostPrevs();};r.readAsDataURL(f);})(files[i]);}
+}
+function handlePostVideos(e){
+  postVideos=[];var files=Array.prototype.slice.call(e.target.files,0,2);if(!files.length)return;
+  var done=0;
+  for(var i=0;i<files.length;i++){(function(f){var r=new FileReader();r.onload=function(ev){postVideos.push(ev.target.result);done++;if(done===files.length)renderPostPrevs();};r.readAsDataURL(f);})(files[i]);}
+}
+function renderPostPrevs(){
+  var el=document.getElementById('mediaPrevEl');el.innerHTML='';
+  for(var i=0;i<postFotos.length;i++){var img=document.createElement('img');img.src=postFotos[i];img.className='mprev-img';el.appendChild(img);}
+}
+function submitPost(){
+  var title=document.getElementById('pTitle').value.trim();
+  var price=parseInt(document.getElementById('pPrice').value)||0;
+  if(!title||!price){alert('Preenche o título e o preço!');return;}
+  var nl={id:Date.now(),type:postType,title:title,zone:document.getElementById('pZone').value||'Luanda',price:price,
+    quartos:parseInt(document.getElementById('pQ').value)||1,banhos:parseInt(document.getElementById('pB').value)||1,
+    area:parseInt(document.getElementById('pArea').value)||80,photos:postFotos.slice(),videos:postVideos.slice(),
+    emoji:EMOJIS[Math.floor(Math.random()*EMOJIS.length)],
+    desc:document.getElementById('pDesc').value.trim()||'Imóvel disponível.',
+    owner:currentUser?currentUser.nome:'Proprietário',
+    ownerPhone:document.getElementById('pPhone').value.trim()||'+244 900 000 000',
+    ownerAddress:(document.getElementById('pZone').value||'Luanda')+', Angola',
+    destaque:false,rating:0,trustScore:calcTrust(),reviews:[]};
+  myListings.unshift(nl);
+  document.getElementById('statAn').textContent=myListings.length;
+  document.getElementById('postModal').classList.remove('show');
+  ['pTitle','pPrice','pDesc','pPhone'].forEach(function(id){document.getElementById(id).value='';});
+  postFotos=[];postVideos=[];document.getElementById('mediaPrevEl').innerHTML='';
+  showPage('listings');
+  alert('✅ Anúncio publicado com sucesso!');
+}
+
+// ── DOCS ──
+function setDocTab(i,el){
+  document.querySelectorAll('#page-profile .dtab').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('.dpanel').forEach(function(p,j){p.classList.toggle('show',j===i);});
+}
+function setSideTab(doc,side,el){
+  var par=el.closest('.dpanel');
+  par.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  var fa=par.querySelector('#'+doc+'-f-area');
+  var va=par.querySelector('#'+doc+'-v-area');
+  if(fa)fa.style.display=side==='f'?'block':'none';
+  if(va)va.style.display=side==='v'?'block':'none';
+}
+function handleDoc(e,doc,side){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    if(!userDocs[doc])userDocs[doc]={};
+    userDocs[doc][side]=ev.target.result;
+    var prev=document.getElementById(doc+'-'+side+'-prev');
+    if(prev){prev.src=ev.target.result;prev.style.display='block';}
+    var box=document.getElementById(doc+'-'+side+'-box');
+    if(box)box.classList.add('done');
+    updateTrustUI();updateProfileTrustBar();
+  };r.readAsDataURL(f);
+}
+function updateTrustUI(){
+  var s=calcTrust(),tc=tColor(s);
+  document.getElementById('statTrust').textContent=s+'%';
+  var cnt=0;
+  if(userDocs.bi.f||userDocs.bi.v)cnt++;if(userDocs.carta.f||userDocs.carta.v)cnt++;
+  if(userDocs.pass.f||userDocs.pass.v)cnt++;if(userDocs.nif.f)cnt++;if(userDocs.prop.f)cnt++;
+  document.getElementById('profDocsBadge').textContent=cnt+' doc'+(cnt!==1?'s':'')+' enviados';
+  var tb=document.getElementById('profTrustBadge');if(tb){tb.textContent=tc.lbl;tb.style.color=tc.c;}
+}
+function updateProfileTrustBar(){
+  var s=calcTrust(),tc=tColor(s);
+  var pts=document.getElementById('profileTrustScore');if(pts)pts.textContent=s+'%';
+  var ptb=document.getElementById('profileTrustBar');if(ptb){ptb.style.width=s+'%';ptb.style.background=tc.bar;}
+}
+
+// ── PROFILE ──
+function handleProfPhoto(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    currentUser.photo=ev.target.result;
+    document.getElementById('profAvEl').innerHTML='<img src="'+ev.target.result+'"/>';
+    var nb=document.getElementById('navUserBtn');
+    nb.innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>';
+  };r.readAsDataURL(f);
+}
+function showFavs(){alert('Casas favoritas: em breve! ❤️');}
+
+// ── REVIEWS ──
+function openReviewModal(){document.getElementById('reviewModal').classList.add('show');setStar(5);}
+function setStar(n){
+  selectedStars=n;
+  document.querySelectorAll('#starsEl span').forEach(function(s,i){s.style.opacity=i<n?'1':'0.3';});
+}
+function submitReview(){
+  var text=document.getElementById('reviewTxt').value.trim();
+  var l=getListing(currentDetailId);
+  if(!text||!l)return;
+  l.reviews.push({user:currentUser?currentUser.nome:'Anónimo',stars:selectedStars,text:text,time:'Agora'});
+  var tot=0;for(var i=0;i<l.reviews.length;i++)tot+=l.reviews[i].stars;
+  l.rating=tot/l.reviews.length;
+  document.getElementById('reviewTxt').value='';
+  document.getElementById('reviewModal').classList.remove('show');
+  document.getElementById('dStars').innerHTML=starsHtml(l.rating)+' <span style="color:var(--muted)">('+l.reviews.length+' avaliações)</span>';
+  renderDetailReviews(l);
+  alert('✅ Avaliação publicada. Obrigado!');
+}
+
+// ── INIT ──
+function copyToClipboard(text, label){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      alert('✅ '+label+' copiado!\n\n'+text);
+    });
+  } else {
+    alert(label+':\n'+text);
+  }
+}
+buildSelects();
+renderFeatured();
+renderListingsPage();
+</script>
+
+<!-- PENDING PAYMENT MODAL -->
+<div class="modal-ov" id="pendingModal">
+  <div class="modal-box" style="max-width:460px;text-align:center">
+    <div style="font-size:56px;margin-bottom:16px">⏳</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px">Comprovativo recebido!</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7">A equipa KasaAngola está a verificar o teu pagamento. Recebes a confirmação por WhatsApp em breve.</div>
+    <div style="background:linear-gradient(135deg,#0a1a00,#112200);border:1px solid #16a34a;border-radius:16px;padding:24px;margin-bottom:20px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:4px">Tempo de resposta</div>
+      <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#4ade80;margin-bottom:4px">5 min</div>
+      <div style="font-size:13px;color:var(--muted)">Segunda a Domingo · 07h00 – 22h00</div>
+    </div>
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">📋 O que acontece a seguir:</div>
+      <div style="font-size:13px;color:var(--muted);line-height:2.0;text-align:left">
+        ✅ Recebes mensagem de confirmação no WhatsApp<br/>
+        ✅ O contacto do proprietário fica desbloqueado<br/>
+        ✅ Podes ligar e marcar a visita<br/>
+        ✅ Registo fica guardado na KasaAngola
+      </div>
+    </div>
+    <a href="https://wa.me/244935633508?text=Ol%C3%A1%21%20Enviei%20o%20comprovativo%20de%20pagamento%20no%20KasaAngola.%20Aguardo%20o%20desbloqueio%20do%20contacto.%20Obrigado%21" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;background:#16a34a;border:none;border-radius:14px;color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:12px">
+      <span style="font-size:20px">📲</span> Falar com a equipa no WhatsApp
+    </a>
+    <button onclick="document.getElementById('pendingModal').classList.remove('show')" class="btn btn-ghost" style="width:100%;padding:13px">Fechar</button>
+  </div>
+</div>
+</body>
+</html>
