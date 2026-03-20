@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#cc0000"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>KasaAngola 🏠</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--red:#cc0000;--gold:#ffb800;--panel:#1a1a1a;--card:#232323;--border:#2e2e2e;--text:#f0f0f0;--muted:#888;--green:#22c55e;--blue:#3b82f6;--bg:#141414;--orange:#f97316;--purple:#a855f7}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* AUTH */
+.auth-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-screen.hide{display:none}
+.abox{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:22px;width:100%;max-width:360px}
+.atabs{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:16px}
+.atab{flex:1;padding:8px;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s}
+.atab.active{background:var(--red);color:#fff}
+.inp{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:13px;color:var(--text);outline:none;margin-bottom:9px}
+.inp:focus{border-color:var(--red)}
+.btn-red{width:100%;padding:12px;background:var(--red);border:none;border-radius:13px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:54px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.logo-text{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.logo-text span{color:var(--red)}
+.ib{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;overflow:hidden}
+
+/* NAV */
+.bottom-nav{display:flex;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 0 6px;cursor:pointer;color:var(--muted);font-size:9px;font-weight:600;gap:3px;position:relative}
+.nav-item.active{color:var(--red)}
+.nav-icon{font-size:18px}
+.nav-badge{position:absolute;top:5px;right:calc(50% - 15px);background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:1px 5px}
+
+.app-body{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.screen{display:none;flex:1;overflow:hidden;flex-direction:column}
+.screen.active{display:flex}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a0000,#2a0500);padding:14px;flex-shrink:0}
+.hero-title{font-size:20px;font-weight:800;line-height:1.2;margin-bottom:3px}
+.hero-title span{color:var(--red)}
+.hero-sub{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.search-bar{display:flex;gap:7px;margin-bottom:9px}
+.search-inp{flex:1;background:#fff1;border:1px solid #fff2;border-radius:11px;padding:9px 12px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none}
+.search-inp::placeholder{color:#ffffff55}
+.search-btn{padding:9px 13px;background:var(--red);border:none;border-radius:11px;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #fff2;color:#ffffffaa;background:transparent;font-family:inherit}
+.chip.active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* FILTERS */
+.filters-row{display:flex;gap:6px;padding:9px 13px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;background:var(--panel);border-bottom:1px solid var(--border)}
+.filters-row::-webkit-scrollbar{display:none}
+.fbtn{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid var(--border);color:var(--muted);background:var(--card);font-family:inherit}
+.fbtn.active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* LISTINGS */
+.listings{flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:11px}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer}
+.lcard-img{width:100%;height:175px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#0a1628)}
+.lcard-img img{width:100%;height:100%;object-fit:cover}
+.lbadge{position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700}
+.badge-a{background:var(--blue);color:#fff}
+.badge-v{background:var(--green);color:#fff}
+.badge-dest{position:absolute;top:8px;right:8px;background:var(--gold);color:#000;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700}
+.trust-pill{position:absolute;bottom:8px;right:8px;border-radius:20px;padding:3px 8px;font-size:9.5px;font-weight:700}
+.tp-high{background:#00800099;color:#afffaf}
+.tp-med{background:#f9731680;color:#fff}
+.tp-low{background:#88888855;color:#ddd}
+.lbody{padding:11px 13px}
+.lprice{font-size:17px;font-weight:800;color:var(--red);margin-bottom:2px}
+.ltitle{font-size:13px;font-weight:600;margin-bottom:2px}
+.lloc{font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.stars-row{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--gold);margin-bottom:5px}
+.lfeats{display:flex;gap:8px}
+.lfeat{font-size:11px;color:var(--muted)}
+
+/* DETAIL */
+.dscreen{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;overflow:hidden}
+.dscreen.show{display:flex}
+.dhead{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.back{cursor:pointer;color:var(--red);font-size:13px;font-weight:700}
+.dbody{flex:1;overflow-y:auto}
+.dimg{width:100%;height:210px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#0a1628)}
+.dimg img,.dimg video{width:100%;height:100%;object-fit:cover}
+.media-tabs{display:flex;background:var(--panel);border-bottom:1px solid var(--border)}
+.mtab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent}
+.mtab.active{color:var(--red);border-bottom-color:var(--red)}
+.dinfo{padding:13px}
+.dprice{font-size:21px;font-weight:800;color:var(--red)}
+.dtitle{font-size:15px;font-weight:700;margin:4px 0}
+.dloc{font-size:12.5px;color:var(--muted);margin-bottom:9px}
+.dfeats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+.dfeat{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 11px;font-size:12px}
+.ddesc{font-size:12.5px;line-height:1.7;color:#ccc;margin-bottom:13px}
+
+/* CONTACT LOCK BOX */
+.contact-lock{background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple);border-radius:14px;padding:16px;margin-bottom:13px}
+.lock-title{font-size:13.5px;font-weight:800;color:var(--purple);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.lock-sub{font-size:11.5px;color:#ccaaff;line-height:1.65;margin-bottom:12px}
+.lock-price{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.lock-price span{font-size:12px;font-weight:400;color:#aaa}
+.lock-features{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.lock-feat{font-size:11.5px;color:#ddbbff;display:flex;align-items:center;gap:6px}
+.blurred{filter:blur(5px);user-select:none;pointer-events:none}
+.contact-revealed{background:linear-gradient(135deg,#0a200a,#0a1a0a);border:1px solid var(--green);border-radius:14px;padding:14px;margin-bottom:13px}
+
+/* TRUST METER */
+.trust-meter{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px}
+.trust-bar-bg{background:var(--border);border-radius:20px;height:7px;margin:8px 0;overflow:hidden}
+.trust-bar-fill{height:100%;border-radius:20px;transition:width .5s}
+.trust-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:3px solid;flex-shrink:0}
+.trust-doc-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:11.5px}
+.trust-doc-row:last-child{border:none}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* LEGAL BOX */
+.legal-box{background:linear-gradient(135deg,#1a0a00,#200000);border:1px solid var(--orange);border-radius:11px;padding:12px;margin-bottom:12px}
+.lbox-title{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px}
+.lbox-item{font-size:11px;color:#ffccaa;line-height:1.65;margin-bottom:3px;padding-left:14px;position:relative}
+.lbox-item::before{content:'⚠️';position:absolute;left:-2px;font-size:9px}
+
+.owner-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.owner-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.review-box{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px;margin-bottom:8px}
+
+.dactions{display:flex;gap:7px;padding:0 13px 14px}
+.abtn{flex:1;padding:11px;border:none;border-radius:12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.abtn-p{background:var(--red);color:#fff}
+.abtn-s{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.abtn-g{background:var(--green);color:#fff}
+.abtn-pu{background:var(--purple);color:#fff}
+
+/* MAP */
+.map-area{flex:1;background:linear-gradient(135deg,#0a1628,#0f2040);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.map-bg{position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 40px)}
+.pin{position:absolute;cursor:pointer;text-align:center}
+.pin-b{color:#fff;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 3px 9px #00000055}
+.pin-arr{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;margin:0 auto}
+.map-cards{height:142px;overflow-x:auto;display:flex;gap:9px;padding:9px 12px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0;scrollbar-width:none}
+.map-cards::-webkit-scrollbar{display:none}
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px;flex-shrink:0;width:158px;cursor:pointer}
+
+/* CHAT */
+.chat-wrap{display:flex;flex:1;overflow:hidden}
+.clist{width:100%;background:var(--panel);display:flex;flex-direction:column}
+.clist.hide{display:none}
+.cwin{flex:1;display:none;flex-direction:column;background:var(--bg)}
+.cwin.show{display:flex}
+.csearch{padding:10px 12px 7px}
+.csearch input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:8px 13px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none}
+.citem{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--border);cursor:pointer}
+.citem:hover,.citem.active{background:var(--card)}
+.cav{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cheader{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.msg{max-width:74%;padding:9px 12px;font-size:12.5px;line-height:1.55}
+.msg.r{align-self:flex-start;background:var(--card);border-radius:14px 14px 14px 3px}
+.msg.s{align-self:flex-end;background:#4a0000;color:#ffcccc;border-radius:14px 14px 3px 14px}
+.msg-t{font-size:9.5px;color:var(--muted);margin-top:3px;text-align:right}
+/* CHAT LOCK WARNING */
+.chat-lock-warn{background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple);border-radius:12px;padding:12px;margin:12px;font-size:12px;color:#ccaaff;text-align:center}
+.cinput{display:flex;align-items:center;gap:7px;padding:9px 12px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.cinput input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:9px 13px;font-family:inherit;font-size:13px;color:var(--text);outline:none}
+.sbtn{width:36px;height:36px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* PROFILE */
+.prof-wrap{flex:1;overflow-y:auto;padding:15px}
+.prof-header{background:linear-gradient(135deg,#1a0000,#2a0500);border-radius:14px;padding:19px;display:flex;flex-direction:column;align-items:center;gap:7px;margin-bottom:13px;text-align:center}
+.prof-av{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid var(--red);overflow:hidden;cursor:pointer}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.stat-row{display:flex;gap:8px;margin-bottom:13px}
+.sbox{flex:1;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px;text-align:center}
+.sval{font-size:17px;font-weight:800;color:var(--red)}
+.slbl{font-size:10px;color:var(--muted);margin-top:2px}
+.mi{display:flex;align-items:center;gap:10px;padding:12px 13px;background:var(--card);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;cursor:pointer;font-size:13px;font-weight:500}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:#000c;z-index:200;display:none;align-items:flex-end}
+.modal-ov.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:19px;width:100%;max-height:93vh;overflow-y:auto}
+.mhandle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 15px}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:13px}
+.mlabel{font-size:11px;color:var(--muted);margin-bottom:4px;margin-top:6px}
+.mrow{display:flex;gap:8px}
+
+/* UNLOCK MODAL */
+.unlock-box{background:linear-gradient(135deg,#0a0a25,#150a35);border:2px solid var(--purple);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center}
+.unlock-price{font-size:32px;font-weight:800;color:#fff;margin:10px 0 4px}
+.unlock-sub{font-size:12px;color:#ccaaff;margin-bottom:14px}
+.unlock-feats{text-align:left;display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.unlock-feat{font-size:12px;color:#ddbbff;display:flex;align-items:center;gap:7px}
+
+/* DOCS */
+.doc-tabs-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.doc-tabs-hdr{display:flex;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.doc-tabs-hdr::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:8px 10px;text-align:center;font-size:10.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;border-bottom:2px solid transparent;white-space:nowrap}
+.dtab.active{color:var(--red);border-bottom-color:var(--red);background:var(--card)}
+.doc-panel{display:none;padding:12px}
+.doc-panel.show{display:block}
+.side-tabs{display:flex;gap:0;background:var(--bg);border-radius:7px;padding:2px;margin-bottom:9px}
+.stab{flex:1;padding:6px;text-align:center;font-size:11px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-family:inherit}
+.stab.active{background:var(--red);color:#fff}
+.upload-box{border:2px dashed var(--border);border-radius:10px;padding:15px;text-align:center;cursor:pointer}
+.upload-box:hover{border-color:var(--red)}
+.upload-box.done{border-color:var(--green);background:#0a200a}
+.doc-prev{width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border)}
+
+/* MEDIA UPLOAD */
+.muptabs{display:flex;gap:0;background:var(--bg);border-radius:7px;padding:2px;margin-bottom:9px}
+.muptab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-family:inherit}
+.muptab.active{background:var(--red);color:#fff}
+.upload-area{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;margin-bottom:8px}
+.upload-area:hover{border-color:var(--red)}
+.media-previews{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.mprev-img{width:60px;height:60px;border-radius:7px;object-fit:cover;border:1px solid var(--border)}
+.mprev-vid{width:60px;height:60px;border-radius:7px;overflow:hidden;border:1px solid var(--border);position:relative;background:#000}
+.mprev-vid video{width:100%;height:100%;object-fit:cover}
+.mprev-vid::after{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;background:#0006}
+
+/* MULTICAIXA */
+.mc-box{background:linear-gradient(135deg,#0a1a0a,#001400);border:1px solid var(--green);border-radius:12px;padding:13px;margin-bottom:11px}
+.mc-ref{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center}
+.mc-ref-num{font-size:20px;font-weight:800;letter-spacing:4px;color:var(--green);font-family:monospace}
+
+/* STARS */
+.star-btn{font-size:22px;cursor:pointer;opacity:.3}
+.star-btn.active{opacity:1}
+
+/* LEGAL PAGE */
+.legal-page{flex:1;overflow-y:auto;padding:14px}
+.lsection{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:10px}
+.lsec-title{font-size:13px;font-weight:700;margin-bottom:9px}
+.ltext{font-size:12px;color:#ccc;line-height:1.75}
+.law-art{background:linear-gradient(135deg,#200000,#1a0000);border:1px solid #ff000044;border-radius:9px;padding:11px;margin:8px 0}
+.law-num{font-size:10.5px;font-weight:700;color:var(--red);margin-bottom:4px}
+.law-txt{font-size:11.5px;color:#ffaaaa;line-height:1.6}
+.copy-ok{background:#0a200a;border:1px solid #22c55e44;border-radius:9px;padding:11px;margin-bottom:7px}
+.copy-no{background:#200a0a;border:1px solid #cc000044;border-radius:9px;padding:11px;margin-bottom:7px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.lcard{animation:fadeUp .22s ease both}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:9px;color:var(--muted);padding:36px;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div class="auth-screen" id="authScreen">
+  <div style="text-align:center;margin-bottom:18px">
+    <div style="font-size:44px;margin-bottom:6px">🏠</div>
+    <div style="font-size:26px;font-weight:800;margin-bottom:4px">Kasa<span style="color:var(--red)">Angola</span></div>
+    <div style="font-size:12px;color:var(--muted)">Sem intermediario · Proprietario direto 🇦🇴</div>
+  </div>
+  <div class="abox">
+    <div class="atabs">
+      <button class="atab active" id="tabLogin" onclick="setAuthTab('login')">Entrar</button>
+      <button class="atab" id="tabReg" onclick="setAuthTab('reg')">Cadastrar</button>
+    </div>
+    <div id="authErr" style="color:var(--red);font-size:12px;text-align:center;margin-bottom:8px;display:none"></div>
+    <div id="formLogin">
+      <input class="inp" id="aEmail" type="email" placeholder="E-mail"/>
+      <input class="inp" id="aSenha" type="password" placeholder="Senha"/>
+      <button class="btn-red" onclick="doLogin()">Entrar</button>
+      <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:9px">Teste: teste@kasa.ao / 1234</div>
+    </div>
+    <div id="formReg" style="display:none">
+      <input class="inp" id="rNome" placeholder="Nome completo"/>
+      <input class="inp" id="rPhone" placeholder="Telefone (+244...)"/>
+      <input class="inp" id="rEmail" type="email" placeholder="E-mail"/>
+      <input class="inp" id="rSenha" type="password" placeholder="Senha (min. 4 caracteres)"/>
+      <button class="btn-red" onclick="doRegister()">Criar conta</button>
+    </div>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center">
+    Aceitas os nossos <span style="color:var(--red);cursor:pointer" onclick="gotoLegal()">Termos Legais</span>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:6px">
+    <span style="font-size:16px">🇦🇴</span>
+    <div class="logo-text">Kasa<span>Angola</span></div>
+  </div>
+  <div style="display:flex;gap:6px">
+    <div class="ib" onclick="openPostModal()">➕</div>
+    <div class="ib">🔔</div>
+    <div class="ib" id="topAvatar" onclick="setScreen('perfil')">👤</div>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- INÍCIO -->
+  <div class="screen active" id="screen-inicio">
+    <div class="hero">
+      <div class="hero-title">Encontra a tua <span>casa ideal</span> 🏠</div>
+      <div class="hero-sub">Proprietário direto · 21 Províncias · Contactos protegidos</div>
+      <div class="search-bar">
+        <input class="search-inp" id="searchInp" placeholder="🔍  Luanda, Benguela, Huambo..."/>
+        <button class="search-btn" onclick="renderListings()">Buscar</button>
+      </div>
+      <div class="chips">
+        <button class="chip active" onclick="setFType('todos',this)">Todos</button>
+        <button class="chip" onclick="setFType('alugar',this)">Alugar</button>
+        <button class="chip" onclick="setFType('vender',this)">Vender</button>
+      </div>
+    </div>
+    <div class="filters-row" id="provincesRow"></div>
+    <div class="listings" id="listingsContainer"></div>
+  </div>
+
+  <!-- MAPA -->
+  <div class="screen" id="screen-mapa">
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div class="map-area">
+        <div class="map-bg"></div>
+        <div style="font-size:12px;font-weight:700;color:#fff;background:#0009;padding:3px 11px;border-radius:20px;position:absolute;top:12px;left:50%;transform:translateX(-50%);white-space:nowrap">🗺️ Angola — 21 Províncias</div>
+        <div class="pin" style="top:34%;left:36%" onclick="openDetail(0)"><div class="pin-b" style="background:var(--blue)">30k/mês</div><div class="pin-arr" style="border-top:6px solid var(--blue)"></div></div>
+        <div class="pin" style="top:44%;left:53%" onclick="openDetail(1)"><div class="pin-b" style="background:var(--green)">4.5M Kz</div><div class="pin-arr" style="border-top:6px solid var(--green)"></div></div>
+        <div class="pin" style="top:54%;left:28%" onclick="openDetail(2)"><div class="pin-b" style="background:var(--blue)">25k/mês</div><div class="pin-arr" style="border-top:6px solid var(--blue)"></div></div>
+        <div class="pin" style="top:27%;left:60%" onclick="openDetail(3)"><div class="pin-b" style="background:var(--blue)">40k/mês</div><div class="pin-arr" style="border-top:6px solid var(--blue)"></div></div>
+        <div class="pin" style="top:63%;left:46%" onclick="openDetail(4)"><div class="pin-b" style="background:var(--green)">6M Kz</div><div class="pin-arr" style="border-top:6px solid var(--green)"></div></div>
+        <div class="pin" style="top:39%;left:70%" onclick="openDetail(5)"><div class="pin-b" style="background:var(--blue)">18k/mês</div><div class="pin-arr" style="border-top:6px solid var(--blue)"></div></div>
+      </div>
+      <div class="map-cards" id="mapCards"></div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="screen" id="screen-chat">
+    <div class="chat-wrap">
+      <div class="clist" id="clist">
+        <div class="csearch"><input type="text" placeholder="🔍  Pesquisar..."/></div>
+        <div id="citemsEl"></div>
+      </div>
+      <div class="cwin" id="cwin">
+        <div class="cheader">
+          <div class="back" onclick="backChat()">← Voltar</div>
+          <div id="cheaderInfo" style="flex:1"></div>
+          <div class="ib" style="width:30px;height:30px;font-size:13px" id="chatCallBtn">📞</div>
+        </div>
+        <div id="chatLockWarn" class="chat-lock-warn" style="display:none">
+          🔒 <strong>Contactos bloqueados</strong><br/>
+          <span style="font-size:11px">Para ver o número de telefone e encontrar-se pessoalmente, precisas de pagar 3.000 Kz de acesso.</span><br/>
+          <button onclick="openUnlockModal(activeChatListingId)" style="margin-top:8px;padding:7px 16px;background:var(--purple);border:none;border-radius:20px;color:#fff;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer">🔓 Desbloquear 3.000 Kz</button>
+        </div>
+        <div class="msgs" id="msgsEl"></div>
+        <div class="cinput">
+          <input type="text" id="cinputField" placeholder="Escreve uma mensagem..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+          <button class="sbtn" onclick="sendMsg()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="screen" id="screen-perfil">
+    <div class="prof-wrap">
+      <div class="prof-header">
+        <div class="prof-av" id="profAv" onclick="document.getElementById('profPhotoInp').click()">👤</div>
+        <input type="file" accept="image/*" id="profPhotoInp" style="display:none" onchange="handleProfPhoto(event)"/>
+        <div style="font-size:16px;font-weight:700" id="profName">Utilizador</div>
+        <div style="font-size:12px;color:var(--muted)" id="profPhone"></div>
+        <div id="profTrustBadge" style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--card);color:var(--muted)">🔒 Sem verificação</div>
+      </div>
+      <div class="stat-row">
+        <div class="sbox"><div class="sval" id="statAn">0</div><div class="slbl">Anúncios</div></div>
+        <div class="sbox"><div class="sval" id="statFav">0</div><div class="slbl">Favoritos</div></div>
+        <div class="sbox"><div class="sval" id="statTrust">0%</div><div class="slbl">Confiança</div></div>
+        <div class="sbox"><div class="sval" id="statUnlocked">0</div><div class="slbl">Desbloq.</div></div>
+      </div>
+      <div class="mi" onclick="openPostModal()">➕ <span style="flex:1">Publicar anúncio</span><span style="color:var(--muted)">›</span></div>
+      <div class="mi" onclick="openDocsModal()">🛡️ <span style="flex:1">Verificação de Documentos</span><span id="profDocsBadge" style="font-size:10px;background:var(--card);color:var(--muted);padding:2px 8px;border-radius:20px">0/5</span></div>
+      <div class="mi" onclick="showFavs()">❤️ <span style="flex:1">Casas favoritas</span><span style="color:var(--muted)">›</span></div>
+      <div class="mi">📋 <span style="flex:1">Meus anúncios</span><span style="color:var(--muted)">›</span></div>
+      <div class="mi" onclick="setScreen('legal')">⚖️ <span style="flex:1">Termos Legais & Direitos</span><span style="color:var(--muted)">›</span></div>
+      <div class="mi" onclick="logout()">🚪 <span style="flex:1">Sair da conta</span><span style="color:var(--muted)">›</span></div>
+      <div style="text-align:center;padding:16px 0;font-size:11px;color:var(--muted)">KasaAngola v5.0 🇦🇴 · 21 Províncias<br/>Feito com ❤️ para Angola</div>
+    </div>
+  </div>
+
+  <!-- LEGAL -->
+  <div class="screen" id="screen-legal">
+    <div style="display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0">
+      <div class="back" onclick="setScreen('perfil')">← Voltar</div>
+      <div style="font-size:13px;font-weight:700">⚖️ Termos Legais & Direitos</div>
+    </div>
+    <div class="legal-page">
+      <div style="background:linear-gradient(135deg,#1a0a00,#200a00);border-radius:13px;padding:18px;margin-bottom:14px;text-align:center">
+        <div style="font-size:34px;margin-bottom:7px">⚖️</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:4px">Aviso Legal KasaAngola</div>
+        <div style="font-size:11px;color:var(--muted)">Lei n.º 38/20 de 11 de Novembro — Código Penal da República de Angola</div>
+      </div>
+
+      <div class="lsection">
+        <div class="lsec-title">🔒 Sistema de Protecção de Contactos</div>
+        <div class="ltext">A KasaAngola protege os seus utilizadores através do bloqueio de contactos pessoais (número de telefone, morada exacta) até ao pagamento de uma taxa simbólica de acesso de <strong style="color:var(--purple)">3.000 Kz</strong>. Este sistema existe para:<br/><br/>
+        • Evitar que utilizadores troquem contactos e se encontrem fora da plataforma sem segurança<br/>
+        • Garantir que ambas as partes estão comprometidas com a transacção<br/>
+        • Criar um registo rastreável de todas as interacções<br/>
+        • Proteger proprietários de visitas não autorizadas<br/>
+        • Proteger clientes de fraudes e encontros inseguros<br/><br/>
+        <strong style="color:var(--orange)">⚠️ Nunca te encontres com alguém fora da plataforma sem antes verificar os documentos e desbloquear o contacto de forma oficial.</strong></div>
+      </div>
+
+      <div class="lsection">
+        <div class="lsec-title">🚨 Burla e Extorsão são Crimes Graves em Angola</div>
+        <div class="ltext" style="margin-bottom:8px">Qualquer utilizador que tente enganar, cobrar valores indevidos, apresentar imóveis falsos ou extorquir outros utilizadores comete crime punível pelo Código Penal Angolano — Lei n.º 38/20.</div>
+        <div class="law-art"><div class="law-num">📜 Art. 217.º — BURLA</div><div class="law-txt">Induzir alguém em erro por meio fraudulento causando prejuízo patrimonial — <strong style="color:#ff6666">prisão até 3 anos</strong> ou multa.</div></div>
+        <div class="law-art"><div class="law-num">📜 Art. 218.º — BURLA QUALIFICADA</div><div class="law-txt">Burla de valor elevado ou por modo de vida — <strong style="color:#ff6666">prisão de 2 a 8 anos</strong>, sem suspensão.</div></div>
+        <div class="law-art"><div class="law-num">📜 Art. 223.º — EXTORSÃO</div><div class="law-txt">Constranger por violência ou ameaça grave para obter benefício patrimonial — <strong style="color:#ff6666">prisão de 1 a 8 anos</strong>.</div></div>
+        <div class="law-art"><div class="law-num">📜 Art. 356.º — FALSIFICAÇÃO</div><div class="law-txt">Usar documentos falsos ou falsificar BI ou contratos — <strong style="color:#ff6666">prisão até 5 anos</strong>.</div></div>
+        <div style="background:#200000;border:1px solid var(--red);border-radius:9px;padding:10px;margin-top:10px;font-size:12px;color:#ffaaaa;text-align:center">
+          🚨 <strong>Denuncia crimes:</strong> Polícia Nacional Angola: <strong style="font-size:14px">113</strong>
+        </div>
+      </div>
+
+      <div class="lsection">
+        <div class="lsec-title">©️ Direitos Autorais</div>
+        <div class="copy-ok">
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px">✅ PODES</div>
+          <div style="font-size:11.5px;color:#aaffaa;line-height:1.75">✓ Partilhar o link da plataforma<br/>✓ Publicar os teus próprios imóveis<br/>✓ Contactar proprietários via chat<br/>✓ Deixar avaliações honestas</div>
+        </div>
+        <div class="copy-no">
+          <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">❌ NÃO PODES</div>
+          <div style="font-size:11.5px;color:#ffaaaa;line-height:1.75">✗ Copiar o design ou código da KasaAngola<br/>✗ Usar o nome "KasaAngola" sem autorização<br/>✗ Publicar imóveis que não são teus<br/>✗ Publicar conteúdo falso ou enganoso<br/>✗ Contornar o sistema de protecção de contactos</div>
+        </div>
+      </div>
+
+      <div class="lsection">
+        <div class="lsec-title">⚠️ Isenção de Responsabilidade</div>
+        <div class="ltext">A KasaAngola <strong>NÃO SE RESPONSABILIZA</strong> por: veracidade dos anúncios, qualidade dos imóveis, acordos fora da plataforma, disputas entre utilizadores, nem por encontros ocorridos sem desbloqueio oficial de contactos.<br/><br/><strong style="color:var(--orange)">Recomendamos sempre:</strong> verificar documentos, usar o chat oficial e desbloquear o contacto antes de qualquer encontro presencial.</div>
+      </div>
+      <div style="text-align:center;padding:14px 0;font-size:11px;color:var(--muted)">KasaAngola © 2025 🇦🇴 — Todos os direitos reservados</div>
+    </div>
+  </div>
+
+</div><!-- end app-body -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" onclick="setScreen('inicio')"><span class="nav-icon">🏠</span>Início</div>
+  <div class="nav-item" onclick="setScreen('mapa')"><span class="nav-icon">🗺️</span>Mapa</div>
+  <div class="nav-item" onclick="setScreen('chat')"><span class="nav-icon">💬</span>Chat<span class="nav-badge" id="chatBadge">3</span></div>
+  <div class="nav-item" onclick="setScreen('perfil')"><span class="nav-icon">👤</span>Perfil</div>
+  <div class="nav-item" onclick="setScreen('legal')"><span class="nav-icon">⚖️</span>Legal</div>
+</nav>
+
+<!-- DETAIL SCREEN -->
+<div class="dscreen" id="detailScreen">
+  <div class="dhead">
+    <div class="back" onclick="closeDetail()">← Voltar</div>
+    <div style="font-size:13px;font-weight:700;flex:1;text-align:center" id="dHeaderTitle"></div>
+    <div class="ib" style="width:30px;height:30px;font-size:15px" id="favBtn" onclick="toggleFav()">🤍</div>
+  </div>
+  <div class="dbody">
+    <div class="dimg" id="dimg"></div>
+    <div class="media-tabs" id="mediaTabs" style="display:none">
+      <div class="mtab active" onclick="showMedia('foto')">📷 Fotos</div>
+      <div class="mtab" onclick="showMedia('video')">🎥 Vídeos</div>
+    </div>
+    <div class="dinfo">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div class="dprice" id="dprice"></div>
+        <div id="dBadge"></div>
+      </div>
+      <div class="dtitle" id="dtitle"></div>
+      <div class="dloc" id="dloc"></div>
+      <div id="dstars" style="display:flex;align-items:center;gap:3px;font-size:11px;color:var(--gold);margin-bottom:9px"></div>
+      <div class="dfeats" id="dfeats"></div>
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:5px">📋 Descrição</div>
+      <div class="ddesc" id="ddesc"></div>
+
+      <!-- TRUST METER -->
+      <div class="trust-meter">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+          <span style="font-size:13px;font-weight:700">🛡️ Nível de Confiança</span>
+          <div class="trust-circle" id="dTrustCircle"></div>
+        </div>
+        <div class="trust-bar-bg"><div class="trust-bar-fill" id="dTrustBar"></div></div>
+        <div id="dTrustDocs"></div>
+      </div>
+
+      <!-- CONTACT LOCK / REVEALED -->
+      <div id="contactSection"></div>
+
+      <div class="legal-box">
+        <div class="lbox-title">⚠️ Aviso de Segurança — Código Penal Angolano</div>
+        <div class="lbox-item">Nunca pagues nada sem visitar o imóvel pessoalmente.</div>
+        <div class="lbox-item">Desbloqueia o contacto oficialmente antes de qualquer encontro.</div>
+        <div class="lbox-item">Burla e extorsão: <strong>prisão até 8 anos</strong> (Art. 217.º e 223.º).</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted)">🚨 Polícia: <strong style="color:var(--orange)">113</strong></div>
+      </div>
+
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:8px">👤 Proprietário</div>
+      <div class="owner-box">
+        <div class="owner-av" id="ownerAv">👤</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="ownerName"></div>
+          <div style="font-size:11.5px;color:var(--muted)" id="ownerPhone"></div>
+        </div>
+        <div style="font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px" id="ownerVerifiedBadge"></div>
+      </div>
+
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:8px">⭐ Avaliações</div>
+      <div id="reviewsList"></div>
+      <button onclick="openReviewModal()" style="width:100%;padding:9px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:inherit;font-size:12px;cursor:pointer;margin-bottom:13px">✍️ Deixar avaliação</button>
+    </div>
+  </div>
+  <div class="dactions" id="dActions"></div>
+</div>
+
+<!-- UNLOCK MODAL -->
+<div class="modal-ov" id="unlockModal">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="modal-title">🔓 Desbloquear Contacto</div>
+    <div class="unlock-box">
+      <div style="font-size:32px">🔐</div>
+      <div class="unlock-price">3.000 Kz <span>/ acesso</span></div>
+      <div class="unlock-sub">Pagamento único por anúncio. Acesso vitalício ao contacto completo.</div>
+      <div class="unlock-feats">
+        <div class="unlock-feat">✅ Número de telefone do proprietário</div>
+        <div class="unlock-feat">✅ Morada exacta do imóvel</div>
+        <div class="unlock-feat">✅ Possibilidade de marcar visita presencial</div>
+        <div class="unlock-feat">✅ Chat ilimitado com o proprietário</div>
+        <div class="unlock-feat">🔒 Os teus dados ficam protegidos</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple)44;border-radius:11px;padding:12px;margin-bottom:12px;font-size:11.5px;color:#ccaaff;line-height:1.7">
+      🛡️ <strong>Porquê este sistema existe?</strong><br/>
+      Para evitar que proprietários e clientes se encontrem em locais inseguros sem registo. Todas as interacções pagas ficam registadas na plataforma como proteção de ambas as partes.
+    </div>
+    <div class="mc-box">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+        <span style="font-size:20px">💳</span>
+        <div><div style="font-size:13px;font-weight:700;color:var(--green)">Multicaixa Express</div><div style="font-size:10px;color:var(--muted)">Pagamento seguro 🇦🇴</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">Valor</div>
+      <div style="font-size:18px;font-weight:800;color:var(--green);margin-bottom:9px">3.000 Kz</div>
+      <div class="mc-ref">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:3px">REFERÊNCIA</div>
+        <div class="mc-ref-num" id="unlockRef">000 000 000</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Entidade: <strong>11351</strong></div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:12px;font-size:11.5px;color:var(--muted);line-height:1.8">
+      1. Abre o <strong>Multicaixa Express</strong><br/>
+      2. <strong>"Pagar Serviços"</strong> → Entidade <strong>11351</strong><br/>
+      3. Usa a referência acima → Confirma<br/>
+      4. Toca em "Já paguei" abaixo ✓
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('unlockModal').classList.remove('show')" style="flex:1;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:inherit;font-weight:600;cursor:pointer">Cancelar</button>
+      <button onclick="confirmUnlock()" style="flex:1;padding:11px;background:var(--purple);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;cursor:pointer;font-size:13px">🔓 Já paguei!</button>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-ov" id="postModal">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="modal-title">➕ Publicar Anúncio</div>
+    <div class="mlabel">📷 Fotos & 🎥 Vídeos</div>
+    <div class="muptabs">
+      <button class="muptab active" onclick="setMediaUpTab('fotos',this)">📷 Fotos</button>
+      <button class="muptab" onclick="setMediaUpTab('videos',this)">🎥 Vídeos</button>
+    </div>
+    <div id="fotosUpArea" class="upload-area" onclick="document.getElementById('postFotos').click()">
+      <input type="file" accept="image/*" multiple id="postFotos" style="display:none" onchange="handlePostFotos(event)"/>
+      <div style="font-size:26px;margin-bottom:4px">📷</div>
+      <div style="font-size:12px;color:var(--muted)">Adicionar fotos (máx. 5)</div>
+    </div>
+    <div id="videosUpArea" class="upload-area" style="display:none" onclick="document.getElementById('postVideos').click()">
+      <input type="file" accept="video/*" multiple id="postVideos" style="display:none" onchange="handlePostVideos(event)"/>
+      <div style="font-size:26px;margin-bottom:4px">🎥</div>
+      <div style="font-size:12px;color:var(--muted)">Adicionar vídeos (máx. 2)</div>
+    </div>
+    <div class="media-previews" id="mediaPreviewsEl"></div>
+    <div class="mlabel">Tipo</div>
+    <div style="display:flex;gap:7px;margin-bottom:9px">
+      <button class="chip active" id="ptA" onclick="selPT('alugar')">Alugar</button>
+      <button class="chip" id="ptV" onclick="selPT('vender')">Vender</button>
+    </div>
+    <div class="mlabel">Título</div>
+    <input class="inp" id="pTitle" placeholder="Ex: T3 Mobilado em Talatona, Luanda"/>
+    <div class="mrow" style="margin-bottom:9px">
+      <div style="flex:1"><div class="mlabel">Preço (Kz)</div><input class="inp" id="pPrice" type="number" placeholder="25000" style="margin:0"/></div>
+      <div style="flex:1.4"><div class="mlabel">Província</div><select class="inp" id="pZone" style="margin:0;font-size:12px"></select></div>
+    </div>
+    <div class="mrow" style="margin-bottom:9px">
+      <div style="flex:1"><div class="mlabel">Quartos</div><select class="inp" id="pQ" style="margin:0"><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div>
+      <div style="flex:1"><div class="mlabel">Banhos</div><select class="inp" id="pB" style="margin:0"><option>1</option><option>2</option><option>3</option><option>4+</option></select></div>
+      <div style="flex:1"><div class="mlabel">Área m²</div><input class="inp" id="pA" type="number" placeholder="80" style="margin:0"/></div>
+    </div>
+    <div class="mlabel">Descrição</div>
+    <textarea class="inp" id="pDesc" rows="3" style="resize:none;height:60px" placeholder="Descreve a tua casa..."></textarea>
+    <div class="mlabel">O teu contacto (visível só após pagamento)</div>
+    <input class="inp" id="pPhone" placeholder="+244 900 000 000"/>
+    <div style="background:#1a0a00;border:1px solid var(--orange);border-radius:10px;padding:10px;margin-bottom:11px;font-size:11px;color:#ffccaa;line-height:1.6">
+      ⚠️ Ao publicar confirmas que és o legítimo proprietário. Informações falsas constituem Burla — Art. 217.º Cód. Penal — <strong>até 8 anos de prisão</strong>.
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="closePostModal()" style="flex:1;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:inherit;font-weight:600;cursor:pointer">Cancelar</button>
+      <button onclick="submitPost()" style="flex:1;padding:11px;background:var(--red);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;cursor:pointer">Publicar 🏠</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOCS MODAL -->
+<div class="modal-ov" id="docsModal">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="modal-title">🛡️ Verificação de Documentos</div>
+    <div style="background:linear-gradient(135deg,#0a1628,#0a2028);border:1px solid var(--blue);border-radius:12px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px">
+      <div class="trust-circle" id="modalTrustCircle" style="border-color:var(--muted);color:var(--muted)">0%</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;margin-bottom:3px">Nível de Confiança</div>
+        <div class="trust-bar-bg"><div class="trust-bar-fill" id="modalTrustBar" style="width:0%;background:var(--muted)"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px" id="modalTrustLabel">Adiciona documentos para aumentar</div>
+      </div>
+    </div>
+    <div class="doc-tabs-wrap">
+      <div class="doc-tabs-hdr">
+        <button class="dtab active" onclick="setDocTab(0,this)">🪪 BI</button>
+        <button class="dtab" onclick="setDocTab(1,this)">🚗 Carta</button>
+        <button class="dtab" onclick="setDocTab(2,this)">🛂 Pass.</button>
+        <button class="dtab" onclick="setDocTab(3,this)">📋 Certidão</button>
+        <button class="dtab" onclick="setDocTab(4,this)">🏠 Prop.</button>
+      </div>
+      <!-- BI -->
+      <div class="doc-panel show" id="docPanel0">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">🪪 Bilhete de Identidade — +30%</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Documento principal do cidadão angolano emitido pela DNIRN.</div>
+        <div class="side-tabs">
+          <button class="stab active" onclick="setSideTab('bi','frente',this)">Frente</button>
+          <button class="stab" onclick="setSideTab('bi','verso',this)">Verso</button>
+        </div>
+        <div id="bi-frente-area"><div class="upload-box" id="bi-frente-box" onclick="document.getElementById('bi-frente-inp').click()"><input type="file" accept="image/*" id="bi-frente-inp" style="display:none" onchange="handleDocUpload(event,'bi','frente')"/><div style="font-size:26px;margin-bottom:4px">🪪</div><div style="font-size:12px;color:var(--muted)">Frente do BI</div></div><img id="bi-frente-prev" class="doc-prev" style="display:none"/></div>
+        <div id="bi-verso-area" style="display:none"><div class="upload-box" id="bi-verso-box" onclick="document.getElementById('bi-verso-inp').click()"><input type="file" accept="image/*" id="bi-verso-inp" style="display:none" onchange="handleDocUpload(event,'bi','verso')"/><div style="font-size:26px;margin-bottom:4px">🪪</div><div style="font-size:12px;color:var(--muted)">Verso do BI</div></div><img id="bi-verso-prev" class="doc-prev" style="display:none"/></div>
+      </div>
+      <!-- CARTA -->
+      <div class="doc-panel" id="docPanel1">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">🚗 Carta de Condução — +20%</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Emitida pelo IMTT Angola. Aceite como identificação secundária.</div>
+        <div class="side-tabs">
+          <button class="stab active" onclick="setSideTab('carta','frente',this)">Frente</button>
+          <button class="stab" onclick="setSideTab('carta','verso',this)">Verso</button>
+        </div>
+        <div id="carta-frente-area"><div class="upload-box" id="carta-frente-box" onclick="document.getElementById('carta-frente-inp').click()"><input type="file" accept="image/*" id="carta-frente-inp" style="display:none" onchange="handleDocUpload(event,'carta','frente')"/><div style="font-size:26px;margin-bottom:4px">🚗</div><div style="font-size:12px;color:var(--muted)">Frente da Carta</div></div><img id="carta-frente-prev" class="doc-prev" style="display:none"/></div>
+        <div id="carta-verso-area" style="display:none"><div class="upload-box" id="carta-verso-box" onclick="document.getElementById('carta-verso-inp').click()"><input type="file" accept="image/*" id="carta-verso-inp" style="display:none" onchange="handleDocUpload(event,'carta','verso')"/><div style="font-size:26px;margin-bottom:4px">🚗</div><div style="font-size:12px;color:var(--muted)">Verso da Carta</div></div><img id="carta-verso-prev" class="doc-prev" style="display:none"/></div>
+      </div>
+      <!-- PASSAPORTE -->
+      <div class="doc-panel" id="docPanel2">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">🛂 Passaporte — +20%</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Emitido pelo SMIC. Alta segurança, aceite internacionalmente.</div>
+        <div class="side-tabs">
+          <button class="stab active" onclick="setSideTab('pass','frente',this)">Página de dados</button>
+          <button class="stab" onclick="setSideTab('pass','verso',this)">Página de foto</button>
+        </div>
+        <div id="pass-frente-area"><div class="upload-box" id="pass-frente-box" onclick="document.getElementById('pass-frente-inp').click()"><input type="file" accept="image/*" id="pass-frente-inp" style="display:none" onchange="handleDocUpload(event,'pass','frente')"/><div style="font-size:26px;margin-bottom:4px">🛂</div><div style="font-size:12px;color:var(--muted)">Dados do Passaporte</div></div><img id="pass-frente-prev" class="doc-prev" style="display:none"/></div>
+        <div id="pass-verso-area" style="display:none"><div class="upload-box" id="pass-verso-box" onclick="document.getElementById('pass-verso-inp').click()"><input type="file" accept="image/*" id="pass-verso-inp" style="display:none" onchange="handleDocUpload(event,'pass','verso')"/><div style="font-size:26px;margin-bottom:4px">🛂</div><div style="font-size:12px;color:var(--muted)">Foto do Passaporte</div></div><img id="pass-verso-prev" class="doc-prev" style="display:none"/></div>
+      </div>
+      <!-- CERTIDÃO -->
+      <div class="doc-panel" id="docPanel3">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">📋 Certidão de Nascimento — +15%</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Emitida pelo Cartório Notarial ou Conservatória do Registo Civil.</div>
+        <div class="upload-box" id="certidao-box" onclick="document.getElementById('certidao-inp').click()"><input type="file" accept="image/*" id="certidao-inp" style="display:none" onchange="handleDocUpload(event,'certidao','frente')"/><div style="font-size:26px;margin-bottom:4px">📋</div><div style="font-size:12px;color:var(--muted)">Foto da Certidão</div></div>
+        <img id="certidao-frente-prev" class="doc-prev" style="display:none"/>
+      </div>
+      <!-- PROPRIEDADE -->
+      <div class="doc-panel" id="docPanel4">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">🏠 Comprovativo de Propriedade — +15%</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Escritura pública ou registo predial emitido pelo Cartório Notarial ou Conservatória dos Registos em Angola.</div>
+        <div class="upload-box" id="prop-box" onclick="document.getElementById('prop-inp').click()"><input type="file" accept="image/*" id="prop-inp" style="display:none" onchange="handleDocUpload(event,'prop','frente')"/><div style="font-size:26px;margin-bottom:4px">🏠</div><div style="font-size:12px;color:var(--muted)">Escritura ou Registo Predial</div></div>
+        <img id="prop-frente-prev" class="doc-prev" style="display:none"/>
+      </div>
+    </div>
+    <div style="background:#0a200a;border:1px solid #22c55e44;border-radius:10px;padding:10px;margin:11px 0;font-size:11.5px;color:#aaffaa;line-height:1.6">🔒 Documentos armazenados de forma segura. Nunca partilhados sem o teu consentimento.</div>
+    <button onclick="closeDocsModal()" style="width:100%;padding:12px;background:var(--red);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;cursor:pointer;font-size:14px">Guardar ✓</button>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="modal-ov" id="reviewModal">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="modal-title">⭐ Deixar Avaliação</div>
+    <div class="mlabel">Classificação</div>
+    <div style="display:flex;gap:4px;margin-bottom:9px" id="starsInput">
+      <span class="star-btn" onclick="setStar(1)">⭐</span><span class="star-btn" onclick="setStar(2)">⭐</span>
+      <span class="star-btn" onclick="setStar(3)">⭐</span><span class="star-btn" onclick="setStar(4)">⭐</span>
+      <span class="star-btn" onclick="setStar(5)">⭐</span>
+    </div>
+    <div class="mlabel">Comentário</div>
+    <textarea class="inp" id="reviewText" rows="3" style="resize:none;height:70px" placeholder="Como foi a tua experiência?"></textarea>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('reviewModal').classList.remove('show')" style="flex:1;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:inherit;font-weight:600;cursor:pointer">Cancelar</button>
+      <button onclick="submitReview()" style="flex:1;padding:11px;background:var(--red);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;cursor:pointer">Publicar ⭐</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ AUTH FUNCTIONS ═══
+function setAuthTab(m){
+  authMode=m;
+  document.getElementById('tabLogin').className=m==='login'?'atab active':'atab';
+  document.getElementById('tabReg').className=m==='reg'?'atab active':'atab';
+  document.getElementById('authErr').style.display='none';
+  document.getElementById('formLogin').style.display=m==='login'?'block':'none';
+  document.getElementById('formReg').style.display=m==='reg'?'block':'none';
+}
+
+function doLogin(){
+  var err=document.getElementById('authErr');
+  err.style.display='none';
+  var emailEl=document.getElementById('aEmail');
+  var senhaEl=document.getElementById('aSenha');
+  var email=emailEl?emailEl.value.trim():'';
+  var senha=senhaEl?senhaEl.value.trim():'';
+  if(!email||!senha){err.textContent='Preenche todos os campos.';err.style.display='block';return;}
+  var u=null;
+  for(var i=0;i<users.length;i++){
+    if(users[i].email===email&&users[i].senha===senha){u=users[i];break;}
+  }
+  if(!u){err.textContent='E-mail ou senha incorretos!';err.style.display='block';return;}
+  login(u);
+}
+
+function doRegister(){
+  var err=document.getElementById('authErr');
+  err.style.display='none';
+  var nome=document.getElementById('rNome')?document.getElementById('rNome').value.trim():'';
+  var phone=document.getElementById('rPhone')?document.getElementById('rPhone').value.trim():'';
+  var email=document.getElementById('rEmail')?document.getElementById('rEmail').value.trim():'';
+  var senha=document.getElementById('rSenha')?document.getElementById('rSenha').value.trim():'';
+  if(!nome||!email||!senha){err.textContent='Preenche todos os campos.';err.style.display='block';return;}
+  if(senha.length<4){err.textContent='Senha muito curta (min. 4).';err.style.display='block';return;}
+  for(var j=0;j<users.length;j++){
+    if(users[j].email===email){err.textContent='E-mail ja registado.';err.style.display='block';return;}
+  }
+  var nu={email:email,senha:senha,nome:nome,phone:phone||'+244 900 000 000',photo:null};
+  users.push(nu);
+  login(nu);
+}
+
+function doAuth(){doLogin();}
+function renderAuthForm(){}
+
+
+// ═══════════════════════════════════════
+// CONSTANTS & DATA
+// ═══════════════════════════════════════
+const PROVINCES=['Bengo','Benguela','Bié','Cabinda','Cuando Cubango','Cuando','Cuanza Norte','Cuanza Sul','Cunene','Huambo','Huíla','Ícolo e Bengo','Luanda','Lunda Norte','Lunda Sul','Malanje','Moxico','Moxico Leste','Namibe','Uíge','Zaire'];
+const EMOJIS=['🏠','🏡','🏢','🏬','🏘️'];
+const DOC_W={bi:30,carta:20,pass:20,certidao:15,prop:15};
+const DOC_LBL={bi:'BI',carta:'Carta de Condução',pass:'Passaporte',certidao:'Certidão Nasc.',prop:'Comprovativo Prop.'};
+const DOC_ICO={bi:'🪪',carta:'🚗',pass:'🛂',certidao:'📋',prop:'🏠'};
+
+let users=[{email:'teste@kasa.ao',senha:'1234',nome:'João Silva',phone:'+244 923 456 789',photo:null}];
+let currentUser=null, authMode='login';
+let unlockedContacts=new Set(); // listing IDs the user has unlocked
+let pendingUnlockId=null;
+let activeChatListingId=null;
+
+let listings=[
+  {id:0,type:'alugar',title:'T3 Mobilado em Talatona',zone:'Luanda',price:30000,quartos:3,banhos:2,area:120,photos:[],videos:[],emoji:'🏠',desc:'Apartamento T3 totalmente mobilado em Talatona, perto do Belas Shopping. Condomínio fechado, segurança 24h, piscina.',owner:'Carlos Mendes',ownerPhone:'+244 923 456 789',ownerAddress:'Rua da Samba, Bloco B, Ap. 4, Talatona, Luanda',destaque:true,rating:4.5,trustScore:80,reviews:[{user:'Ana T.',stars:5,text:'Casa excelente! Proprietário muito atencioso.',time:'Jan 2025'},{user:'Miguel S.',stars:4,text:'Boa localização, bem mobilada.',time:'Dez 2024'}]},
+  {id:1,type:'vender',title:'Vivenda T4 no Kilamba',zone:'Luanda',price:4500000,quartos:4,banhos:3,area:200,photos:[],videos:[],emoji:'🏡',desc:'Vivenda T4 no Kilamba, zona nova e segura. Jardim privado, garagem para 2 carros.',owner:'Ana Teixeira',ownerPhone:'+244 912 345 678',ownerAddress:'Rua K2, Casa 45, Kilamba, Luanda',destaque:false,rating:4.8,trustScore:95,reviews:[{user:'Pedro L.',stars:5,text:'Vivenda incrível! Negócio rápido.',time:'Fev 2025'}]},
+  {id:2,type:'alugar',title:'T2 no Centro de Benguela',zone:'Benguela',price:25000,quartos:2,banhos:1,area:80,photos:[],videos:[],emoji:'🏢',desc:'Apartamento T2 no centro de Benguela. Vista para o mar, 2.º andar.',owner:'Manuel Silva',ownerPhone:'+244 934 567 890',ownerAddress:'Av. Norton de Matos, Ed. Savana, Ap. 12, Benguela',destaque:false,rating:4.2,trustScore:50,reviews:[]},
+  {id:3,type:'alugar',title:'T4 Luxo em Miramar',zone:'Luanda',price:40000,quartos:4,banhos:3,area:180,photos:[],videos:[],emoji:'🏠',desc:'Apartamento de luxo em Miramar com vista panorâmica para o mar. Acabamentos de alto padrão.',owner:'Sofia Leal',ownerPhone:'+244 945 678 901',ownerAddress:'Av. Miramar, Bloco Sol, Ap. 8, Luanda',destaque:true,rating:4.9,trustScore:100,reviews:[{user:'Carla M.',stars:5,text:'Melhor apartamento de Luanda!',time:'Mar 2025'}]},
+  {id:4,type:'vender',title:'Moradia T5 no Huambo',zone:'Huambo',price:6000000,quartos:5,banhos:4,area:300,photos:[],videos:[],emoji:'🏡',desc:'Grande moradia T5 no Huambo com terreno de 500m². Zona residencial tranquila.',owner:'Pedro Neto',ownerPhone:'+244 956 789 012',ownerAddress:'Bairro Popular, Rua 12, Casa 7, Huambo',destaque:false,rating:4.0,trustScore:65,reviews:[]},
+  {id:5,type:'alugar',title:'T1 em Cabinda Centro',zone:'Cabinda',price:18000,quartos:1,banhos:1,area:45,photos:[],videos:[],emoji:'🏬',desc:'Apartamento T1 bem localizado em Cabinda. Inclui água e luz.',owner:'Maria João',ownerPhone:'+244 967 890 123',ownerAddress:'Rua Henrique de Carvalho, Ap. 3, Cabinda',destaque:false,rating:3.8,trustScore:30,reviews:[]},
+  {id:6,type:'alugar',title:'T2 em Benguela-Mar',zone:'Benguela',price:22000,quartos:2,banhos:1,area:70,photos:[],videos:[],emoji:'🏠',desc:'Casa T2 a 200m da praia em Benguela. Vista para o mar, quintal privado.',owner:'Rosa Ferreira',ownerPhone:'+244 978 901 234',ownerAddress:'Rua da Praia, Casa 8, Benguela',destaque:false,rating:4.3,trustScore:70,reviews:[]},
+  {id:7,type:'vender',title:'Moradia T3 em Saurimo',zone:'Lunda Sul',price:3200000,quartos:3,banhos:2,area:150,photos:[],videos:[],emoji:'🏡',desc:'Moradia T3 no centro de Saurimo. Zona tranquila, próximo de serviços.',owner:'António Lopes',ownerPhone:'+244 989 012 345',ownerAddress:'Bairro Novo, Rua 5, Casa 12, Saurimo, Lunda Sul',destaque:false,rating:4.1,trustScore:55,reviews:[]},
+];
+let myListings=[],favs=[],fType='todos',fZone='todas';
+let currentDetail=null,currentDetailId=-1,currentDetailMedia='foto';
+let postType='alugar',postFotos=[],postVideos=[];
+let selectedStars=5;
+let userDocs={bi:{frente:null,verso:null},carta:{frente:null,verso:null},pass:{frente:null,verso:null},certidao:{frente:null},prop:{frente:null}};
+let activeChats=[
+  {id:1,name:'Carlos Mendes',emoji:'👨',about:'T3 Talatona',listingId:0,msgs:[{text:'Olá! Ainda está disponível o T3?',s:false,t:'09:10'},{text:'Sim! Quando quer visitar?',s:true,t:'09:12'}],unread:1},
+  {id:2,name:'Ana Teixeira',emoji:'👩',about:'Vivenda Kilamba',listingId:1,msgs:[{text:'Qual é o preço final?',s:false,t:'ontem'}],unread:0},
+  {id:3,name:'Sofia Leal',emoji:'👩‍💼',about:'T4 Miramar',listingId:3,msgs:[{text:'Posso visitar sábado?',s:false,t:'seg'}],unread:2},
+];
+let activeChatIdx=0;
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+
+  {id:1,name:'Carlos Mendes',emoji:'👨',about:'T3 Talatona',listingId:0,msgs:[{text:'Olá! Ainda está disponível o T3?',s:false,t:'09:10'},{text:'Sim! Quando quer visitar?',s:true,t:'09:12'}],unread:1},
+  {id:2,name:'Ana Teixeira',emoji:'👩',about:'Vivenda Kilamba',listingId:1,msgs:[{text:'Qual é o preço final?',s:false,t:'ontem'}],unread:0},
+  {id:3,name:'Sofia Leal',emoji:'👩‍💼',about:'T4 Miramar',listingId:3,msgs:[{text:'Posso visitar sábado?',s:false,t:'seg'}],unread:2},
+];
+let activeChatIdx=0;
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+function setAuthTab(m){authMode=m;document.querySelectorAll('.atab').forEach((t,i)=>t.classList.toggle('active',i===(m==='login'?0:1)));document.getElementById('authErr').style.display='none';renderAuthForm();}
+
+function doAuth(){
+  const email=document.getElementById('aEmail')?.value.trim(),senha=document.getElementById('aSenha')?.value.trim();
+  const err=document.getElementById('authErr');
+  if(authMode==='login'){
+    const u=users.find(u=>u.email===email&&u.senha===senha);
+    if(!u){err.textContent='E-mail ou senha incorretos.';err.style.display='block';return;}
+    login(u);
+  } else {
+    const nome=document.getElementById('aNome')?.value.trim(),phone=document.getElementById('aPhone')?.value.trim();
+    if(!nome||!email||!senha){err.textContent='Preenche todos os campos.';err.style.display='block';return;}
+    if(senha.length<4){err.textContent='Senha muito curta.';err.style.display='block';return;}
+    if(users.find(u=>u.email===email)){err.textContent='E-mail já registado.';err.style.display='block';return;}
+    const u={email,senha,nome,phone:phone||'+244 900 000 000',photo:null};users.push(u);login(u);
+  }
+}
+function login(u){
+  currentUser=u;
+  document.getElementById('authScreen').classList.add('hide');
+  document.getElementById('profName').textContent=u.nome;
+  document.getElementById('profPhone').textContent=u.phone||u.email;
+  document.getElementById('topAvatar').textContent=u.nome[0].toUpperCase();
+  buildProvincesRow(); buildProvinceSelect();
+  renderListings(); renderChatList(); renderMapCards(); updateTrustUI();
+}
+function logout(){currentUser=null;document.getElementById('authScreen').classList.remove('hide');renderAuthForm();}
+function gotoLegal(){document.getElementById('authScreen').classList.add('hide');setScreen('legal');}
+
+// ═══════════════════════════════════════
+// PROVINCES
+// ═══════════════════════════════════════
+function buildProvincesRow(){
+  document.getElementById('provincesRow').innerHTML=`<button class="fbtn active" onclick="setFZone('todas',this)">Todas (21)</button>`+PROVINCES.map(p=>`<button class="fbtn" onclick="setFZone('${p}',this)">${p}</button>`).join('');
+}
+function buildProvinceSelect(){
+  document.getElementById('pZone').innerHTML=PROVINCES.map(p=>`<option>${p}</option>`).join('');
+}
+
+// ═══════════════════════════════════════
+// TRUST
+// ═══════════════════════════════════════
+function calcTrust(){
+  let s=0;
+  if(userDocs.bi.frente||userDocs.bi.verso)s+=30;
+  if(userDocs.carta.frente||userDocs.carta.verso)s+=20;
+  if(userDocs.pass.frente||userDocs.pass.verso)s+=20;
+  if(userDocs.certidao.frente)s+=15;
+  if(userDocs.prop.frente)s+=15;
+  return Math.min(s,100);
+}
+function tColor(s){
+  if(s>=80)return{bar:'var(--green)',c:'var(--green)',lbl:'✅ Alta Confiança'};
+  if(s>=50)return{bar:'var(--gold)',c:'var(--gold)',lbl:'⚡ Confiança Média'};
+  if(s>=20)return{bar:'var(--orange)',c:'var(--orange)',lbl:'⚠️ Confiança Baixa'};
+  return{bar:'var(--muted)',c:'var(--muted)',lbl:'🔒 Sem Verificação'};
+}
+function updateTrustUI(){
+  const s=calcTrust(),tc=tColor(s);
+  document.getElementById('statTrust').textContent=s+'%';
+  const cnt=[userDocs.bi,userDocs.carta,userDocs.pass].filter(d=>d.frente||d.verso).length+[userDocs.certidao,userDocs.prop].filter(d=>d.frente).length;
+  const pb=document.getElementById('profDocsBadge');
+  pb.textContent=cnt+'/5';pb.style.background=s>=80?'#0a200a':s>=50?'#1a1400':'var(--card)';pb.style.color=s>=80?'var(--green)':s>=50?'var(--gold)':'var(--muted)';
+  const tb=document.getElementById('profTrustBadge');tb.textContent=tc.lbl;tb.style.background=s>=80?'#0a200a':s>=50?'#1a1400':'var(--card)';tb.style.color=tc.c;
+  const mb=document.getElementById('modalTrustBar'),mc=document.getElementById('modalTrustCircle'),ml=document.getElementById('modalTrustLabel');
+  if(mb){mb.style.width=s+'%';mb.style.background=tc.bar;}
+  if(mc){mc.textContent=s+'%';mc.style.borderColor=tc.c;mc.style.color=tc.c;}
+  if(ml){ml.textContent=tc.lbl;ml.style.color=tc.c;}
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function fmtP(p,t){if(p>=1000000)return(p/1000000).toFixed(1).replace('.0','')+' M Kz';return p.toLocaleString('pt-AO')+' Kz'+(t==='alugar'?'/mês':'');}
+function starsHtml(r){let s='';for(let i=1;i<=5;i++)s+=`<span style="opacity:${i<=Math.round(r)?1:.3}">⭐</span>`;return s+` <span style="color:var(--muted)">${r.toFixed(1)}</span>`;}
+function trustPillHtml(score){
+  if(score>=80)return`<div class="trust-pill tp-high">🛡️ Alta Confiança</div>`;
+  if(score>=50)return`<div class="trust-pill tp-med">⚡ Média</div>`;
+  return`<div class="trust-pill tp-low">🔒 Não Verificado</div>`;
+}
+
+// ═══════════════════════════════════════
+// LISTINGS
+// ═══════════════════════════════════════
+function getAllL(){
+  return [...myListings,...listings].filter(l=>{
+    if(fType!=='todos'&&l.type!==fType)return false;
+    if(fZone!=='todas'&&l.zone!==fZone)return false;
+    const q=document.getElementById('searchInp').value.toLowerCase();
+    if(q&&!l.title.toLowerCase().includes(q)&&!l.zone.toLowerCase().includes(q))return false;
+    return true;
+  });
+}
+function renderListings(){
+  const c=document.getElementById('listingsContainer'),list=getAllL();
+  if(!list.length){c.innerHTML=`<div class="empty"><div style="font-size:44px">🔍</div><div style="font-weight:600">Nenhuma casa encontrada</div><div style="font-size:12px">Tenta outros filtros</div></div>`;return;}
+  c.innerHTML=list.map((l,i)=>{
+    const img=l.photos&&l.photos.length?`<img src="${l.photos[0]}"/>`:`<span style="font-size:60px">${l.emoji}</span>`;
+    const vid=l.videos&&l.videos.length?`<div style="position:absolute;bottom:7px;left:7px;background:#0009;color:#fff;font-size:10px;padding:2px 7px;border-radius:20px">🎥 Vídeo</div>`:'';
+    return `<div class="lcard" style="animation-delay:${i*.05}s" onclick="openDetail(${l.id})">
+      <div class="lcard-img">${img}
+        <div class="lbadge ${l.type==='alugar'?'badge-a':'badge-v'}">${l.type==='alugar'?'Alugar':'Vender'}</div>
+        ${l.destaque?`<div class="badge-dest">⭐ Destaque</div>`:''}${vid}
+        ${trustPillHtml(l.trustScore||0)}
+      </div>
+      <div class="lbody">
+        <div class="lprice">${fmtP(l.price,l.type)}</div>
+        <div class="ltitle">${l.title}</div>
+        <div class="lloc">📍 ${l.zone}</div>
+        <div class="stars-row">${starsHtml(l.rating||4)}<span style="color:var(--muted)">(${(l.reviews||[]).length})</span></div>
+        <div class="lfeats"><span class="lfeat">🛏️ ${l.quartos}</span><span class="lfeat">🚿 ${l.banhos}</span><span class="lfeat">📐 ${l.area}m²</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function setFType(t,el){fType=t;document.querySelectorAll('.chips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderListings();}
+function setFZone(z,el){fZone=z;document.querySelectorAll('#provincesRow .fbtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderListings();}
+
+// ═══════════════════════════════════════
+// DETAIL
+// ═══════════════════════════════════════
+function openDetail(id){
+  const all=[...myListings,...listings];
+  const l=all.find(x=>x.id===id);if(!l)return;
+  currentDetail=l;currentDetailId=id;currentDetailMedia='foto';
+  document.getElementById('dHeaderTitle').textContent=l.type==='alugar'?'Casa para Alugar':'Casa para Vender';
+  renderDetailMedia(l);
+  document.getElementById('mediaTabs').style.display=l.videos&&l.videos.length?'flex':'none';
+  document.getElementById('dprice').textContent=fmtP(l.price,l.type);
+  const db=document.getElementById('dBadge');
+  db.textContent=l.type==='alugar'?'Alugar':'Vender';
+  db.style.cssText=`background:${l.type==='alugar'?'var(--blue)':'var(--green)'};color:#fff;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700`;
+  document.getElementById('dtitle').textContent=l.title;
+  document.getElementById('dloc').textContent='📍 '+l.zone;
+  document.getElementById('dstars').innerHTML=starsHtml(l.rating||4)+`<span style="color:var(--muted)">(${(l.reviews||[]).length})</span>`;
+  document.getElementById('dfeats').innerHTML=`<div class="dfeat">🛏️ ${l.quartos} quartos</div><div class="dfeat">🚿 ${l.banhos} banhos</div><div class="dfeat">📐 ${l.area}m²</div><div class="dfeat">${l.type==='alugar'?'🔑 Arrendar':'🏷️ Comprar'}</div>`;
+  document.getElementById('ddesc').textContent=l.desc;
+  renderDetailTrust(l.trustScore||0);
+  renderContactSection(l);
+  document.getElementById('ownerAv').textContent='👤';
+  document.getElementById('ownerName').textContent=l.owner;
+  // Phone: blurred unless unlocked
+  document.getElementById('ownerPhone').innerHTML=unlockedContacts.has(id)?l.ownerPhone:`<span class="blurred">+244 9XX XXX XXX</span> 🔒`;
+  const ts=l.trustScore||0;
+  const vb=document.getElementById('ownerVerifiedBadge');
+  vb.textContent=ts>=80?'✓ Muito Confiável':ts>=50?'⚡ Verificado':'🔒 Não Verificado';
+  vb.style.cssText=`background:${ts>=80?'var(--green)':ts>=50?'var(--gold)':'var(--border)'};color:${ts>=80?'#fff':ts>=50?'#000':'var(--muted)'};font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px`;
+  document.getElementById('favBtn').textContent=favs.includes(id)?'❤️':'🤍';
+  renderReviews(l);
+  // Actions
+  const unlocked=unlockedContacts.has(id);
+  document.getElementById('dActions').innerHTML=`
+    <button class="abtn abtn-s" onclick="alert('📞 ${unlocked?l.ownerPhone:'Desbloqueia o contacto primeiro!'}')">📞 Ligar</button>
+    <button class="abtn abtn-p" onclick="startChatWith(currentDetail)">💬 Chat</button>
+    ${unlocked?`<button class="abtn abtn-g" onclick="openPayModal()">💳 Reservar</button>`:`<button class="abtn abtn-pu" onclick="openUnlockModal(${id})">🔓 Desbloquear</button>`}`;
+  document.getElementById('detailScreen').classList.add('show');
+}
+
+function renderContactSection(l){
+  const id=l.id,unlocked=unlockedContacts.has(id);
+  const el=document.getElementById('contactSection');
+  if(unlocked){
+    el.innerHTML=`<div class="contact-revealed">
+      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:9px;display:flex;align-items:center;gap:6px">✅ Contacto Desbloqueado</div>
+      <div style="font-size:12px;color:#aaffaa;margin-bottom:5px">📞 <strong>${l.ownerPhone}</strong></div>
+      <div style="font-size:12px;color:#aaffaa;margin-bottom:5px">📍 <strong>${l.ownerAddress}</strong></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px solid var(--border)">🛡️ Este contacto foi desbloqueado e está registado na KasaAngola por segurança.</div>
+    </div>`;
+  } else {
+    el.innerHTML=`<div class="contact-lock">
+      <div class="lock-title">🔒 Contacto Protegido</div>
+      <div class="lock-sub">Para proteger proprietários e clientes, os contactos pessoais só ficam visíveis após o pagamento de uma taxa simbólica de acesso. Isto evita encontros não seguros fora da plataforma.</div>
+      <div class="lock-price">3.000 Kz <span>/ acesso único</span></div>
+      <div class="lock-features">
+        <div class="lock-feat">✅ Número de telefone real do proprietário</div>
+        <div class="lock-feat">✅ Morada exacta do imóvel</div>
+        <div class="lock-feat">✅ Autorização para visita presencial</div>
+        <div class="lock-feat">🔒 Registo oficial na KasaAngola</div>
+      </div>
+      <button onclick="openUnlockModal(${id})" style="width:100%;padding:11px;background:var(--purple);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">🔓 Desbloquear por 3.000 Kz</button>
+    </div>`;
+  }
+}
+
+function renderDetailTrust(score){
+  const tc=tColor(score);
+  document.getElementById('dTrustBar').style.cssText=`width:${score}%;background:${tc.bar}`;
+  const c=document.getElementById('dTrustCircle');c.textContent=score+'%';c.style.borderColor=tc.c;c.style.color=tc.c;
+  const keys=['bi','carta','pass','certidao','prop'];
+  let cum=0;
+  document.getElementById('dTrustDocs').innerHTML=keys.map(k=>{
+    cum+=DOC_W[k];const present=score>=cum;
+    return `<div class="trust-doc-row"><span>${DOC_ICO[k]} ${DOC_LBL[k]}</span><div style="display:flex;align-items:center;gap:5px"><span style="font-size:10.5px;color:${present?'var(--green)':'var(--muted)'}">${present?'+'+DOC_W[k]+'%':'Não enviado'}</span><div class="tdot" style="background:${present?'var(--green)':'var(--border)'}"></div></div></div>`;
+  }).join('');
+}
+
+function renderDetailMedia(l){
+  const el=document.getElementById('dimg');
+  if(currentDetailMedia==='foto') el.innerHTML=l.photos&&l.photos.length?`<img src="${l.photos[0]}"/>`:`<span style="font-size:80px">${l.emoji}</span>`;
+  else el.innerHTML=l.videos&&l.videos.length?`<video src="${l.videos[0]}" controls autoplay muted playsinline></video>`:`<span style="font-size:40px">🎥</span><div style="font-size:13px;color:var(--muted);margin-top:8px">Sem vídeos</div>`;
+}
+function showMedia(t){currentDetailMedia=t;document.querySelectorAll('.mtab').forEach((m,i)=>m.classList.toggle('active',i===(t==='foto'?0:1)));renderDetailMedia(currentDetail);}
+function closeDetail(){document.getElementById('detailScreen').classList.remove('show');}
+function toggleFav(){if(!currentDetail)return;const id=currentDetailId,i=favs.indexOf(id);if(i>=0)favs.splice(i,1);else favs.push(id);document.getElementById('favBtn').textContent=favs.includes(id)?'❤️':'🤍';document.getElementById('statFav').textContent=favs.length;}
+
+function renderReviews(l){
+  const rs=l.reviews||[];
+  document.getElementById('reviewsList').innerHTML=rs.length===0?`<div style="color:var(--muted);font-size:12px;margin-bottom:10px">Ainda sem avaliações.</div>`:rs.map(r=>`<div class="review-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px">${r.user[0]}</div><div style="flex:1"><div style="font-size:12px;font-weight:600">${r.user}</div><div style="font-size:10px;color:var(--muted)">${r.time}</div></div><div style="color:var(--gold);font-size:11px">${'⭐'.repeat(r.stars)}</div></div><div style="font-size:12px;color:#ccc">${r.text}</div></div>`).join('');
+}
+function openReviewModal(){document.getElementById('reviewModal').classList.add('show');setStar(5);}
+function setStar(n){selectedStars=n;document.querySelectorAll('.star-btn').forEach((s,i)=>s.classList.toggle('active',i<n));}
+function submitReview(){
+  const text=document.getElementById('reviewText').value.trim();if(!text||!currentDetail)return;
+  currentDetail.reviews.push({user:currentUser?currentUser.nome:'Anónimo',stars:selectedStars,text,time:'Agora'});
+  const tot=currentDetail.reviews.reduce((s,r)=>s+r.stars,0);currentDetail.rating=tot/currentDetail.reviews.length;
+  renderReviews(currentDetail);document.getElementById('dstars').innerHTML=starsHtml(currentDetail.rating)+`<span style="color:var(--muted)">(${currentDetail.reviews.length})</span>`;
+  document.getElementById('reviewText').value='';document.getElementById('reviewModal').classList.remove('show');renderListings();
+}
+
+// ═══════════════════════════════════════
+// UNLOCK SYSTEM
+// ═══════════════════════════════════════
+function openUnlockModal(id){
+  pendingUnlockId=id;
+  document.getElementById('unlockRef').textContent=String(Math.floor(Math.random()*900000000)+100000000).replace(/(\\d{3})(\\d{3})(\\d{3})/,'$1 $2 $3');
+  document.getElementById('unlockModal').classList.add('show');
+}
+function confirmUnlock(){
+  if(pendingUnlockId===null)return;
+  unlockedContacts.add(pendingUnlockId);
+  document.getElementById('statUnlocked').textContent=unlockedContacts.size;
+  document.getElementById('unlockModal').classList.remove('show');
+  // Refresh detail if open
+  if(currentDetailId===pendingUnlockId){
+    renderContactSection(currentDetail);
+    document.getElementById('ownerPhone').innerHTML=currentDetail.ownerPhone;
+    document.getElementById('dActions').innerHTML=`
+      <button class="abtn abtn-s" onclick="alert('📞 ${currentDetail.ownerPhone}')">📞 Ligar</button>
+      <button class="abtn abtn-p" onclick="startChatWith(currentDetail)">💬 Chat</button>
+      <button class="abtn abtn-g" onclick="openPayModal()">💳 Reservar</button>`;
+  }
+  // Refresh chat lock warn if chat is open with same listing
+  if(activeChatListingId===pendingUnlockId) renderChatLockWarn();
+  pendingUnlockId=null;
+  alert('✅ Contacto desbloqueado!\
+\
+Já podes ver o número de telefone e morada.\
+Registo efectuado na KasaAngola por segurança. 🛡️');
+}
+
+// Reserve/Pay modal (after unlock)
+function openPayModal(){
+  if(!currentDetail)return;
+  document.getElementById('unlockRef').textContent=String(Math.floor(Math.random()*900000000)+100000000).replace(/(\\d{3})(\\d{3})(\\d{3})/,'$1 $2 $3');
+  // Reuse unlock modal with different context - simpler: just alert
+  alert(`💳 Multicaixa Express\
+\
+Valor: ${fmtP(currentDetail.price,currentDetail.type)}\
+Proprietário: ${currentDetail.owner}\
+Telefone: ${currentDetail.ownerPhone}\
+\
+Podes agora contactar directamente o proprietário!`);
+}
+
+// ═══════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════
+function renderChatList(){
+  const total=activeChats.reduce((s,c)=>s+c.unread,0);
+  const b=document.getElementById('chatBadge');b.style.display=total>0?'block':'none';b.textContent=total;
+  document.getElementById('citemsEl').innerHTML=activeChats.map((c,i)=>`
+    <div class="citem${activeChatIdx===i?' active':''}" onclick="openChat(${i})">
+      <div class="cav" style="background:linear-gradient(135deg,var(--red),#ff6600)">${c.emoji}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12.5px;font-weight:600">${c.name}</div>
+        <div style="font-size:10.5px;color:var(--muted)">🏠 ${c.about}</div>
+        <div style="font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.msgs.length?c.msgs[c.msgs.length-1].text:'...'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        ${c.unread>0?`<div style="background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:2px 6px">${c.unread}</div>`:''}
+        ${!unlockedContacts.has(c.listingId)?`<div style="font-size:9px;color:var(--purple)">🔒</div>`:`<div style="font-size:9px;color:var(--green)">✅</div>`}
+      </div>
+    </div>`).join('');
+}
+
+function openChat(i){
+  activeChatIdx=i;activeChats[i].unread=0;
+  activeChatListingId=activeChats[i].listingId;
+  const c=activeChats[i];
+  document.getElementById('cheaderInfo').innerHTML=`<div style="display:flex;align-items:center;gap:9px"><div class="cav" style="width:34px;height:34px;background:linear-gradient(135deg,var(--red),#ff6600);font-size:16px">${c.emoji}</div><div><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:10.5px;color:var(--muted)">🏠 ${c.about}</div></div></div>`;
+  const callBtn=document.getElementById('chatCallBtn');
+  callBtn.onclick=()=>{
+    const l=listings.find(x=>x.id===c.listingId);
+    if(unlockedContacts.has(c.listingId)&&l) alert('📞 A ligar para '+l.ownerPhone);
+    else openUnlockModal(c.listingId);
+  };
+  renderChatLockWarn();renderMsgs();renderChatList();
+  document.getElementById('clist').classList.add('hide');
+  document.getElementById('cwin').classList.add('show');
+}
+function renderChatLockWarn(){
+  const warn=document.getElementById('chatLockWarn');
+  warn.style.display=unlockedContacts.has(activeChatListingId)?'none':'block';
+}
+function backChat(){document.getElementById('clist').classList.remove('hide');document.getElementById('cwin').classList.remove('show');}
+function renderMsgs(){
+  const msgs=activeChats[activeChatIdx].msgs;
+  const el=document.getElementById('msgsEl');
+  el.innerHTML=msgs.length===0?`<div class="empty"><div style="font-size:38px">💬</div><div style="font-weight:600">Inicia a conversa!</div></div>`:msgs.map(m=>`<div class="msg ${m.s?'s':'r'}">${m.text}<div class="msg-t">${m.t}${m.s?' ✓✓':''}</div></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('cinputField'),text=inp.value.trim();if(!text)return;
+  const now=new Date(),t=`${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  // Check if trying to share contact info
+  const hasPhone=/(\\+?244[\\s-]?\\d{3}[\\s-]?\\d{3}[\\s-]?\\d{3}|\\d{9})/.test(text);
+  if(hasPhone){alert('🔒 Por segurança, a partilha de números de telefone no chat não é permitida.\
+\
+Usa o botão "🔓 Desbloquear" para aceder ao contacto oficial.');return;}
+  activeChats[activeChatIdx].msgs.push({text,s:true,t});inp.value='';renderMsgs();renderChatList();
+  const replies=['Obrigado pelo interesse! Posso mostrar o imóvel quando quiser.','A casa ainda está disponível!','Para visita, por favor desbloqueie o meu contacto.','Tenho disponibilidade esta semana.','Respondo com mais detalhes em breve!'];
+  setTimeout(()=>{activeChats[activeChatIdx].msgs.push({text:replies[Math.floor(Math.random()*replies.length)],s:false,t});renderMsgs();},1200);
+}
+function startChatWith(l){
+  closeDetail();
+  const ei=activeChats.findIndex(c=>c.name===l.owner);
+  if(ei>=0){activeChatIdx=ei;setScreen('chat');openChat(ei);return;}
+  activeChats.unshift({id:Date.now(),name:l.owner,emoji:'👤',about:l.title,listingId:l.id,msgs:[],unread:0});
+  activeChatIdx=0;setScreen('chat');openChat(0);
+}
+
+// ═══════════════════════════════════════
+// POST
+// ═══════════════════════════════════════
+function openPostModal(){document.getElementById('postModal').classList.add('show');}
+function closePostModal(){document.getElementById('postModal').classList.remove('show');}
+function selPT(t){postType=t;document.getElementById('ptA').classList.toggle('active',t==='alugar');document.getElementById('ptV').classList.toggle('active',t==='vender');}
+function setMediaUpTab(t,el){document.querySelectorAll('.muptab').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('fotosUpArea').style.display=t==='fotos'?'block':'none';document.getElementById('videosUpArea').style.display=t==='videos'?'block':'none';}
+function handlePostFotos(e){postFotos=[];Array.from(e.target.files).slice(0,5).forEach(f=>{const r=new FileReader();r.onload=ev=>{postFotos.push(ev.target.result);renderMediaPrevs();};r.readAsDataURL(f);});}
+function handlePostVideos(e){postVideos=[];Array.from(e.target.files).slice(0,2).forEach(f=>{const r=new FileReader();r.onload=ev=>{postVideos.push(ev.target.result);renderMediaPrevs();};r.readAsDataURL(f);});}
+function renderMediaPrevs(){
+  const el=document.getElementById('mediaPreviewsEl');el.innerHTML='';
+  postFotos.forEach(u=>{const i=document.createElement('img');i.src=u;i.className='mprev-img';el.appendChild(i);});
+  postVideos.forEach(u=>{const w=document.createElement('div');w.className='mprev-vid';const v=document.createElement('video');v.src=u;v.muted=true;w.appendChild(v);el.appendChild(w);});
+}
+function submitPost(){
+  const title=document.getElementById('pTitle').value.trim(),price=parseInt(document.getElementById('pPrice').value)||0;
+  if(!title||!price){alert('Preenche o título e o preço!');return;}
+  const nl={id:Date.now(),type:postType,title,zone:document.getElementById('pZone').value,price,quartos:parseInt(document.getElementById('pQ').value)||1,banhos:parseInt(document.getElementById('pB').value)||1,area:parseInt(document.getElementById('pA').value)||80,photos:[...postFotos],videos:[...postVideos],emoji:EMOJIS[Math.floor(Math.random()*EMOJIS.length)],desc:document.getElementById('pDesc').value.trim()||'Casa disponível.',owner:currentUser?currentUser.nome:'Proprietário',ownerPhone:document.getElementById('pPhone').value.trim()||'+244 900 000 000',ownerAddress:document.getElementById('pZone').value+', Angola',destaque:false,rating:0,trustScore:calcTrust(),reviews:[]};
+  myListings.unshift(nl);document.getElementById('statAn').textContent=myListings.length;
+  closePostModal();setScreen('inicio');renderListings();
+  ['pTitle','pPrice','pDesc','pPhone'].forEach(id=>document.getElementById(id).value='');
+  postFotos=[];postVideos=[];document.getElementById('mediaPreviewsEl').innerHTML='';
+}
+
+// ═══════════════════════════════════════
+// DOCS
+// ═══════════════════════════════════════
+function openDocsModal(){document.getElementById('docsModal').classList.add('show');updateTrustUI();}
+function closeDocsModal(){document.getElementById('docsModal').classList.remove('show');updateTrustUI();}
+function setDocTab(i,el){document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.doc-panel').forEach((p,j)=>p.classList.toggle('show',j===i));}
+function setSideTab(doc,side,el){
+  const par=el.closest('.doc-panel');par.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  par.querySelector(`#${doc}-frente-area`).style.display=side==='frente'?'block':'none';
+  par.querySelector(`#${doc}-verso-area`).style.display=side==='verso'?'block':'none';
+}
+function handleDocUpload(e,doc,side){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    if(!userDocs[doc])userDocs[doc]={};
+    userDocs[doc][side]=ev.target.result;
+    const prev=document.getElementById(`${doc}-${side}-prev`);
+    if(prev){prev.src=ev.target.result;prev.style.display='block';}
+    const box=document.getElementById(`${doc}-${side}-box`);
+    if(box) box.classList.add('done');
+    updateTrustUI();
+  };r.readAsDataURL(f);
+}
+
+// ═══════════════════════════════════════
+// MAP
+// ═══════════════════════════════════════
+function renderMapCards(){
+  document.getElementById('mapCards').innerHTML=[...myListings,...listings].slice(0,8).map(l=>{
+    const imgEl=l.photos&&l.photos.length?`<img src="${l.photos[0]}" style="width:100%;height:56px;object-fit:cover;border-radius:7px;margin-bottom:5px"/>`:`<div style="font-size:26px;margin-bottom:4px">${l.emoji}</div>`;
+    return `<div class="mcard" onclick="openDetail(${l.id})">${imgEl}<div style="font-size:12.5px;font-weight:800;color:var(--red)">${fmtP(l.price,l.type)}</div><div style="font-size:11px;font-weight:600;margin-top:1px">${l.title}</div><div style="font-size:10px;color:var(--muted)">📍 ${l.zone}</div></div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════
+function handleProfPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{currentUser.photo=ev.target.result;document.getElementById('profAv').innerHTML=`<img src="${ev.target.result}"/>`;document.getElementById('topAvatar').innerHTML=`<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;};r.readAsDataURL(f);}
+function showFavs(){
+  setScreen('inicio');
+  const all=[...myListings,...listings].filter(l=>favs.includes(l.id));
+  const c=document.getElementById('listingsContainer');
+  if(!all.length){c.innerHTML=`<div class="empty"><div style="font-size:44px">❤️</div><div style="font-weight:600">Nenhuma casa favorita</div></div>`;return;}
+  c.innerHTML=all.map(l=>`<div class="lcard" onclick="openDetail(${l.id})"><div class="lcard-img">${l.photos&&l.photos.length?`<img src="${l.photos[0]}"/>`:`<span style="font-size:60px">${l.emoji}</span>`}<div class="lbadge ${l.type==='alugar'?'badge-a':'badge-v'}">${l.type==='alugar'?'Alugar':'Vender'}</div></div><div class="lbody"><div class="lprice">${fmtP(l.price,l.type)}</div><div class="ltitle">${l.title}</div><div class="lloc">📍 ${l.zone}</div></div></div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════════
+function setScreen(s){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  const idx={inicio:0,mapa:1,chat:2,perfil:3,legal:4}[s];
+  if(idx!==undefined) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  if(s==='chat'){renderChatList();renderMsgs();}
+  if(s==='mapa') renderMapCards();
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+renderAuthForm();
+</script>
+</body>
+</html>
