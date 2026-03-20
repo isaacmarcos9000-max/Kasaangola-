@@ -1,0 +1,855 @@
+Vou corrigir o código HTML/JavaScript para que a autenticação (login e cadastro) seja funcional. O problema é que atualmente há apenas a interface, mas falta a lógica JavaScript para gerenciar autenticação, telas, navegação e interações.
+
+Aqui está o código **index.html** completo e funcional (com JavaScript embutido). Ele inclui:
+
+1. **Sistema de autenticação** com login e cadastro (simulado, sem backend, mas funcional localmente)
+2. **Navegação entre telas** (Início, Mapa, Chat, Perfil)
+3. **Interatividade** dos botões, filtros, cards e modal
+4. **Troca de dados** entre telas (ex: detalhes do imóvel)
+5. **Design responsivo** mantendo o estilo original
+
+```html
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="theme-color" content="#cc0000"/>
+<title>KasaAngola</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--red:#cc0000;--gold:#ffb800;--panel:#1a1a1a;--card:#232323;--border:#2e2e2e;--text:#f0f0f0;--muted:#888;--green:#22c55e;--blue:#3b82f6;--bg:#141414;--orange:#f97316;--purple:#a855f7}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.inp{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:13px;color:var(--text);outline:none;margin-bottom:9px}
+.inp:focus{border-color:var(--red)}
+/* AUTH */
+.auth-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-screen.hide{display:none}
+.abox{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:22px;width:100%;max-width:360px}
+.atabs{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:16px}
+.atab{flex:1;padding:8px;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--muted)}
+.atab.active{background:var(--red);color:#fff}
+.btn-red{width:100%;padding:12px;background:var(--red);border:none;border-radius:13px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+.btn-red:active{opacity:0.8;}
+.auth-msg{font-size:12px;margin-top:10px;text-align:center;min-height:18px;}
+.auth-msg.error{color:#ff5555;}
+.auth-msg.success{color:var(--green);}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:54px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.logo-text{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.logo-text span{color:var(--red)}
+.ib{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;overflow:hidden}
+/* NAV */
+.bottom-nav{display:flex;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 0 6px;cursor:pointer;color:var(--muted);font-size:9px;font-weight:600;gap:3px;position:relative}
+.nav-item.active{color:var(--red)}
+.nav-icon{font-size:18px}
+.nav-badge{position:absolute;top:5px;right:calc(50% - 15px);background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:1px 5px}
+.app-body{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.screen{display:none;flex:1;overflow:hidden;flex-direction:column}
+.screen.active{display:flex}
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a0000,#2a0500);padding:14px;flex-shrink:0}
+.hero-title{font-size:20px;font-weight:800;margin-bottom:3px}
+.hero-title span{color:var(--red)}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #fff2;color:#ffffffaa;background:transparent;font-family:inherit}
+.chip.active{background:var(--red);border-color:var(--red);color:#fff}
+.filters-row{display:flex;gap:6px;padding:9px 13px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;background:var(--panel);border-bottom:1px solid var(--border)}
+.filters-row::-webkit-scrollbar{display:none}
+.fbtn{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid var(--border);color:var(--muted);background:var(--card);font-family:inherit}
+.fbtn.active{background:var(--red);border-color:var(--red);color:#fff}
+/* LISTINGS */
+.listings{flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:11px}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer}
+.lcard-img{width:100%;height:175px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#0a1628)}
+.lcard-img img{width:100%;height:100%;object-fit:cover}
+.lbadge{position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700}
+.badge-a{background:var(--blue);color:#fff}
+.badge-v{background:var(--green);color:#fff}
+.badge-dest{position:absolute;top:8px;right:8px;background:var(--gold);color:#000;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700}
+.trust-pill{position:absolute;bottom:8px;right:8px;border-radius:20px;padding:3px 8px;font-size:9.5px;font-weight:700}
+.tp-high{background:#00800099;color:#afffaf}
+.tp-med{background:#f9731680;color:#fff}
+.tp-low{background:#88888855;color:#ddd}
+.lbody{padding:11px 13px}
+.lprice{font-size:17px;font-weight:800;color:var(--red);margin-bottom:2px}
+.ltitle{font-size:13px;font-weight:600;margin-bottom:2px}
+.lloc{font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.lfeats{display:flex;gap:8px}
+.lfeat{font-size:11px;color:var(--muted)}
+/* DETAIL */
+.dscreen{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;overflow:hidden}
+.dscreen.show{display:flex}
+.dhead{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.back-btn{cursor:pointer;color:var(--red);font-size:13px;font-weight:700;padding:4px 8px}
+.dbody{flex:1;overflow-y:auto}
+.dimg{width:100%;height:210px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#0a1628)}
+.dimg img,.dimg video{width:100%;height:100%;object-fit:cover}
+.mtabs{display:flex;background:var(--panel);border-bottom:1px solid var(--border)}
+.mtab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent}
+.mtab.active{color:var(--red);border-bottom-color:var(--red)}
+.dinfo{padding:13px}
+.dprice{font-size:21px;font-weight:800;color:var(--red)}
+.dfeats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+.dfeat{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 11px;font-size:12px}
+/* LOCK BOX */
+.lock-box{background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple);border-radius:14px;padding:16px;margin-bottom:13px}
+.unlocked-box{background:linear-gradient(135deg,#0a200a,#0a1a0a);border:1px solid var(--green);border-radius:14px;padding:14px;margin-bottom:13px}
+/* TRUST */
+.trust-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px}
+.trust-bar-bg{background:var(--border);border-radius:20px;height:7px;margin:7px 0;overflow:hidden}
+.trust-bar-fill{height:100%;border-radius:20px;transition:width .5s}
+.trust-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:3px solid;flex-shrink:0}
+.tdoc-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:11.5px}
+.tdoc-row:last-child{border:none}
+/* LEGAL WARN */
+.legal-warn{background:linear-gradient(135deg,#1a0a00,#200000);border:1px solid var(--orange);border-radius:11px;padding:12px;margin-bottom:12px}
+/* OWNER */
+.owner-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.owner-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.review-box{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px;margin-bottom:8px}
+.dactions{display:flex;gap:7px;padding:0 13px 14px;flex-shrink:0}
+.abtn{flex:1;padding:11px;border:none;border-radius:12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.abtn-r{background:var(--red);color:#fff}
+.abtn-s{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.abtn-g{background:var(--green);color:#fff}
+.abtn-p{background:var(--purple);color:#fff}
+/* MAP */
+.map-area{flex:1;background:linear-gradient(135deg,#0a1628,#0f2040);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.map-bg{position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 40px)}
+.pin{position:absolute;cursor:pointer;text-align:center}
+.pin-b{color:#fff;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 3px 9px #00000055}
+.pin-arr{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;margin:0 auto}
+.map-cards{height:142px;overflow-x:auto;display:flex;gap:9px;padding:9px 12px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0;scrollbar-width:none}
+.map-cards::-webkit-scrollbar{display:none}
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px;flex-shrink:0;width:158px;cursor:pointer}
+/* CHAT */
+.chat-wrap{display:flex;flex:1;overflow:hidden}
+.clist{width:100%;background:var(--panel);display:flex;flex-direction:column}
+.clist.hide{display:none}
+.cwin{flex:1;display:none;flex-direction:column;background:var(--bg)}
+.cwin.show{display:flex}
+.cheader{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.msg{max-width:74%;padding:9px 12px;font-size:12.5px;line-height:1.55}
+.msg.r{align-self:flex-start;background:var(--card);border-radius:14px 14px 14px 3px}
+.msg.s{align-self:flex-end;background:#4a0000;color:#ffcccc;border-radius:14px 14px 3px 14px}
+.msg-t{font-size:9.5px;color:var(--muted);margin-top:3px;text-align:right}
+.chat-lock{background:linear-gradient(135deg,#0a0a20,#150a30);border:1px solid var(--purple);border-radius:12px;padding:12px;margin:10px;text-align:center;font-size:12px;color:#ccaaff}
+.cinput{display:flex;align-items:center;gap:7px;padding:9px 12px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.cinput input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:9px 13px;font-family:inherit;font-size:13px;color:var(--text);outline:none}
+.sbtn{width:36px;height:36px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+/* PROFILE */
+.prof-wrap{flex:1;overflow-y:auto;padding:15px}
+.prof-header{background:linear-gradient(135deg,#1a0000,#2a0500);border-radius:14px;padding:19px;display:flex;flex-direction:column;align-items:center;gap:7px;margin-bottom:13px;text-align:center}
+.prof-av{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid var(--red);overflow:hidden;cursor:pointer}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.stat-row{display:flex;gap:8px;margin-bottom:13px}
+.sbox{flex:1;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px;text-align:center}
+.sval{font-size:17px;font-weight:800;color:var(--red)}
+.slbl{font-size:10px;color:var(--muted);margin-top:2px}
+.mi{display:flex;align-items:center;gap:10px;padding:12px 13px;background:var(--card);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;cursor:pointer;font-size:13px;font-weight:500}
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:#000c;z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-ov.show{display:flex;}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:19px;width:100%;max-width:500px;max-height:93vh;overflow-y:auto}
+.mhandle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 15px}
+.mlabel{font-size:11px;color:var(--muted);margin-bottom:4px;margin-top:6px}
+/* DOCS */
+.dtabs-hdr{display:flex;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.dtabs-hdr::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:9px 10px;font-size:10.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;border-bottom:2px solid transparent;white-space:nowrap}
+.dtab.active{color:var(--red);border-bottom-color:var(--red);background:var(--card)}
+.dpanel{display:none;padding:12px}
+.dpanel.show{display:block}
+.side-tabs{display:flex;gap:0;background:var(--bg);border-radius:7px;padding:2px;margin-bottom:9px}
+.stab{flex:1;padding:6px;text-align:center;font-size:11px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-family:inherit}
+.stab.active{background:var(--red);color:#fff}
+.ubox{border:2px dashed var(--border);border-radius:10px;padding:15px;text-align:center;cursor:pointer}
+.ubox:hover,.ubox.done{border-color:var(--green)}
+.ubox.done{background:#0a200a}
+.doc-prev{width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border)}
+/* MEDIA UP */
+.muptabs{display:flex;gap:0;background:var(--bg);border-radius:7px;padding:2px;margin-bottom:9px}
+.muptab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-family:inherit}
+.muptab.active{background:var(--red);color:#fff}
+.upload-area{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;margin-bottom:8px}
+.mprev-img{width:60px;height:60px;border-radius:7px;object-fit:cover;border:1px solid var(--border)}
+/* MC */
+.mc-box{background:linear-gradient(135deg,#0a1a0a,#001400);border:1px solid var(--green);border-radius:12px;padding:13px;margin-bottom:11px}
+.mc-ref{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center}
+.mc-ref-num{font-size:20px;font-weight:800;letter-spacing:4px;color:var(--green);font-family:monospace}
+/* LEGAL */
+.legal-page{flex:1;overflow-y:auto;padding:14px}
+.lsec{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:11px}
+.lsec-title{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--red)}
+/* LOADING */
+.loading{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);}
+/* NOTIFICATION */
+.notification{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;z-index:300;display:none;align-items:center;gap:10px;max-width:90%;}
+.notification.show{display:flex;animation:fadeInOut 3s;}
+@keyframes fadeInOut{
+0%{opacity:0;top:5px;}
+10%{opacity:1;top:15px;}
+90%{opacity:1;top:15px;}
+100%{opacity:0;top:5px;}
+}
+</style>
+</head>
+<body>
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen">
+  <div class="abox">
+    <div class="atabs" id="authTabs">
+      <button class="atab active" data-tab="login">Login</button>
+      <button class="atab" data-tab="register">Registar</button>
+    </div>
+    <div id="loginForm">
+      <input type="email" class="inp" id="loginEmail" placeholder="Email">
+      <input type="password" class="inp" id="loginPass" placeholder="Senha">
+      <div class="auth-msg" id="loginMsg"></div>
+      <button class="btn-red" id="loginBtn">Entrar</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <input type="text" class="inp" id="regName" placeholder="Nome completo">
+      <input type="email" class="inp" id="regEmail" placeholder="Email">
+      <input type="password" class="inp" id="regPass" placeholder="Senha (mín. 6 caracteres)">
+      <input type="password" class="inp" id="regPass2" placeholder="Confirmar senha">
+      <div class="auth-msg" id="regMsg"></div>
+      <button class="btn-red" id="registerBtn">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-body" id="appBody" style="display:none">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo-text">Kasa<span>Angola</span></div>
+    <div style="display:flex;gap:6px">
+      <div class="ib" id="notifBtn"><i class="fas fa-bell"></i></div>
+      <div class="ib" id="profileBtn"><i class="fas fa-user"></i></div>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="app-body">
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="homeScreen">
+      <div class="hero">
+        <div class="hero-title">Encontre seu <span>lar ideal</span> em Angola</div>
+        <div class="chips" id="locationChips">
+          <div class="chip active" data-loc="all">Todas</div>
+          <div class="chip" data-loc="luanda">Luanda</div>
+          <div class="chip" data-loc="huambo">Huambo</div>
+          <div class="chip" data-loc="lobito">Lobito</div>
+          <div class="chip" data-loc="benguela">Benguela</div>
+        </div>
+      </div>
+      <div class="filters-row">
+        <div class="fbtn active" data-type="all">Todos</div>
+        <div class="fbtn" data-type="apart">Apartamento</div>
+        <div class="fbtn" data-type="casa">Casa</div>
+        <div class="fbtn" data-type="comercial">Comercial</div>
+        <div class="fbtn" data-type="terreno">Terreno</div>
+      </div>
+      <div class="listings" id="listings">
+        <!-- Listings loaded by JS -->
+      </div>
+    </div>
+
+    <!-- MAP SCREEN -->
+    <div class="screen" id="mapScreen">
+      <div class="topbar" style="border-bottom:none;background:transparent;position:absolute;z-index:2;width:100%;">
+        <div class="logo-text">Kasa<span>Angola</span></div>
+        <div class="ib" id="mapBackBtn"><i class="fas fa-chevron-left"></i></div>
+      </div>
+      <div class="map-area">
+        <div class="map-bg"></div>
+        <div class="pin" style="top:30%;left:40%;" data-id="1">
+          <div class="pin-b" style="background:var(--red);">$ 120.000</div>
+          <div class="pin-arr" style="border-top:6px solid var(--red);"></div>
+        </div>
+        <div class="pin" style="top:50%;left:60%;" data-id="2">
+          <div class="pin-b" style="background:var(--blue);">$ 85.000</div>
+          <div class="pin-arr" style="border-top:6px solid var(--blue);"></div>
+        </div>
+        <div class="pin" style="top:70%;left:30%;" data-id="3">
+          <div class="pin-b" style="background:var(--green);">$ 200.000</div>
+          <div class="pin-arr" style="border-top:6px solid var(--green);"></div>
+        </div>
+      </div>
+      <div class="map-cards">
+        <div class="mcard" data-id="1">
+          <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Vila Alice, Luanda</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;">4 quartos • 250 m²</div>
+          <div style="font-size:14px;font-weight:800;color:var(--red);">$ 120.000</div>
+        </div>
+        <div class="mcard" data-id="2">
+          <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Benguela Centro</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;">3 quartos • 180 m²</div>
+          <div style="font-size:14px;font-weight:800;color:var(--blue);">$ 85.000</div>
+        </div>
+        <div class="mcard" data-id="3">
+          <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Huambo Residencial</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;">5 quartos • 320 m²</div>
+          <div style="font-size:14px;font-weight:800;color:var(--green);">$ 200.000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div class="screen" id="chatScreen">
+      <div class="chat-wrap">
+        <div class="clist" id="chatList">
+          <div class="cheader">
+            <div class="ib" id="chatBackBtn"><i class="fas fa-chevron-left"></i></div>
+            <div style="flex:1;font-size:14px;font-weight:700;">Mensagens</div>
+            <div class="ib"><i class="fas fa-edit"></i></div>
+          </div>
+          <div style="padding:12px;flex:1;overflow-y:auto;">
+            <div class="chat-item" data-chat="1" style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border-radius:10px;margin-bottom:8px;cursor:pointer;">
+              <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6600);display:flex;align-items:center;justify-content:center;font-size:16px;">M</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">Maria Silva</div>
+                <div style="font-size:11px;color:var(--muted);">Ótimo imóvel! Podemos negociar?</div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);">12:30</div>
+            </div>
+            <div class="chat-item" data-chat="2" style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border-radius:10px;margin-bottom:8px;cursor:pointer;">
+              <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#3b82f6);display:flex;align-items:center;justify-content:center;font-size:16px;">J</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">João Santos</div>
+                <div style="font-size:11px;color:var(--muted);">Aceita visita amanhã?</div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);">10:15</div>
+            </div>
+          </div>
+        </div>
+        <div class="cwin" id="chatWindow">
+          <div class="cheader">
+            <div class="ib" id="backToChatList"><i class="fas fa-chevron-left"></i></div>
+            <div style="flex:1;font-size:14px;font-weight:700;" id="chatUserName">Maria Silva</div>
+            <div class="ib"><i class="fas fa-phone"></i></div>
+          </div>
+          <div class="msgs" id="chatMessages">
+            <div class="msg r">Olá, estou interessado no seu apartamento em Luanda.</div>
+            <div class="msg s">Olá! Que bom. Pode me dar mais detalhes?</div>
+            <div class="msg r">Claro. Tem 3 quartos, 2 banheiros, garagem.</div>
+            <div class="msg s">Perfeito. Podemos marcar uma visita?</div>
+          </div>
+          <div class="cinput">
+            <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
+            <button class="sbtn" id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE SCREEN -->
+    <div class="screen" id="profileScreen">
+      <div class="prof-wrap">
+        <div class="prof-header">
+          <div class="prof-av" id="profileAvatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div style="font-size:16px;font-weight:800;" id="userName">Carlos Mendes</div>
+          <div style="font-size:12px;color:var(--muted);" id="userEmail">carlos@email.com</div>
+        </div>
+        <div class="stat-row">
+          <div class="sbox">
+            <div class="sval" id="propertiesCount">3</div>
+            <div class="slbl">Imóveis</div>
+          </div>
+          <div class="sbox">
+            <div class="sval" id="favoritesCount">7</div>
+            <div class="slbl">Favoritos</div>
+          </div>
+          <div class="sbox">
+            <div class="sval" id="visitsCount">12</div>
+            <div class="slbl">Visitas</div>
+          </div>
+        </div>
+        <div class="mi" id="editProfileBtn"><i class="fas fa-user-edit"></i> Editar perfil</div>
+        <div class="mi" id="myPropertiesBtn"><i class="fas fa-home"></i> Meus imóveis</div>
+        <div class="mi" id="documentsBtn"><i class="fas fa-file-alt"></i> Documentos</div>
+        <div class="mi" id="securityBtn"><i class="fas fa-shield-alt"></i> Segurança</div>
+        <div class="mi" id="helpBtn"><i class="fas fa-question-circle"></i> Ajuda</div>
+        <div class="mi" id="logoutBtn" style="color:var(--red);"><i class="fas fa-sign-out-alt"></i> Sair</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" data-screen="home">
+      <i class="fas fa-home nav-icon"></i>
+      <div>Início</div>
+    </div>
+    <div class="nav-item" data-screen="map">
+      <i class="fas fa-map-marker-alt nav-icon"></i>
+      <div>Mapa</div>
+    </div>
+    <div class="nav-item" data-screen="chat">
+      <i class="fas fa-comment nav-icon"></i>
+      <div>Chat</div>
+      <div class="nav-badge">2</div>
+    </div>
+    <div class="nav-item" data-screen="profile">
+      <i class="fas fa-user nav-icon"></i>
+      <div>Perfil</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div class="dscreen" id="detailScreen">
+  <div class="dhead">
+    <div class="back-btn" id="detailBackBtn"><i class="fas fa-chevron-left"></i> Voltar</div>
+    <div style="flex:1;font-size:14px;font-weight:700;" id="detailTitle">Detalhes</div>
+    <div class="ib"><i class="fas fa-share-alt"></i></div>
+  </div>
+  <div class="dbody">
+    <div class="dimg" id="detailImage">
+      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Imóvel">
+    </div>
+    <div class="mtabs">
+      <div class="mtab active" data-tab="info">Informação</div>
+      <div class="mtab" data-tab="trust">Confiança</div>
+      <div class="mtab" data-tab="owner">Proprietário</div>
+    </div>
+    <div class="dinfo">
+      <div class="dprice" id="detailPrice">$ 120.000</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:5px;" id="detailName">Apartamento moderno em Luanda</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="detailLocation">Vila Alice, Luanda, Angola</div>
+      <div class="dfeats" id="detailFeatures">
+        <div class="dfeat">4 quartos</div>
+        <div class="dfeat">3 banheiros</div>
+        <div class="dfeat">250 m²</div>
+        <div class="dfeat">Garagem</div>
+      </div>
+      <div style="font-size:13px;margin-top:15px;line-height:1.5;" id="detailDescription">
+        Apartamento totalmente renovado, com vista para o mar, cozinha moderna, área de serviço, segurança 24h. Próximo a supermercados e escolas.
+      </div>
+      <div class="lock-box">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <i class="fas fa-lock" style="color:var(--purple);"></i>
+          <div style="font-size:13px;font-weight:700;">Conteúdo bloqueado</div>
+        </div>
+        <div style="font-size:12px;color:#ccaaff;margin-bottom:10px;">Para ver documentos legais e contacto do proprietário, necessita de verificação.</div>
+        <button class="abtn abtn-p" id="verifyBtn"><i class="fas fa-id-card"></i> Verificar identidade</button>
+      </div>
+      <div class="trust-wrap">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div class="trust-circle" style="border-color:var(--green);color:var(--green);">85%</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Nível de Confiança: Alto</div>
+            <div style="font-size:11px;color:var(--muted);">Baseado em documentos verificados</div>
+          </div>
+        </div>
+        <div class="trust-bar-bg">
+          <div class="trust-bar-fill" style="width:85%;background:var(--green);"></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;">Documentos verificados: CC, Registo Predial, Licença</div>
+      </div>
+      <div class="owner-box">
+        <div class="owner-av"><i class="fas fa-user-tie"></i></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;">Maria Silva</div>
+          <div style="font-size:11px;color:var(--muted);">Proprietária desde 2020</div>
+        </div>
+        <button class="abtn abtn-s" id="contactBtn"><i class="fas fa-phone"></i> Contactar</button>
+      </div>
+    </div>
+    <div class="dactions">
+      <button class="abtn abtn-r" id="favoriteBtn"><i class="fas fa-heart"></i> Favorito</button>
+      <button class="abtn abtn-g" id="scheduleBtn"><i class="fas fa-calendar-alt"></i> Agendar visita</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL (example) -->
+<div class="modal-ov" id="modalOverlay">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:15px;">Editar perfil</div>
+    <div class="mlabel">Nome completo</div>
+    <input type="text" class="inp" id="modalName" value="Carlos Mendes">
+    <div class="mlabel">Email</div>
+    <input type="email" class="inp" id="modalEmail" value="carlos@email.com">
+    <div class="mlabel">Telefone</div>
+    <input type="tel" class="inp" id="modalPhone" value="+244 912 345 678">
+    <button class="btn-red" style="margin-top:20px;" id="modalSaveBtn">Guardar alterações</button>
+    <button class="abtn abtn-s" style="margin-top:10px;" id="modalCloseBtn">Cancelar</button>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notification" id="notification">
+  <i class="fas fa-check-circle" style="color:var(--green);"></i>
+  <div id="notificationText">Operação concluída com sucesso!</div>
+</div>
+
+<script>
+// ===== STATE =====
+let currentUser = null;
+let listingsData = [];
+let activeScreen = 'home';
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if user is already logged in (from localStorage)
+  const savedUser = localStorage.getItem('kasa_user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    showApp();
+  } else {
+    showAuth();
+  }
+
+  initAuth();
+  initApp();
+  loadListings();
+  initDetailScreen();
+  initModals();
+});
+
+// ===== AUTH FUNCTIONS =====
+function showAuth() {
+  document.getElementById('authScreen').classList.remove('hide');
+  document.getElementById('appBody').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('authScreen').classList.add('hide');
+  document.getElementById('appBody').style.display = 'flex';
+  updateProfileInfo();
+}
+
+function initAuth() {
+  // Tab switching
+  document.querySelectorAll('.atab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const tabName = this.getAttribute('data-tab');
+      document.querySelectorAll('.atab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      if (tabName === 'login') {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+      } else {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+      }
+    });
+  });
+
+  // Login
+  document.getElementById('loginBtn').addEventListener('click', function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    const msg = document.getElementById('loginMsg');
+
+    if (!email || !pass) {
+      msg.textContent = 'Por favor, preencha todos os campos.';
+      msg.className = 'auth-msg error';
+      return;
+    }
+
+    // Simulate login (in real app, you would call an API)
+    if (pass.length < 6) {
+      msg.textContent = 'Senha deve ter pelo menos 6 caracteres.';
+      msg.className = 'auth-msg error';
+      return;
+    }
+
+    // Success
+    msg.textContent = 'Login realizado com sucesso!';
+    msg.className = 'auth-msg success';
+
+    // Create user object
+    currentUser = {
+      name: email.split('@')[0],
+      email: email,
+      properties: 3,
+      favorites: 7,
+      visits: 12
+    };
+    localStorage.setItem('kasa_user', JSON.stringify(currentUser));
+
+    // Show app after delay
+    setTimeout(() => {
+      showApp();
+      showNotification('Bem-vindo de volta!');
+    }, 800);
+  });
+
+  // Register
+  document.getElementById('registerBtn').addEventListener('click', function() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    const pass2 = document.getElementById('regPass2').value.trim();
+    const msg = document.getElementById('regMsg');
+
+    if (!name || !email || !pass || !pass2) {
+      msg.textContent = 'Por favor, preencha todos os campos.';
+      msg.className = 'auth-msg error';
+      return;
+    }
+
+    if (pass.length < 6) {
+      msg.textContent = 'Senha deve ter pelo menos 6 caracteres.';
+      msg.className = 'auth-msg error';
+      return;
+    }
+
+    if (pass !== pass2) {
+      msg.textContent = 'As senhas não coincidem.';
+      msg.className = 'auth-msg error';
+      return;
+    }
+
+    // Success
+    msg.textContent = 'Conta criada com sucesso!';
+    msg.className = 'auth-msg success';
+
+    // Create user object
+    currentUser = {
+      name: name,
+      email: email,
+      properties: 0,
+      favorites: 0,
+      visits: 0
+    };
+    localStorage.setItem('kasa_user', JSON.stringify(currentUser));
+
+    // Switch to login tab after delay
+    setTimeout(() => {
+      document.querySelector('.atab[data-tab="login"]').click();
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPass').value = pass;
+      document.getElementById('loginMsg').textContent = 'Pode fazer login agora.';
+      document.getElementById('loginMsg').className = 'auth-msg success';
+    }, 1000);
+  });
+
+  // Enter key for forms
+  document.getElementById('loginPass').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+  document.getElementById('regPass2').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('registerBtn').click();
+  });
+}
+
+// ===== APP FUNCTIONS =====
+function initApp() {
+  // Bottom nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const screen = this.getAttribute('data-screen');
+      switchScreen(screen);
+    });
+  });
+
+  // Top bar buttons
+  document.getElementById('notifBtn').addEventListener('click', function() {
+    showNotification('Nenhuma notificação nova.');
+  });
+  document.getElementById('profileBtn').addEventListener('click', function() {
+    switchScreen('profile');
+  });
+
+  // Map back button
+  document.getElementById('mapBackBtn').addEventListener('click', function() {
+    switchScreen('home');
+  });
+
+  // Chat navigation
+  document.getElementById('chatBackBtn').addEventListener('click', function() {
+    switchScreen('home');
+  });
+  document.querySelectorAll('.chat-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const chatId = this.getAttribute('data-chat');
+      document.getElementById('chatList').classList.add('hide');
+      document.getElementById('chatWindow').classList.add('show');
+      document.getElementById('chatUserName').textContent = this.querySelector('div:nth-child(2) div').textContent;
+    });
+  });
+  document.getElementById('backToChatList').addEventListener('click', function() {
+    document.getElementById('chatList').classList.remove('hide');
+    document.getElementById('chatWindow').classList.remove('show');
+  });
+  document.getElementById('sendMsgBtn').addEventListener('click', sendMessage);
+  document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Profile screen buttons
+  document.getElementById('editProfileBtn').addEventListener('click', function() {
+    showModal();
+  });
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('kasa_user');
+    currentUser = null;
+    showAuth();
+    showNotification('Sessão terminada.');
+  });
+
+  // Filters and chips
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      filterListings();
+    });
+  });
+  document.querySelectorAll('.fbtn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      filterListings();
+    });
+  });
+}
+
+function switchScreen(screen) {
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.getAttribute('data-screen') === screen) {
+      item.classList.add('active');
+    }
+  });
+
+  // Update screens
+  document.querySelectorAll('.screen').forEach(sc => {
+    sc.classList.remove('active');
+  });
+  document.getElementById(screen + 'Screen').classList.add('active');
+  activeScreen = screen;
+}
+
+function updateProfileInfo() {
+  if (!currentUser) return;
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userEmail').textContent = currentUser.email;
+  document.getElementById('propertiesCount').textContent = currentUser.properties;
+  document.getElementById('favoritesCount').textContent = currentUser.favorites;
+  document.getElementById('visitsCount').textContent = currentUser.visits;
+}
+
+// ===== LISTINGS =====
+function loadListings() {
+  listingsData = [
+    {
+      id: 1,
+      title: "Apartamento moderno em Luanda",
+      location: "Vila Alice, Luanda",
+      price: "$ 120.000",
+      type: "apart",
+      beds: 4,
+      baths: 3,
+      area: "250 m²",
+      badge: "venda",
+      trust: "high",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 2,
+      title: "Casa com piscina em Benguela",
+      location: "Benguela Centro",
+      price: "$ 85.000",
+      type: "casa",
+      beds: 3,
+      baths: 2,
+      area: "180 m²",
+      badge: "venda",
+      trust: "med",
+      image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 3,
+      title: "Terreno comercial em Huambo",
+      location: "Huambo Residencial",
+      price: "$ 200.000",
+      type: "terreno",
+      beds: 0,
+      baths: 0,
+      area: "500 m²",
+      badge: "arrendamento",
+      trust: "high",
+      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 4,
+      title: "Apartamento de luxo na Marginal",
+      location: "Marginal, Luanda",
+      price: "$ 350.000",
+      type: "apart",
+      beds: 5,
+      baths: 4,
+      area: "400 m²",
+      badge: "venda",
+      trust: "high",
+      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 5,
+      title: "Loja comercial no centro",
+      location: "Baixa, Luanda",
+      price: "$ 60.000",
+      type: "comercial",
+      beds: 0,
+      baths: 1,
+      area: "120 m²",
+      badge: "venda",
+      trust: "low",
+      image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    }
+  ];
+
+  renderListings(listingsData);
+}
+
+function renderListings(listings) {
+  const container = document.getElementById('listings');
+  container.innerHTML = '';
+
+  listings.forEach(item => {
+    const trustClass = {
+      high: 'tp-high',
+      med: 'tp-med',
+      low: 'tp-low'
+    }[item.trust] || 'tp-low';
+
+    const badgeClass = item.badge === 'venda' ? 'badge-v' : 'badge-a';
+    const badgeText = item.badge === 'venda' ? 'VENDA' : 'ARRENDA';
+
+    const card = document.createElement('div');
+    card.className = 'lcard';
+    card.setAttribute('data-id', item.id);
+    card.innerHTML = `
+      <div class="lcard-img">
+        <img src="${item.image}" alt="${item.title}" loading="lazy">
+        <div class="lbadge ${badgeClass}">${badgeText}</div>
+        <div class="trust-pill ${trustClass}">${item.trust === 'high' ? 'ALTA' : item.trust === 'med' ? 'MÉDIA' : 'BAIXA'}</div>
+      </div>
+      <div class="lbody">
+        <div class="lprice">${item.price}</div>
+        <div class="ltitle">${item.title}</div>
+        <div class="lloc">${item.location}</div>
+        <div class="lfeats">
+          <div class="lfeat"><i class="fas fa-bed"></i> ${item.beds} quarto${item.beds !== 1 ? 's' : ''}</div>
+          <div class="lfeat"><i class="fas fa-bath"></i> ${item.baths} banheiro${item.baths !== 1 ? 's' : ''}</div>
+          <div class="lfeat"><i class="fas fa-vector-square"></i> ${item.area}</div>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => showDetail(item.id
