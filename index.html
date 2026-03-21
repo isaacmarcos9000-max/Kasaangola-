@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>KasaAngola</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#0c0c0c;color:#f2f2f2;min-height:100vh}
+input,button,select,textarea{font-family:inherit}
+.inp{width:100%;background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:11px 14px;font-size:14px;color:#f2f2f2;outline:none;margin-bottom:10px}
+.inp:focus{border-color:#cc0000}
+.btn{width:100%;padding:13px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.btn-red{background:#cc0000;color:#fff}
+.btn-ghost{background:#1a1a1a;border:1px solid #2e2e2e;color:#777}
+/* AUTH */
+#telaAuth{position:fixed;inset:0;background:#0c0c0c;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-box{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:20px;padding:24px;width:100%;max-width:380px}
+.auth-tabs{display:flex;background:#0c0c0c;border-radius:10px;padding:3px;margin-bottom:16px}
+.auth-tab{flex:1;padding:9px;border:none;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:#777}
+.auth-tab.ativo{background:#cc0000;color:#fff}
+.erro{color:#cc0000;font-size:13px;text-align:center;margin-bottom:8px;display:none;padding:8px;background:#1a0000;border-radius:8px}
+/* DOCS SCREEN */
+#telaDocumentos{position:fixed;inset:0;background:#0c0c0c;z-index:998;display:none;overflow-y:auto;padding:20px}
+.doc-card{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:14px;padding:16px;margin-bottom:14px}
+.doc-card.verificado{border-color:#16a34a}
+.doc-upload{border:2px dashed #2e2e2e;border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:8px;transition:border-color .2s}
+.doc-upload:hover,.doc-upload.tem{border-color:#16a34a;background:#0a1a0a}
+.doc-prev{width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:8px;display:none}
+/* APP */
+#appPrincipal{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:#111;border-bottom:1px solid #222;padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-size:20px;font-weight:800}.logo span{color:#cc0000}
+.avatar-btn{width:36px;height:36px;border-radius:50%;background:#cc0000;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer;font-size:15px;border:none;color:#fff;overflow:hidden}
+.avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.nav-bottom{display:flex;background:#111;border-top:1px solid #222;flex-shrink:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;cursor:pointer;color:#666;font-size:10px;font-weight:600;gap:3px}
+.nav-item.ativo{color:#cc0000}
+.nav-icon{font-size:20px}
+.tela{display:none;flex:1;overflow-y:auto;padding:16px}
+.tela.ativo{display:block}
+/* CARDS */
+.card{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:14px;overflow:hidden;margin-bottom:14px;cursor:pointer}
+.card-img{width:100%;height:160px;background:linear-gradient(135deg,#1a0000,#0a1628);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.tag-a{background:#2563eb;color:#fff}.tag-v{background:#16a34a;color:#fff}
+.card-body{padding:14px}
+.preco{font-size:19px;font-weight:800;color:#cc0000;margin-bottom:4px}
+.titulo-card{font-size:14px;font-weight:600;margin-bottom:3px}
+.loc{font-size:12px;color:#777;margin-bottom:8px}
+.feats{display:flex;gap:12px;font-size:12px;color:#666}
+/* DETALHE */
+#telaDetalhe{display:none;position:fixed;inset:0;background:#0c0c0c;z-index:100;overflow-y:auto}
+.det-head{background:#111;border-bottom:1px solid #222;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.btn-back{color:#cc0000;font-weight:700;cursor:pointer;padding:4px 8px;font-size:14px;background:none;border:none}
+.det-img{width:100%;height:200px;background:linear-gradient(135deg,#1a0000,#0a1628);display:flex;align-items:center;justify-content:center;font-size:80px;overflow:hidden}
+.det-img img{width:100%;height:100%;object-fit:cover}
+.det-body{padding:16px}
+.det-preco{font-size:26px;font-weight:800;color:#cc0000;margin-bottom:6px}
+.det-titulo{font-size:18px;font-weight:700;margin-bottom:4px}
+.det-loc{font-size:13px;color:#777;margin-bottom:14px}
+.det-feats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.feat-box{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:8px 14px;font-size:13px}
+.det-desc{font-size:14px;line-height:1.7;color:#bbb;margin-bottom:16px}
+.contacto-box{border-radius:14px;padding:16px;margin-bottom:16px}
+.c-bloqueado{background:linear-gradient(135deg,#0a0a20,#15103a);border:1px solid #7c3aed}
+.c-desbloqueado{background:linear-gradient(135deg,#0a1f0a,#0a1a0a);border:1px solid #16a34a}
+.aviso{background:#1a0a00;border:1px solid #f97316;border-radius:12px;padding:14px;font-size:12px;color:#ffccaa;line-height:1.7;margin-bottom:16px}
+.det-acoes{display:flex;gap:10px;padding:16px;position:sticky;bottom:0;background:#0c0c0c;border-top:1px solid #222}
+.btn-acao{flex:1;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer}
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:flex-end;justify-content:center}
+.modal-ov.aberto{display:flex}
+.modal-box{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:22px 22px 0 0;padding:24px;width:100%;max-height:92vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:#333;border-radius:4px;margin:0 auto 16px}
+/* IBAN - VISIVEL */
+.iban-box{background:#0a1a0a;border:2px solid #16a34a;border-radius:12px;padding:14px;margin-bottom:10px}
+.iban-banco{font-size:12px;font-weight:700;color:#16a34a;margin-bottom:6px;letter-spacing:.5px}
+.iban-num{font-size:18px;font-weight:800;color:#fff;letter-spacing:2px;font-family:monospace;cursor:pointer;background:#0c0c0c;border:1px solid #16a34a;border-radius:8px;padding:10px 14px;width:100%;text-align:center}
+.iban-copy-tip{font-size:11px;color:#16a34a;margin-top:4px;text-align:center}
+.ref-box{background:#0c0c0c;border:2px solid #16a34a;border-radius:10px;padding:14px;text-align:center;margin:12px 0}
+.ref-num{font-size:26px;font-weight:800;letter-spacing:5px;color:#16a34a;font-family:monospace}
+/* CHAT */
+.chat-item{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #1a1a1a;cursor:pointer}
+.chat-av{width:44px;height:44px;border-radius:50%;background:#cc0000;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;color:#fff}
+.chat-window{display:none;flex-direction:column;height:calc(100vh - 56px);position:fixed;inset:0;top:56px;background:#0c0c0c;z-index:50}
+.chat-window.aberta{display:flex}
+.mensagens{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:75%;padding:10px 14px;font-size:13px;line-height:1.5}
+.msg.rec{align-self:flex-start;background:#1a1a1a;border-radius:14px 14px 14px 3px}
+.msg.env{align-self:flex-end;background:#4a0000;color:#ffcccc;border-radius:14px 14px 3px 14px}
+.chat-inp{display:flex;gap:8px;padding:10px 14px;background:#111;border-top:1px solid #222;flex-shrink:0}
+.chat-inp input{flex:1;background:#1a1a1a;border:1px solid #2e2e2e;border-radius:20px;padding:10px 14px;font-size:14px;color:#f2f2f2;outline:none}
+.btn-send{width:40px;height:40px;border-radius:50%;background:#cc0000;border:none;color:#fff;font-size:16px;cursor:pointer;flex-shrink:0}
+/* PERFIL */
+.prof-header{background:linear-gradient(135deg,#1a0000,#2a0500);border-radius:14px;padding:20px;text-align:center;margin-bottom:16px}
+.prof-av{width:70px;height:70px;border-radius:50%;background:#cc0000;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;border:3px solid #cc0000;overflow:hidden;cursor:pointer}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-box{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:12px;padding:14px;text-align:center}
+.stat-val{font-size:22px;font-weight:800;color:#cc0000}
+.stat-lbl{font-size:11px;color:#666;margin-top:2px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:14px;background:#1a1a1a;border:1px solid #2e2e2e;border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:14px}
+.badge-verificado{display:inline-block;background:#16a34a;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:6px}
+.badge-pendente{display:inline-block;background:#d97706;color:#000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:6px}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="telaAuth">
+  <div class="auth-box">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:48px;margin-bottom:8px">&#127968;</div>
+      <div style="font-size:24px;font-weight:800">Kasa<span style="color:#cc0000">Angola</span></div>
+      <div style="font-size:12px;color:#666;margin-top:4px">Sem intermediario &#127462;&#127476;</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab ativo" id="tabEntrar" onclick="mostrarEntrar()">Entrar</button>
+      <button class="auth-tab" id="tabCadastrar" onclick="mostrarCadastrar()">Cadastrar</button>
+    </div>
+    <div class="erro" id="erroAuth"></div>
+    <div id="painelEntrar">
+      <input class="inp" id="loginEmail" type="email" placeholder="E-mail"/>
+      <input class="inp" id="loginSenha" type="password" placeholder="Senha"/>
+      <button class="btn btn-red" onclick="fazerLogin()">Entrar</button>
+    </div>
+    <div id="painelCadastrar" style="display:none">
+      <input class="inp" id="cadNome" placeholder="Nome completo"/>
+      <input class="inp" id="cadTelefone" placeholder="Telefone (+244...)"/>
+      <input class="inp" id="cadEmail" type="email" placeholder="E-mail"/>
+      <input class="inp" id="cadSenha" type="password" placeholder="Senha (min. 4 caracteres)"/>
+      <button class="btn btn-red" onclick="fazerCadastro()">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENTOS OBRIGATORIOS -->
+<div id="telaDocumentos">
+  <div style="max-width:480px;margin:0 auto;padding-bottom:40px">
+    <div style="text-align:center;padding:24px 0 16px">
+      <div style="font-size:40px;margin-bottom:8px">&#128274;</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:6px">Verificacao de Identidade</div>
+      <div style="font-size:13px;color:#777;line-height:1.6">Para aceder ao KasaAngola precisas de enviar pelo menos <strong style="color:#fff">1 documento de identidade</strong> (frente e verso).</div>
+    </div>
+
+    <div style="background:#0a1a0a;border:1px solid #16a34a;border-radius:12px;padding:12px;margin-bottom:16px;font-size:12px;color:#aaffaa">
+      &#128274; Os teus documentos sao guardados apenas no teu dispositivo. Nunca sao enviados para servidores.
+    </div>
+
+    <!-- BI -->
+    <div class="doc-card" id="cardBI">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:24px">&#128100;</span>
+        <div><div style="font-weight:700;font-size:15px">Bilhete de Identidade</div><div style="font-size:12px;color:#777">Frente + Verso obrigatorio</div></div>
+        <div id="badgeBI" style="margin-left:auto;font-size:11px;background:#1a1a1a;color:#555;padding:3px 8px;border-radius:20px">0/2</div>
+      </div>
+      <div style="display:flex;gap:0;background:#0c0c0c;border-radius:8px;padding:3px;margin-bottom:12px">
+        <button class="auth-tab ativo" id="biTabF" onclick="setBITab('frente')">Frente</button>
+        <button class="auth-tab" id="biTabV" onclick="setBITab('verso')">Verso</button>
+      </div>
+      <div id="biFrente">
+        <div class="doc-upload" id="uploadBIF" onclick="document.getElementById('inputBIF').click()">
+          <input type="file" id="inputBIF" accept="image/*" style="display:none" onchange="carregarDoc(event,'biFrente','uploadBIF','prevBIF','badgeBI','biProgress')"/>
+          <div style="font-size:28px;margin-bottom:6px">&#128247;</div>
+          <div style="font-size:13px;color:#777">Toca para carregar a frente do BI</div>
+        </div>
+        <img id="prevBIF" class="doc-prev"/>
+      </div>
+      <div id="biVerso" style="display:none">
+        <div class="doc-upload" id="uploadBIV" onclick="document.getElementById('inputBIV').click()">
+          <input type="file" id="inputBIV" accept="image/*" style="display:none" onchange="carregarDoc(event,'biVerso','uploadBIV','prevBIV','badgeBI','biProgress')"/>
+          <div style="font-size:28px;margin-bottom:6px">&#128247;</div>
+          <div style="font-size:13px;color:#777">Toca para carregar o verso do BI</div>
+        </div>
+        <img id="prevBIV" class="doc-prev"/>
+      </div>
+    </div>
+
+    <!-- CARTA -->
+    <div class="doc-card" id="cardCarta">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:24px">&#128663;</span>
+        <div><div style="font-weight:700;font-size:15px">Carta de Conducao</div><div style="font-size:12px;color:#777">Frente + Verso (opcional)</div></div>
+        <div id="badgeCarta" style="margin-left:auto;font-size:11px;background:#1a1a1a;color:#555;padding:3px 8px;border-radius:20px">0/2</div>
+      </div>
+      <div style="display:flex;gap:0;background:#0c0c0c;border-radius:8px;padding:3px;margin-bottom:12px">
+        <button class="auth-tab ativo" id="cartaTabF" onclick="setCartaTab('frente')">Frente</button>
+        <button class="auth-tab" id="cartaTabV" onclick="setCartaTab('verso')">Verso</button>
+      </div>
+      <div id="cartaFrente">
+        <div class="doc-upload" id="uploadCF" onclick="document.getElementById('inputCF').click()">
+          <input type="file" id="inputCF" accept="image/*" style="display:none" onchange="carregarDoc(event,'cartaFrente','uploadCF','prevCF','badgeCarta','cartaProgress')"/>
+          <div style="font-size:28px;margin-bottom:6px">&#128247;</div>
+          <div style="font-size:13px;color:#777">Toca para carregar a frente da carta</div>
+        </div>
+        <img id="prevCF" class="doc-prev"/>
+      </div>
+      <div id="cartaVerso" style="display:none">
+        <div class="doc-upload" id="uploadCV" onclick="document.getElementById('inputCV').click()">
+          <input type="file" id="inputCV" accept="image/*" style="display:none" onchange="carregarDoc(event,'cartaVerso','uploadCV','prevCV','badgeCarta','cartaProgress')"/>
+          <div style="font-size:28px;margin-bottom:6px">&#128247;</div>
+          <div style="font-size:13px;color:#777">Toca para carregar o verso da carta</div>
+        </div>
+        <img id="prevCV" class="doc-prev"/>
+      </div>
+    </div>
+
+    <div id="erroDoc" style="color:#cc0000;font-size:13px;text-align:center;margin-bottom:10px;display:none;padding:10px;background:#1a0000;border-radius:8px"></div>
+
+    <button onclick="confirmarDocumentos()" class="btn btn-red" style="margin-bottom:10px">Continuar para o KasaAngola &#8594;</button>
+    <div style="text-align:center;font-size:11px;color:#444">Podes adicionar mais documentos depois no teu Perfil</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appPrincipal">
+  <header class="topbar">
+    <div class="logo">Kasa<span>Angola</span></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="avatar-btn" style="background:#1a1a1a;border:1px solid #2e2e2e;color:#f2f2f2;font-size:18px" onclick="abrirPublicar()">+</button>
+      <button class="avatar-btn" id="avatarTopo" onclick="irPara('perfil')">U</button>
+    </div>
+  </header>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+    <div class="tela ativo" id="tela-inicio">
+      <div style="margin-bottom:12px">
+        <input class="inp" id="campoPesquisa" placeholder="&#128269; Pesquisar..." style="margin:0" oninput="renderImoveis()"/>
+      </div>
+      <div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none">
+        <button id="fTodos" style="background:#cc0000;color:#fff;border:none;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer" onclick="setFiltro('todos',this)">Todos</button>
+        <button id="fAlugar" style="background:#1a1a1a;color:#777;border:1px solid #2e2e2e;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer" onclick="setFiltro('alugar',this)">Alugar</button>
+        <button id="fVender" style="background:#1a1a1a;color:#777;border:1px solid #2e2e2e;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer" onclick="setFiltro('vender',this)">Vender</button>
+      </div>
+      <div id="listaImoveis"></div>
+    </div>
+    <div class="tela" id="tela-chat">
+      <div id="listaChatEl"></div>
+      <div id="janelaChat" class="chat-window">
+        <div class="det-head">
+          <button class="btn-back" onclick="fecharChat()">&#8592; Voltar</button>
+          <div id="chatCabec" style="font-size:14px;font-weight:600;flex:1"></div>
+        </div>
+        <div class="mensagens" id="mensagensEl"></div>
+        <div class="chat-inp">
+          <input type="text" id="campoMsg" placeholder="Escreve uma mensagem..." onkeydown="if(event.key==='Enter')enviarMsg()"/>
+          <button class="btn-send" onclick="enviarMsg()">&#9658;</button>
+        </div>
+      </div>
+    </div>
+    <div class="tela" id="tela-perfil">
+      <div class="prof-header">
+        <div class="prof-av" id="profAv" onclick="document.getElementById('inputFoto').click()">&#128100;</div>
+        <input type="file" accept="image/*" id="inputFoto" style="display:none" onchange="mudarFoto(event)"/>
+        <div style="font-size:17px;font-weight:700" id="profNome">Utilizador</div>
+        <div style="font-size:12px;color:#777;margin-top:4px" id="profTel"></div>
+        <div style="font-size:11px;color:#555" id="profEmail"></div>
+        <div id="profBadgeDoc"></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val" id="statAn">0</div><div class="stat-lbl">Anuncios</div></div>
+        <div class="stat-box"><div class="stat-val" id="statDesb">0</div><div class="stat-lbl">Desbloqueados</div></div>
+      </div>
+      <div class="menu-item" onclick="abrirPublicar()">+ <span style="flex:1">Publicar anuncio</span><span style="color:#555">&#8250;</span></div>
+      <div class="menu-item" onclick="irParaDocs()">&#128100; <span style="flex:1">Meus Documentos</span><span style="color:#555">&#8250;</span></div>
+      <div class="menu-item" onclick="sair()">&#128682; <span style="flex:1">Sair da conta</span><span style="color:#555">&#8250;</span></div>
+      <div style="text-align:center;padding:20px 0;font-size:12px;color:#333">KasaAngola &#127462;&#127476; · Isaac Ndala Pedro · +244 935 633 508</div>
+    </div>
+  </div>
+  <nav class="nav-bottom">
+    <div class="nav-item ativo" id="nav-inicio" onclick="irPara('inicio')"><span class="nav-icon">&#127968;</span>Inicio</div>
+    <div class="nav-item" id="nav-chat" onclick="irPara('chat')"><span class="nav-icon">&#128172;</span>Chat</div>
+    <div class="nav-item" id="nav-perfil" onclick="irPara('perfil')"><span class="nav-icon">&#128100;</span>Perfil</div>
+  </nav>
+</div>
+
+<!-- DETALHE -->
+<div id="telaDetalhe">
+  <div class="det-head">
+    <button class="btn-back" onclick="fecharDetalhe()">&#8592; Voltar</button>
+    <div id="detTitCab" style="font-size:14px;font-weight:600;flex:1;text-align:center"></div>
+    <span style="cursor:pointer;font-size:20px" onclick="toggleFav()" id="btnFav">&#9825;</span>
+  </div>
+  <div id="detImg" class="det-img"><span style="font-size:80px">&#127968;</span></div>
+  <div class="det-body">
+    <div class="det-preco" id="detPreco"></div>
+    <div class="det-titulo" id="detTit"></div>
+    <div class="det-loc" id="detLoc"></div>
+    <div class="det-feats" id="detFeats"></div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:8px">Descricao</div>
+    <div class="det-desc" id="detDesc"></div>
+    <div class="contacto-box c-bloqueado" id="caixaContacto"></div>
+    <div class="aviso"><strong style="color:#f97316">&#9888; Aviso Legal</strong><br/>Nunca pagues sem visitar o imovel pessoalmente.<br/>Burla: prisao ate 8 anos (Art. 217 CP Angola).<br/>&#128680; Policia: <strong>113</strong></div>
+  </div>
+  <div class="det-acoes">
+    <button class="btn-acao" id="btnDesbloquear" style="background:#7c3aed;color:#fff" onclick="abrirPagamento()">&#128275; Desbloquear</button>
+    <button class="btn-acao" style="background:#cc0000;color:#fff" onclick="iniciarChat()">&#128172; Chat</button>
+    <button class="btn-acao" id="btnLigar" style="background:#1a1a1a;border:1px solid #2e2e2e;color:#f2f2f2" onclick="ligarProprietario()">&#128222; Ligar</button>
+  </div>
+</div>
+
+<!-- MODAL PAGAMENTO -->
+<div class="modal-ov" id="modalPag">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:16px">&#128275; Desbloquear Contacto</div>
+    <div style="background:linear-gradient(135deg,#0a0a20,#15103a);border:2px solid #7c3aed;border-radius:14px;padding:20px;text-align:center;margin-bottom:16px">
+      <div style="font-size:36px;margin-bottom:8px">&#128272;</div>
+      <div id="precoPag" style="font-size:32px;font-weight:800;color:#fff;margin-bottom:4px">3.000 Kz</div>
+      <div style="font-size:12px;color:#c4b5fd">Pagamento unico · Acesso vitalicio</div>
+    </div>
+    <!-- MULTICAIXA -->
+    <div style="background:#0a1a0a;border:2px solid #16a34a;border-radius:12px;padding:16px;margin-bottom:12px">
+      <div style="font-size:14px;font-weight:700;color:#16a34a;margin-bottom:12px">&#128179; Opcao 1 — Multicaixa Express</div>
+      <div style="font-size:12px;color:#aaa;margin-bottom:4px">Valor a pagar</div>
+      <div id="valorMC" style="font-size:22px;font-weight:800;color:#fff;margin-bottom:12px">3.000 Kz</div>
+      <div class="ref-box">
+        <div style="font-size:11px;color:#aaa;margin-bottom:6px;font-weight:600;letter-spacing:.5px">REFERENCIA MULTICAIXA</div>
+        <div class="ref-num" id="refNum">000 000 000</div>
+        <div style="font-size:13px;color:#aaa;margin-top:8px">Entidade: <strong style="color:#fff;font-size:16px">11351</strong></div>
+      </div>
+      <div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.8">1. Abre <strong style="color:#fff">Multicaixa Express</strong><br/>2. Pagar Servicos &#8594; Entidade <strong style="color:#fff">11351</strong><br/>3. Usa a referencia acima</div>
+    </div>
+    <!-- BAI -->
+    <div class="iban-box" style="margin-bottom:10px">
+      <div class="iban-banco">&#127988; OPCAO 2 — TRANSFERENCIA BAI</div>
+      <div class="iban-num" onclick="copiarIBAN('0040000009520869101 23','BAI')">0040 0000 09520869101 23</div>
+      <div class="iban-copy-tip">&#128203; Toca para copiar o IBAN BAI</div>
+    </div>
+    <!-- BFA -->
+    <div class="iban-box" style="margin-bottom:14px">
+      <div class="iban-banco">&#127988; OPCAO 3 — TRANSFERENCIA BFA</div>
+      <div class="iban-num" onclick="copiarIBAN('0006000079471022301 54','BFA')">0006 0000 79471022301 54</div>
+      <div class="iban-copy-tip">&#128203; Toca para copiar o IBAN BFA</div>
+    </div>
+    <a id="linkWA" href="" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;background:#16a34a;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:10px">&#128242; Enviar comprovativo WhatsApp (+244 935 633 508)</a>
+    <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#777;line-height:1.8">Apos pagar, envia o comprovativo por WhatsApp para <strong style="color:#fff">+244 935 633 508</strong>. Desbloqueamos em <strong style="color:#fff">5 minutos</strong>.</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="fecharPag()" class="btn btn-ghost" style="flex:1;padding:13px">Cancelar</button>
+      <button onclick="confirmarPag()" style="flex:1;padding:13px;background:#7c3aed;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer">&#9989; Ja enviei!</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PUBLICAR -->
+<div class="modal-ov" id="modalPub">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:16px">+ Publicar Anuncio</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button id="tipA" style="background:#cc0000;color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:13px;cursor:pointer" onclick="setTipoPub('alugar')">Alugar</button>
+      <button id="tipV" style="background:#1a1a1a;color:#777;border:1px solid #2e2e2e;border-radius:20px;padding:7px 16px;font-size:13px;cursor:pointer" onclick="setTipoPub('vender')">Vender</button>
+    </div>
+    <!-- FOTO -->
+    <div style="font-size:12px;color:#777;margin-bottom:6px">Foto do imovel</div>
+    <div onclick="document.getElementById('inputFotoImovel').click()" style="border:2px dashed #2e2e2e;border-radius:10px;padding:16px;text-align:center;cursor:pointer;margin-bottom:10px" id="areaFoto">
+      <input type="file" accept="image/*" id="inputFotoImovel" style="display:none" onchange="carregarFotoImovel(event)"/>
+      <div style="font-size:28px;margin-bottom:4px">&#128247;</div>
+      <div style="font-size:13px;color:#777">Toca para adicionar foto</div>
+    </div>
+    <input class="inp" id="pubTit" placeholder="Titulo (ex: T3 em Talatona)"/>
+    <input class="inp" id="pubPreco" type="number" placeholder="Preco em Kz"/>
+    <!-- PROVINCIA + MUNICIPIO -->
+    <select class="inp" id="pubProv" onchange="carregarMunicipios('pubProv','pubMun')">
+      <option value="">Selecciona a provincia</option>
+    </select>
+    <select class="inp" id="pubMun" style="display:none">
+      <option value="">Selecciona o municipio</option>
+    </select>
+    <div style="display:flex;gap:8px">
+      <select class="inp" id="pubQ" style="flex:1"><option value="1">1 quarto</option><option value="2">2 quartos</option><option value="3">3 quartos</option><option value="4">4 quartos</option><option value="5">5+</option></select>
+      <input class="inp" id="pubArea" type="number" placeholder="Area m2" style="flex:1"/>
+    </div>
+    <textarea class="inp" id="pubDesc" rows="3" style="resize:none;height:70px" placeholder="Descricao do imovel..."></textarea>
+    <input class="inp" id="pubTel" placeholder="Teu telefone (+244...)"/>
+    <div style="background:#1a0a00;border:1px solid #f97316;border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:#ffccaa">Ao publicar confirmas que es o proprietario legitimo. Informacoes falsas sao crime (Art. 217 CP Angola).</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="fecharPub()" class="btn btn-ghost" style="flex:1;padding:13px">Cancelar</button>
+      <button onclick="publicar()" class="btn btn-red" style="flex:1;padding:13px">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// PROVINCIAS E MUNICIPIOS
+var MUNICIPIOS = {
+  'Luanda': ['Luanda','Belas','Cacuaco','Cazenga','Icolo e Bengo','Quissama','Viana'],
+  'Benguela': ['Benguela','Balombo','Baia Farta','Bocoio','Caimbambo','Catumbela','Chongoroi','Cubal','Ganda','Lobito'],
+  'Huambo': ['Huambo','Bailundo','Catchiungo','Caala','Ecunha','Londuimbali','Longonjo','Mungo','Tchicala-Tcholoanga','Ukuma'],
+  'Huila': ['Lubango','Caconda','Cacula','Caluquembe','Chiange','Chipindo','Chibia','Cuvango','Humpata','Jamba','Matala','Quilengues','Quipungo'],
+  'Cabinda': ['Cabinda','Belize','Buco-Zau','Cacongo'],
+  'Malanje': ['Malanje','Cacuso','Calandula','Cambundi-Catembo','Cangandala','Caombo','Cuaba Nzoji','Cunda-Dia-Baze','Luquembo','Marimba','Massango','Mucari','Quirima'],
+  'Lunda Norte': ['Dundo','Capenda Camulemba','Cambulo','Caungula','Chitato','Cuango','Cuilo','Lubalo','Lucapa','Xa-Muteba'],
+  'Lunda Sul': ['Saurimo','Cacolo','Dala','Muconda'],
+  'Moxico': ['Luena','Alto Zambeze','Bundas','Camanongue','Leua','Luchazes','Lumeje','Moxico'],
+  'Bie': ['Cuito','Andulo','Camacupa','Catabola','Chinguar','Chitembo','Cunhinga','Cuemba','Nharea'],
+  'Cuando Cubango': ['Menongue','Calai','Cuangar','Cuchi','Dirico','Longa','Mavinga','Nancova','Rivungo'],
+  'Cuanza Norte': ['Ndalatando','Ambaca','Banga','Bolongongo','Cambambe','Cazengo','Golungo Alto','Gonguembo','Lucala','Quiculungo','Samba Caju'],
+  'Cuanza Sul': ['Sumbe','Amboim','Cassongue','Cela','Conda','Ebo','Egito','Kibala','Kilenda','Libolo','Mussende','Porto Amboim','Quibala','Quilenda','Seles'],
+  'Cunene': ['Ondjiva','Cahama','Cuanhama','Curoca','Namacunde','Ombadja'],
+  'Namibe': ['Mocamedes','Bibala','Camucuio','Tombua','Virei'],
+  'Uige': ['Uige','Alto Cauale','Ambuila','Bembe','Buengas','Bungo','Damba','Milunga','Mucaba','Negage','Puri','Quimbele','Quitexe','Sanza Pombo','Songo','Zombo'],
+  'Zaire': ['Mbanza Kongo','Cuimba','Noqui','Nzeto','Soyo','Tomboco'],
+  'Bengo': ['Caxito','Ambriz','Bula Atumba','Dande','Dembos','Muxima'],
+  'Icolo e Bengo': ['Catete','Cabiri','Calumbo','Ngonguembo'],
+  'Cuando': ['Calai','Rivungo','Cuangar','Nancova'],
+  'Moxico Leste': ['Luau','Cazombo','Cameia']
+};
+
+// STORAGE
+function LS(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v));}catch(e){return null;}}
+function LSdel(k){try{localStorage.removeItem(k);}catch(e){}}
+
+// DADOS
+var utilizadores = LS('ka_users') || [];
+var anunciosGlobais = LS('ka_anuncios') || [];
+var utilizadorActual = null;
+var imovelActual = null;
+var desbloqueados = {};
+var tipoPub = 'alugar';
+var filtro = 'todos';
+var chatActivo = 0;
+var chats = [];
+var timerInact = null;
+var TIMEOUT = 10 * 60 * 1000;
+var fotoImovelTemp = null;
+var docsTemp = {biFrente:null, biVerso:null, cartaFrente:null, cartaVerso:null};
+
+// INACTIVIDADE
+function resetTimer(){
+  if(timerInact)clearTimeout(timerInact);
+  if(!utilizadorActual)return;
+  timerInact=setTimeout(function(){alert('Sessao expirada (10 minutos de inactividade).\nFaz login novamente.');sair();},TIMEOUT);
+}
+document.addEventListener('click',function(){if(utilizadorActual)resetTimer();});
+document.addEventListener('touchstart',function(){if(utilizadorActual)resetTimer();});
+document.addEventListener('keypress',function(){if(utilizadorActual)resetTimer();});
+document.addEventListener('scroll',function(){if(utilizadorActual)resetTimer();});
+
+// PROVINCIA + MUNICIPIO
+function preencherProvincias(selectId){
+  var sel=document.getElementById(selectId);
+  if(!sel)return;
+  var opts='<option value="">Selecciona a provincia</option>';
+  var provs=Object.keys(MUNICIPIOS).sort();
+  for(var i=0;i<provs.length;i++) opts+='<option value="'+provs[i]+'">'+provs[i]+'</option>';
+  sel.innerHTML=opts;
+}
+function carregarMunicipios(provId,munId){
+  var prov=document.getElementById(provId).value;
+  var munSel=document.getElementById(munId);
+  if(!prov){munSel.style.display='none';return;}
+  var muns=MUNICIPIOS[prov]||[];
+  var opts='<option value="">Selecciona o municipio</option>';
+  for(var i=0;i<muns.length;i++) opts+='<option value="'+muns[i]+'">'+muns[i]+'</option>';
+  munSel.innerHTML=opts;
+  munSel.style.display='block';
+}
+
+// COPIAR IBAN
+function copiarIBAN(iban,banco){
+  try{navigator.clipboard.writeText(iban).then(function(){alert('IBAN '+banco+' copiado!\n'+iban);});}
+  catch(e){alert('IBAN '+banco+':\n'+iban);}
+}
+
+// AUTH
+function mostrarEntrar(){
+  document.getElementById('tabEntrar').className='auth-tab ativo';
+  document.getElementById('tabCadastrar').className='auth-tab';
+  document.getElementById('painelEntrar').style.display='block';
+  document.getElementById('painelCadastrar').style.display='none';
+  document.getElementById('erroAuth').style.display='none';
+}
+function mostrarCadastrar(){
+  document.getElementById('tabEntrar').className='auth-tab';
+  document.getElementById('tabCadastrar').className='auth-tab ativo';
+  document.getElementById('painelEntrar').style.display='none';
+  document.getElementById('painelCadastrar').style.display='block';
+  document.getElementById('erroAuth').style.display='none';
+}
+function mostrarErro(m){var el=document.getElementById('erroAuth');el.textContent=m;el.style.display='block';}
+function fazerLogin(){
+  var email=document.getElementById('loginEmail').value.trim().toLowerCase();
+  var senha=document.getElementById('loginSenha').value.trim();
+  document.getElementById('erroAuth').style.display='none';
+  if(!email||!senha){mostrarErro('Preenche o email e a senha.');return;}
+  var u=null;
+  for(var i=0;i<utilizadores.length;i++){if(utilizadores[i].email===email&&utilizadores[i].senha===senha){u=utilizadores[i];break;}}
+  if(!u){mostrarErro('Email ou senha incorretos!');return;}
+  verificarDocumentosOuEntrar(u);
+}
+function fazerCadastro(){
+  var nome=document.getElementById('cadNome').value.trim();
+  var tel=document.getElementById('cadTelefone').value.trim();
+  var email=document.getElementById('cadEmail').value.trim().toLowerCase();
+  var senha=document.getElementById('cadSenha').value.trim();
+  document.getElementById('erroAuth').style.display='none';
+  if(!nome||!email||!senha){mostrarErro('Preenche todos os campos.');return;}
+  if(senha.length<4){mostrarErro('Senha muito curta (min. 4 caracteres).');return;}
+  for(var j=0;j<utilizadores.length;j++){if(utilizadores[j].email===email){mostrarErro('Este email ja esta registado.');return;}}
+  var novo={email:email,senha:senha,nome:nome,phone:tel||'+244 900 000 000',photo:null,docs:{}};
+  utilizadores.push(novo);
+  LS('ka_users',utilizadores);
+  verificarDocumentosOuEntrar(novo);
+}
+
+// DOCS
+function temDocumentoValido(u){
+  var docs=u.docs||{};
+  var temBI=docs.biFrente&&docs.biVerso;
+  var temCarta=docs.cartaFrente&&docs.cartaVerso;
+  return !!(temBI||temCarta);
+}
+function verificarDocumentosOuEntrar(u){
+  document.getElementById('telaAuth').style.display='none';
+  if(temDocumentoValido(u)){
+    entrar(u);
+  }else{
+    // Show doc screen
+    utilizadorActual=u;
+    docsTemp={biFrente:null,biVerso:null,cartaFrente:null,cartaVerso:null};
+    document.getElementById('telaDocumentos').style.display='block';
+    document.getElementById('erroDoc').style.display='none';
+  }
+}
+
+// DOC UPLOAD
+function setBITab(lado){
+  document.getElementById('biTabF').className=lado==='frente'?'auth-tab ativo':'auth-tab';
+  document.getElementById('biTabV').className=lado==='verso'?'auth-tab ativo':'auth-tab';
+  document.getElementById('biFrente').style.display=lado==='frente'?'block':'none';
+  document.getElementById('biVerso').style.display=lado==='verso'?'block':'none';
+}
+function setCartaTab(lado){
+  document.getElementById('cartaTabF').className=lado==='frente'?'auth-tab ativo':'auth-tab';
+  document.getElementById('cartaTabV').className=lado==='verso'?'auth-tab ativo':'auth-tab';
+  document.getElementById('cartaFrente').style.display=lado==='frente'?'block':'none';
+  document.getElementById('cartaVerso').style.display=lado==='verso'?'block':'none';
+}
+function carregarDoc(event,chave,uploadId,prevId,badgeId){
+  var f=event.target.files[0];
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    docsTemp[chave]=ev.target.result;
+    var prev=document.getElementById(prevId);
+    prev.src=ev.target.result;prev.style.display='block';
+    document.getElementById(uploadId).classList.add('tem');
+    // Update badge
+    var biCount=(docsTemp.biFrente?1:0)+(docsTemp.biVerso?1:0);
+    var cartaCount=(docsTemp.cartaFrente?1:0)+(docsTemp.cartaVerso?1:0);
+    if(badgeId==='badgeBI'){
+      var b=document.getElementById('badgeBI');
+      b.textContent=biCount+'/2';
+      b.style.background=biCount>=2?'#16a34a':'#1a1a1a';
+      b.style.color=biCount>=2?'#fff':'#555';
+      if(biCount>=2)document.getElementById('cardBI').classList.add('verificado');
+    }
+    if(badgeId==='badgeCarta'){
+      var bc=document.getElementById('badgeCarta');
+      bc.textContent=cartaCount+'/2';
+      bc.style.background=cartaCount>=2?'#16a34a':'#1a1a1a';
+      bc.style.color=cartaCount>=2?'#fff':'#555';
+      if(cartaCount>=2)document.getElementById('cardCarta').classList.add('verificado');
+    }
+  };
+  r.readAsDataURL(f);
+}
+function confirmarDocumentos(){
+  var temBI=docsTemp.biFrente&&docsTemp.biVerso;
+  var temCarta=docsTemp.cartaFrente&&docsTemp.cartaVerso;
+  var erroEl=document.getElementById('erroDoc');
+  if(!temBI&&!temCarta){
+    erroEl.textContent='Precisas de enviar pelo menos 1 documento completo (frente E verso).';
+    erroEl.style.display='block';return;
+  }
+  // Save docs to user
+  if(!utilizadorActual.docs)utilizadorActual.docs={};
+  if(docsTemp.biFrente)utilizadorActual.docs.biFrente=docsTemp.biFrente;
+  if(docsTemp.biVerso)utilizadorActual.docs.biVerso=docsTemp.biVerso;
+  if(docsTemp.cartaFrente)utilizadorActual.docs.cartaFrente=docsTemp.cartaFrente;
+  if(docsTemp.cartaVerso)utilizadorActual.docs.cartaVerso=docsTemp.cartaVerso;
+  // Save to localStorage
+  for(var i=0;i<utilizadores.length;i++){
+    if(utilizadores[i].email===utilizadorActual.email){utilizadores[i]=utilizadorActual;break;}
+  }
+  LS('ka_users',utilizadores);
+  document.getElementById('telaDocumentos').style.display='none';
+  entrar(utilizadorActual);
+}
+function irParaDocs(){
+  document.getElementById('telaDocumentos').style.display='block';
+  // Pre-fill existing docs
+  if(utilizadorActual&&utilizadorActual.docs){
+    var d=utilizadorActual.docs;
+    if(d.biFrente){var p=document.getElementById('prevBIF');p.src=d.biFrente;p.style.display='block';document.getElementById('uploadBIF').classList.add('tem');}
+    if(d.biVerso){var p2=document.getElementById('prevBIV');p2.src=d.biVerso;p2.style.display='block';document.getElementById('uploadBIV').classList.add('tem');}
+    if(d.cartaFrente){var p3=document.getElementById('prevCF');p3.src=d.cartaFrente;p3.style.display='block';document.getElementById('uploadCF').classList.add('tem');}
+    if(d.cartaVerso){var p4=document.getElementById('prevCV');p4.src=d.cartaVerso;p4.style.display='block';document.getElementById('uploadCV').classList.add('tem');}
+  }
+}
+
+function entrar(u){
+  utilizadorActual=u;
+  LS('ka_sessao',{email:u.email});
+  document.getElementById('telaAuth').style.display='none';
+  document.getElementById('telaDocumentos').style.display='none';
+  document.getElementById('appPrincipal').style.display='flex';
+  var inicial=u.nome[0].toUpperCase();
+  if(u.photo){document.getElementById('avatarTopo').innerHTML='<img src="'+u.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>';}
+  else{document.getElementById('avatarTopo').textContent=inicial;}
+  document.getElementById('profNome').textContent=u.nome;
+  document.getElementById('profTel').textContent=u.phone||'';
+  document.getElementById('profEmail').textContent=u.email;
+  var badge=document.getElementById('profBadgeDoc');
+  if(temDocumentoValido(u)){badge.innerHTML='<span class="badge-verificado">&#10003; Identidade Verificada</span>';}
+  else{badge.innerHTML='<span class="badge-pendente">&#9888; Documentos pendentes</span>';}
+  resetTimer();
+  preencherProvincias('pubProv');
+  renderImoveis();
+  renderChats();
+}
+function sair(){
+  utilizadorActual=null;LSdel('ka_sessao');
+  if(timerInact)clearTimeout(timerInact);
+  document.getElementById('telaAuth').style.display='flex';
+  document.getElementById('appPrincipal').style.display='none';
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginSenha').value='';
+  mostrarEntrar();
+}
+
+// NAVEGACAO
+function irPara(t){
+  document.querySelectorAll('.tela').forEach(function(e){e.classList.remove('ativo');});
+  document.querySelectorAll('.nav-item').forEach(function(e){e.classList.remove('ativo');});
+  var tela=document.getElementById('tela-'+t);if(tela)tela.classList.add('ativo');
+  var nav=document.getElementById('nav-'+t);if(nav)nav.classList.add('ativo');
+  if(t==='chat')renderChats();
+  if(t==='perfil'){
+    var meus=anunciosGlobais.filter(function(a){return utilizadorActual&&a.autorEmail===utilizadorActual.email;});
+    document.getElementById('statAn').textContent=meus.length;
+  }
+}
+
+// IMOVEIS
+function fmtP(p,tipo){
+  if(p>=1000000)return(p/1000000).toFixed(1).replace('.0','')+'M Kz';
+  return p.toLocaleString()+' Kz'+(tipo==='alugar'?'/mes':'');
+}
+function renderImoveis(){
+  var lista=anunciosGlobais.slice();
+  var q=document.getElementById('campoPesquisa')?document.getElementById('campoPesquisa').value.toLowerCase():'';
+  lista=lista.filter(function(l){
+    if(filtro!=='todos'&&l.tipo!==filtro)return false;
+    if(q&&l.titulo.toLowerCase().indexOf(q)<0&&(l.zona||'').toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  var el=document.getElementById('listaImoveis');
+  if(!lista.length){
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:#555"><div style="font-size:48px;margin-bottom:14px">&#127968;</div><div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhum anuncio ainda</div><div style="font-size:13px">Sê o primeiro a publicar uma casa!</div><div style="margin-top:16px"><button onclick="abrirPublicar()" style="background:#cc0000;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer">+ Publicar agora</button></div></div>';
+    return;
+  }
+  var h='';
+  for(var i=0;i<lista.length;i++){
+    var l=lista[i];
+    var imgH=l.foto?'<img src="'+l.foto+'" style="width:100%;height:100%;object-fit:cover"/>':'<span style="font-size:60px">&#127968;</span>';
+    h+='<div class="card" onclick="abrirDetalhe(\''+l.id+'\')">'
+      +'<div class="card-img">'+imgH
+      +'<div class="tag tag-'+(l.tipo==='alugar'?'a':'v')+'">'+(l.tipo==='alugar'?'Alugar':'Vender')+'</div>'
+      +'</div>'
+      +'<div class="card-body">'
+      +'<div class="preco">'+fmtP(l.preco,l.tipo)+'</div>'
+      +'<div class="titulo-card">'+l.titulo+'</div>'
+      +'<div class="loc">&#128205; '+l.zona+(l.municipio?' · '+l.municipio:'')+'</div>'
+      +'<div class="feats"><span>&#128716; '+l.quartos+'</span><span>&#128207; '+l.area+'m2</span>'
+      +(l.tipo==='vender'?'<span style="margin-left:auto;font-size:11px;color:#d97706">+100k fecho</span>':'<span style="margin-left:auto;font-size:11px;color:#a78bfa">3k Kz</span>')
+      +(l.verificado?'<div style="position:absolute;bottom:10px;right:10px;background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">&#10003; Verificado</div>':'<div style="position:absolute;bottom:10px;right:10px;background:#555;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">Nao verificado</div>')+'</div></div></div>';
+  }
+  el.innerHTML=h;
+}
+function setFiltro(tipo,el){
+  filtro=tipo;
+  ['fTodos','fAlugar','fVender'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b){b.style.background='#1a1a1a';b.style.color='#777';b.style.border='1px solid #2e2e2e';}
+  });
+  el.style.background='#cc0000';el.style.color='#fff';el.style.border='none';
+  renderImoveis();
+}
+
+// DETALHE
+function abrirDetalhe(id){
+  var l=null;
+  for(var i=0;i<anunciosGlobais.length;i++){if(anunciosGlobais[i].id===id){l=anunciosGlobais[i];break;}}
+  if(!l)return;
+  imovelActual=l;
+  var desbl=!!desbloqueados[id];
+  var isVenda=l.tipo==='vender';
+  var precoT=isVenda?'5.000 - 10.000 Kz':'3.000 Kz';
+  document.getElementById('detTitCab').textContent=l.titulo;
+  if(l.foto){document.getElementById('detImg').innerHTML='<img src="'+l.foto+'"/>';}
+  else{document.getElementById('detImg').innerHTML='<span style="font-size:80px">&#127968;</span>';}
+  document.getElementById('detPreco').textContent=fmtP(l.preco,l.tipo);
+  document.getElementById('detTit').textContent=l.titulo;
+  document.getElementById('detLoc').textContent='&#128205; '+l.zona+(l.municipio?' · '+l.municipio:'');
+  document.getElementById('detDesc').textContent=l.desc||'Sem descricao.';
+  // Add verification badge to detail
+  var detLocEl=document.getElementById('detLoc');
+  var badgeHtml=l.verificado
+    ?'<span style="display:inline-block;background:#16a34a;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-left:8px">&#10003; Proprietario Verificado</span>'
+    :'<span style="display:inline-block;background:#555;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-left:8px">&#9888; Nao verificado</span>';
+  detLocEl.innerHTML='&#128205; '+l.zona+(l.municipio?' · '+l.municipio:'')+badgeHtml;
+  document.getElementById('detFeats').innerHTML='<div class="feat-box">&#128716; '+l.quartos+' quartos</div><div class="feat-box">&#128207; '+l.area+'m2</div><div class="feat-box">'+(isVenda?'Venda':'Arrendamento')+'</div>';
+  var caixa=document.getElementById('caixaContacto');
+  var btnD=document.getElementById('btnDesbloquear');
+  var btnL=document.getElementById('btnLigar');
+  if(desbl){
+    caixa.className='contacto-box c-desbloqueado';
+    caixa.innerHTML='<div style="font-size:14px;font-weight:700;color:#16a34a;margin-bottom:10px">&#9989; Contacto Desbloqueado</div><div style="font-size:14px;margin-bottom:6px">&#128222; <strong>'+l.tel+'</strong></div><div style="font-size:13px;color:#777">&#128205; '+l.morada+'</div>'+(isVenda?'<div style="margin-top:10px;padding:10px;background:#1a1400;border:1px solid #d97706;border-radius:8px;font-size:12px;color:#d97706">Emolumento de fecho: <strong>100.000 Kz</strong></div>':'');
+    btnD.style.display='none';btnL.style.background='#16a34a';btnL.style.color='#fff';btnL.style.border='none';
+  }else{
+    caixa.className='contacto-box c-bloqueado';
+    caixa.innerHTML='<div style="font-size:14px;font-weight:700;color:#a78bfa;margin-bottom:8px">&#128274; Contacto Protegido</div><div style="font-size:13px;color:#c4b5fd;margin-bottom:12px;line-height:1.6">Para ver o numero e morada, paga a taxa de acesso.</div><div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:2px">'+precoT+'</div><div style="font-size:11px;color:#888">'+(isVenda?'taxa inicial + 100.000 Kz no fecho':'taxa de acesso unica')+'</div>';
+    btnD.style.display='block';btnD.textContent='&#128275; Desbloquear por '+precoT;
+    btnL.style.background='#1a1a1a';btnL.style.color='#f2f2f2';btnL.style.border='1px solid #2e2e2e';
+  }
+  document.getElementById('telaDetalhe').style.display='block';
+}
+function fecharDetalhe(){document.getElementById('telaDetalhe').style.display='none';imovelActual=null;}
+function toggleFav(){var b=document.getElementById('btnFav');b.innerHTML=b.innerHTML==='&#9825;'?'&#10084;':'&#9825;';}
+function ligarProprietario(){if(!imovelActual)return;if(desbloqueados[imovelActual.id])alert('A ligar para: '+imovelActual.tel);else abrirPagamento();}
+
+// PAGAMENTO
+function abrirPagamento(){
+  if(!imovelActual)return;
+  var isVenda=imovelActual.tipo==='vender';
+  var preco=isVenda?'5.000 - 10.000 Kz':'3.000 Kz';
+  var n=String(Math.floor(Math.random()*900000000)+100000000);
+  document.getElementById('precoPag').textContent=preco;
+  document.getElementById('valorMC').textContent=preco;
+  document.getElementById('refNum').textContent=n.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3');
+  var msg='Ola! Paguei para desbloquear o contacto no KasaAngola. Imovel: '+imovelActual.titulo+'. Referencia: '+n;
+  document.getElementById('linkWA').href='https://wa.me/244935633508?text='+encodeURIComponent(msg);
+  document.getElementById('modalPag').classList.add('aberto');
+}
+function fecharPag(){document.getElementById('modalPag').classList.remove('aberto');}
+function confirmarPag(){
+  if(!imovelActual)return;
+  var id=imovelActual.id;
+  fecharPag();
+  desbloqueados[id]=true;
+  var d=parseInt(document.getElementById('statDesb').textContent)||0;
+  document.getElementById('statDesb').textContent=d+1;
+  alert('Comprovativo recebido!\n\nA equipa KasaAngola esta a verificar o teu pagamento.\nRecebes confirmacao por WhatsApp em 5 minutos.\n+244 935 633 508'+(imovelActual.tipo==='vender'?'\n\nLembra: emolumento de 100.000 Kz no fecho.':''));
+  abrirDetalhe(id);
+}
+
+// CHAT
+function renderChats(){
+  var h='';
+  if(!chats.length){h='<div style="text-align:center;padding:40px;color:#555"><div style="font-size:40px;margin-bottom:10px">&#128172;</div><div>Nenhuma conversa ainda</div></div>';}
+  else{for(var i=0;i<chats.length;i++){var c=chats[i];var ul=c.msgs.length?c.msgs[c.msgs.length-1].t:'...';h+='<div class="chat-item" onclick="abrirChat('+i+')">'+'<div class="chat-av">'+c.emoji+'</div>'+'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:#555">'+c.sobre+'</div><div style="font-size:12px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+ul+'</div></div></div>';}}
+  document.getElementById('listaChatEl').innerHTML=h;
+}
+function abrirChat(i){chatActivo=i;var c=chats[i];document.getElementById('janelaChat').classList.add('aberta');document.getElementById('chatCabec').textContent=c.nome+' · '+c.sobre;renderMensagens();}
+function fecharChat(){document.getElementById('janelaChat').classList.remove('aberta');}
+function renderMensagens(){var msgs=chats[chatActivo].msgs;var h='';for(var i=0;i<msgs.length;i++){var m=msgs[i];h+='<div class="msg '+(m.env?'env':'rec')+'">'+m.t+'<div style="font-size:10px;color:#555;margin-top:3px;text-align:right">'+m.h+'</div></div>';}var el=document.getElementById('mensagensEl');el.innerHTML=h;el.scrollTop=el.scrollHeight;}
+function enviarMsg(){var inp=document.getElementById('campoMsg');var texto=inp.value.trim();if(!texto)return;var tel=/(\+?244[\s\-]?\d{3}[\s\-]?\d{3}[\s\-]?\d{3}|\b\d{9}\b)/;if(tel.test(texto)){alert('Por seguranca, nao e permitido partilhar numeros no chat.');return;}var h=new Date().getHours()+':'+String(new Date().getMinutes()).padStart(2,'0');chats[chatActivo].msgs.push({t:texto,env:true,h:h});inp.value='';renderMensagens();var r=['Obrigado pelo interesse!','A casa ainda esta disponivel.','Quando quer visitar?','Por favor desbloqueie o contacto.'];setTimeout(function(){chats[chatActivo].msgs.push({t:r[Math.floor(Math.random()*r.length)],env:false,h:h});renderMensagens();},1000);}
+function iniciarChat(){if(!imovelActual)return;fecharDetalhe();for(var i=0;i<chats.length;i++){if(chats[i].imovelId===imovelActual.id){irPara('chat');abrirChat(i);return;}}chats.unshift({id:Date.now(),nome:imovelActual.prop,emoji:imovelActual.prop[0].toUpperCase(),sobre:imovelActual.titulo,imovelId:imovelActual.id,msgs:[]});irPara('chat');abrirChat(0);}
+
+// PUBLICAR
+function carregarFotoImovel(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){fotoImovelTemp=ev.target.result;document.getElementById('areaFoto').innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:120px;object-fit:cover;border-radius:8px"/>';};r.readAsDataURL(f);}
+function abrirPublicar(){preencherProvincias('pubProv');document.getElementById('modalPub').classList.add('aberto');}
+function fecharPub(){document.getElementById('modalPub').classList.remove('aberto');}
+function setTipoPub(t){tipoPub=t;document.getElementById('tipA').style.background=t==='alugar'?'#cc0000':'#1a1a1a';document.getElementById('tipA').style.color=t==='alugar'?'#fff':'#777';document.getElementById('tipV').style.background=t==='vender'?'#cc0000':'#1a1a1a';document.getElementById('tipV').style.color=t==='vender'?'#fff':'#777';}
+function publicar(){
+  var titulo=document.getElementById('pubTit').value.trim();
+  var preco=parseInt(document.getElementById('pubPreco').value)||0;
+  var prov=document.getElementById('pubProv').value;
+  var mun=document.getElementById('pubMun').value||'';
+  if(!titulo||!preco||!prov){alert('Preenche o titulo, preco e provincia!');return;}
+  var id='an_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+  var verificado=utilizadorActual&&temDocumentoValido(utilizadorActual);var novo={id:id,tipo:tipoPub,titulo:titulo,zona:prov,municipio:mun,preco:preco,quartos:parseInt(document.getElementById('pubQ').value)||1,area:parseInt(document.getElementById('pubArea').value)||80,foto:fotoImovelTemp,desc:document.getElementById('pubDesc').value.trim()||'Imovel disponivel.',prop:utilizadorActual?utilizadorActual.nome:'Proprietario',autorEmail:utilizadorActual?utilizadorActual.email:'',tel:document.getElementById('pubTel').value.trim()||'+244 900 000 000',morada:(mun?mun+', ':'')+prov+', Angola',verificado:verificado};
+  anunciosGlobais.unshift(novo);
+  LS('ka_anuncios',anunciosGlobais);
+  fecharPub();fotoImovelTemp=null;
+  document.getElementById('areaFoto').innerHTML='<input type="file" accept="image/*" id="inputFotoImovel" style="display:none" onchange="carregarFotoImovel(event)"/><div style="font-size:28px;margin-bottom:4px">&#128247;</div><div style="font-size:13px;color:#777">Toca para adicionar foto</div>';
+  document.getElementById('pubTit').value='';document.getElementById('pubPreco').value='';document.getElementById('pubDesc').value='';document.getElementById('pubTel').value='';
+  irPara('inicio');renderImoveis();
+  alert('Anuncio publicado com sucesso!');
+}
+
+// PERFIL FOTO
+function mudarFoto(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(utilizadorActual){utilizadorActual.photo=ev.target.result;for(var i=0;i<utilizadores.length;i++){if(utilizadores[i].email===utilizadorActual.email){utilizadores[i].photo=ev.target.result;break;}}LS('ka_users',utilizadores);}document.getElementById('profAv').innerHTML='<img src="'+ev.target.result+'"/>';document.getElementById('avatarTopo').innerHTML='<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>';};r.readAsDataURL(f);}
+
+// AUTO-LOGIN
+(function(){
+  var sessao=LS('ka_sessao');
+  if(sessao&&sessao.email){
+    var u=null;
+    for(var i=0;i<utilizadores.length;i++){if(utilizadores[i].email===sessao.email){u=utilizadores[i];break;}}
+    if(u){
+      if(temDocumentoValido(u)){entrar(u);}
+      else{verificarDocumentosOuEntrar(u);}
+    }
+  }
+})();
+</script>
+</body>
+</html>
